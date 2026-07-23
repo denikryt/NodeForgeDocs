@@ -1,6 +1,6 @@
 # NodeForge Geometry Nodes Coverage
 
-This document shows the Blender Geometry Nodes areas and domains covered by NodeForge v0.49.48.
+This document shows the Blender Geometry Nodes areas and domains covered by NodeForge v0.49.49.
 
 | Geometry Nodes area | NodeForge | Note |
 | --- | --- | --- |
