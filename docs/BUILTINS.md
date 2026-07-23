@@ -719,10 +719,10 @@ output('Geometry', geo_2)
 
 ## Raw Blender node construction
 
-### `node(bl_idname, props={}, inputs={}, output=..., typ=...)`
-### `node(bl_idname, props={}, inputs={}, outputs={...})`
+### `node(bl_idname, props={...}, inputs={...}, output=..., typ=...)`
+### `node(bl_idname, props={...}, inputs={...}, outputs={...})`
 
-Creates a Blender node directly. Use this for Blender node types that are not exposed through a dedicated NodeForge built-in.
+Creates a Blender node directly. Use this for Blender node types that are not exposed through a dedicated NodeForge built-in. The dictionary expressions shown here are a special compile-time syntax accepted only in arguments to `node(...)`; general DSL dictionaries remain unsupported.
 
 `bl_idname`, `props` keys and values, input socket names, output socket names, and type tokens are compile-time declarations. Runtime values are allowed inside `inputs={...}` and are linked to the corresponding Blender input socket.
 
@@ -787,9 +787,9 @@ output('Angle', angle)
 
 `range(...)` does not create Repeat Zones. A non-constant `range(...)` count raises `CompileError`; use `repeat_range(...)` for runtime repetition.
 
-## Arrays and unrolled loops
+## Lists, tuples, and unrolled loops
 
-Script arrays are authoring-time collections of compiled values. They are useful for building a fixed list of geometry parts and then passing the list to `join(...)`.
+Script lists and tuples are compile-time collections of compiled values. They are useful for building a fixed list of geometry parts and then passing the list to `join(...)`.
 
 ```python
 parts = []
@@ -804,4 +804,4 @@ geo_6 = join(parts)
 output('Geometry', geo_6)
 ```
 
-Arrays cannot be output directly and cannot be used as runtime values.
+Lists and tuples cannot be output directly and cannot be used as runtime socket values.

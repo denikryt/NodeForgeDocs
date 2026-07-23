@@ -29,7 +29,7 @@ The three main buttons are:
 | Button | What it does |
 | --- | --- |
 | **Compile Script** | Compiles the selected Text datablock into a new Geometry Nodes group and inserts it into the active Geometry Nodes editor when one is open. |
-| **Update Selected NodeGroup** | Recompiles the selected Text datablock into the selected generated group node. The group datablock is preserved, so existing node links can stay connected. |
+| **Update Selected NodeGroup** | Recompiles the selected Text datablock into the selected generated group node. Existing links are preserved only when the updated interface can be matched unambiguously; incompatible socket type changes can make the update fail. |
 | **Load Script From Selected NodeGroup** | Reads the script stored inside the selected generated group and writes it into the selected text block. If no text block is selected, NodeForge can create/use its scratch text block. |
 
 ## First script: one input, one output
@@ -72,7 +72,7 @@ The important difference from normal Python is that `geo` is not a mesh object i
 
 ## Use the object's input geometry
 
-NodeForge can also process geometry that already exists on the object using the Geometry input socket. This is the usual Geometry Nodes pattern: the modifier passes the object's current geometry into the node group, the script changes it, and the result is sent back out.
+A compiled NodeForge group can process geometry supplied by the surrounding Geometry Nodes tree. Declare a Geometry input in the script, then connect the surrounding tree's geometry to that socket on the generated group node. The generated NodeForge group is a nested node group; it is not itself the modifier's root node tree.
 
 ```python
 geo = input_geometry('Geometry')
@@ -134,12 +134,12 @@ Use `range(...)` when the number of loop iterations is known during compilation.
 
 ## Use the Library panel
 
-The **Library** panel contains reusable scripts and package management tools:
+The **Library** panel contains reusable scripts and package management tools. Package-provided entries appear only after that package has been installed explicitly:
 
 | Catalog | Purpose |
 | --- | --- |
 | **Local** | Your saved scripts. These are user-owned `.nf` files stored outside the add-on package in Blender’s user data area. |
-| **Functions** | Reusable functions provided by installed packages, including the Math library. |
+| **Functions** | Reusable DSL functions provided by installed packages. |
 | **Examples** | Example scripts provided by installed packages. |
 | **Packages** | Install and remove NodeForge packages. |
 

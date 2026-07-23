@@ -1,5 +1,7 @@
 # Writing L-System Scripts
 
+The examples require the explicitly installed `nodeforge.lsystem` package with Python permission approved.
+
 This guide shows how to write L-system scripts in NodeForge.
 
 Use `LSYSTEMS.md` for constructor reference and implementation notes.

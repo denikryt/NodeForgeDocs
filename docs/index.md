@@ -6,6 +6,7 @@ NodeForge compiles a Python-like DSL into Blender Geometry Nodes node groups.
 
 - [Get Started](GET_STARTED.md)
 - [DSL Syntax and Semantics](SYNTAX.md)
+- [Geometry Nodes Coverage](GEOMETRY_NODES_COVERAGE.md)
 - [Core DSL Built-ins](BUILTINS.md)
 - [Writing Functions](WRITING_FUNCTIONS.md)
 - [Packages](PACKAGES.md)

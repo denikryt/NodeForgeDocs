@@ -50,7 +50,7 @@ NodeForge supports runtime socket values and compile-time values.
 | --- | --- |
 | `Geometry` | Geometry socket value. |
 | `Float` | Floating-point scalar or field. |
-| `Int` | Integer scalar or field. |
+| `Int` | Integer scalar or field. Some operations accept it as a numeric field or return a `Float`; the called operation defines the result type. |
 | `Bool` | Boolean scalar or field. |
 | `Vector` | Three-component vector or field. |
 
@@ -63,7 +63,7 @@ NodeForge supports runtime socket values and compile-time values.
 | Boolean | `True` or `False`. |
 | String | Text value. |
 | `None` | Absence of a value. |
-| Vector | Three-component vector constant. |
+| Vector | Three-component value. `vector(...)` is compile-time only when all arguments are compile-time; runtime arguments produce a runtime `Vector`. |
 | List | Ordered mutable collection. |
 | Tuple | Ordered immutable collection. |
 
@@ -262,7 +262,7 @@ A name read before assignment becomes an implicit group input when it does not r
 geometry = cube(size=width)
 ```
 
-Here, `width` becomes a group input.
+Here, `width` becomes an implicit group input. Its type must be inferable from the parameter position where it is used. If the use site does not provide one unambiguous expected socket type, compilation fails; use an explicit `input_*` declaration instead.
 
 ### Explicit Outputs
 
@@ -282,11 +282,11 @@ geometry = cube(size=2.0)
 geometry
 ```
 
-A final assignment uses its variable name. A final expression uses `out`.
+A final assignment uses its variable name. A final expression uses `out`. The value must be a supported runtime output (`Geometry`, `Vector`, `Float`, `Int`, or `Bool`). A statement without a resulting value cannot define an implicit output.
 
 ## Reusable Functions
 
-A reusable function is a saved DSL script whose group inputs become call parameters and whose output becomes the returned value.
+A reusable function is a saved DSL script whose group inputs become call parameters. It must expose one usable output, which becomes the call result.
 
 ```python
 size = input_float('Size', default=1.0)
@@ -317,7 +317,7 @@ A star import adds every public name from the selected catalog.
 from functions import *
 ```
 
-Names beginning with `_` are private and excluded from imports. Plain imports, relative imports, block-local imports, and imports from arbitrary Python modules are unsupported.
+Names beginning with `_` are private and excluded from imports. Public callable names must be unique across active package catalogs; conflicting names make the package inventory invalid. Plain imports, relative imports, block-local imports, and imports from arbitrary Python modules are unsupported.
 
 ## Local Functions
 
@@ -359,7 +359,7 @@ geometry = cube(size=size)
 output('Geometry', geometry)
 ```
 
-A runtime top-level `if` requires an `else` branch, and values assigned in both branches must have compatible types.
+A runtime top-level `if` requires an `else` branch. Values merged from both branches must be compatible scalar or vector socket values that can be represented by a Blender Switch node. Geometry and compile-time collections are not general branch-merge values.
 
 ## For Statements
 
@@ -396,7 +396,7 @@ for index in repeat_range(steps):
 output('Value', value)
 ```
 
-Values assigned before the loop and changed inside it become repeat state items. Use `range(...)` for compile-time iteration and `repeat_range(...)` for runtime iteration.
+Values assigned before the loop and changed inside it become repeat state items. Repeat state is limited to existing `Geometry`, `Vector`, `Float`, `Int`, and `Bool` values. The loop must update at least one existing state value; names first created inside the loop are local temporaries. Use `range(...)` for compile-time iteration and `repeat_range(...)` for runtime iteration.
 
 ## Geometry Builder
 
@@ -413,4 +413,4 @@ Builder methods can be used inside compile-time and runtime loops. A builder can
 
 ## Unsupported Python Syntax
 
-NodeForge does not support regular `import` statements, `lambda`, `while`, `try`, `class`, decorators, comprehensions, dictionaries, sets, `with`, `yield`, generators, multiple assignment targets, or top-level `return`, `del`, `global`, and `nonlocal` statements.
+NodeForge does not support regular `import` statements, `lambda`, `while`, `try`, `class`, decorators, comprehensions, general dictionary or set expressions, `with`, `yield`, generators, assignment expressions, multiple assignment targets, or top-level `return`, `del`, `global`, and `nonlocal` statements. `break`, `continue`, `raise`, `assert`, and async statements are also unsupported. Dictionary syntax is accepted only as the compile-time `props`, `inputs`, or `outputs` declaration passed directly to `node(...)`.

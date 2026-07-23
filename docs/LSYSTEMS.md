@@ -1,5 +1,7 @@
 # LSystem Reference
 
+These constructors are provided by the `nodeforge.lsystem` package. Install the package explicitly and approve its Python permission before using them.
+
 The LSystem library generates geometry from rewrite rules. An `ls_system(...)` result is normal `Geometry`: you can `transform(...)`, `join(...)`, assign materials, and connect it to `output(...)`.
 
 For a practical walkthrough, see [Writing L-System Scripts](LSYSTEMS_SCRIPTING.md).
@@ -165,7 +167,7 @@ geo = ls_system(
 )
 ```
 
-Changing runtime angle or step updates the evaluated geometry. Changing the axiom, rules, iteration count, or branch structure changes generated data and requires recompilation.
+`ls_angle(...)` and `ls_step(...)` may receive runtime `Float` values. The axiom, rules, iteration count, parameter names, marker declarations, and branch structure are compile-time declarations and require recompilation when changed.
 
 ## Limits
 

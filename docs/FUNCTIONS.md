@@ -1,5 +1,7 @@
 # Math Functions
 
+These reusable DSL functions are provided by the installed `nodeforge.math` package and are imported from `functions`.
+
 The `functions` catalog of the Math library contains reusable functions written in the DSL. Import a function before calling it. See [Imports](SYNTAX.md#imports) for import syntax and name-resolution rules.
 
 ## Math Helpers
@@ -459,6 +461,20 @@ geo = cube(size=1.0)
 vec_1 = vector(1 / 3, 1 / 3, 1 / 3)
 geo = copy_by_offsets(geo, scale=vec_1)
 output('Geometry', geo)
+```
+
+## Fractal Helper
+
+### `sierpinski_carpet(geometry, steps=2, scale=vector(1/3, 1/3, 1))`
+
+Repeatedly applies `copy_by_offsets` to create a Sierpinski-carpet-style arrangement. `steps` is a runtime `Int`; non-positive values perform no repeat iterations.
+
+```python
+from functions import sierpinski_carpet
+
+source = cube(size=1.0)
+geometry = sierpinski_carpet(source, steps=2)
+output('Geometry', geometry)
 ```
 
 ## Sequence Helper

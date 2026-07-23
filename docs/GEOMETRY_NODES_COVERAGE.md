@@ -1,6 +1,6 @@
 # NodeForge Geometry Nodes Coverage
 
-This document shows the Blender Geometry Nodes areas and domains covered by NodeForge v0.49.47.
+This document shows the Blender Geometry Nodes areas and domains covered by NodeForge v0.49.48.
 
 | Geometry Nodes area | NodeForge | Note |
 | --- | --- | --- |
@@ -48,7 +48,8 @@ This document shows the Blender Geometry Nodes areas and domains covered by Node
 | Texture nodes | Partial | Noise only |
 | Image texture | No | No `Image` socket |
 | Color utilities | No | No `Color` socket |
-| Text / string utilities | Partial | Compile-time strings only |
+| Runtime String socket | No | No public runtime `String` value type |
+| Compile-time strings | Yes | Names, identifiers, and raw-node declarations |
 | Vector construction | Yes | `vector(x, y, z)` |
 | Vector math | Partial | Common vector operations |
 | Rotation utilities | Partial | Helper functions only |
@@ -115,7 +116,7 @@ This document shows the Blender Geometry Nodes areas and domains covered by Node
 | Reusable library imports | Yes | `from functions/examples/local import ...` |
 | Compile-time `for` loops | Yes | Unrolled graph generation |
 | Runtime repeat loops | Partial | Repeat-style loop only |
-| Runtime `if` / switch logic | Yes | Conditional expressions and branch merge |
+| Runtime `if` / switch logic | Partial | Compatible scalar/vector branch values merged through Switch nodes |
 | Arrays / compile-time lists | Partial | Compile-time structure only |
 | L-systems | Yes | NodeForge-specific system |
 | Raw Blender node creation | Raw only | `node(...)`; limited socket types |

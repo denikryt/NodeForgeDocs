@@ -1,5 +1,7 @@
 # Math Methods
 
+These callables are provided by the `nodeforge.math` package, not by the Core DSL. Install that package explicitly before using them.
+
 The Math library adds scalar and procedural methods to the DSL. These methods are called directly in expressions.
 
 ```python

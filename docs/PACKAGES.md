@@ -1,6 +1,8 @@
 # Packages
 
-Packages add reusable functions, examples, and library systems to NodeForge. A package is a directory containing `nodeforge_package.json` and one or more content directories.
+Packages add reusable DSL functions, examples, and optional library systems to NodeForge. Packages are not installed automatically. Each package must be installed explicitly from a directory or ZIP archive through **Library → Packages**.
+
+A package directory contains `nodeforge_package.json` and only the content directories it uses:
 
 ```text
 example.library/
@@ -10,11 +12,7 @@ example.library/
 └── systems/
 ```
 
-Only include directories used by the package.
-
 ## Manifest
-
-The manifest defines the package metadata and content directories:
 
 ```json
 {
@@ -37,49 +35,48 @@ The manifest defines the package metadata and content directories:
 }
 ```
 
-| Field | Description |
+| Field | Requirement |
 | --- | --- |
-| `id` | Unique package identifier. |
-| `name` | Display name shown in NodeForge. |
-| `version` | Package version. |
-| `nodeforge_min_version` | Oldest supported NodeForge version. |
-| `nodeforge_max_version` | Newest supported NodeForge version, or `null`. |
-| `contents` | Package-relative content directories. |
-| `permissions.python` | Allows Python files inside declared content directories. |
+| `schema_version` | Integer `1`. |
+| `id` | Unique lowercase dotted identifier such as `vendor.demo`. |
+| `name` | Display name. |
+| `version` | Dotted numeric version string. |
+| `author` | Package author. |
+| `description` | Package description. |
+| `nodeforge_min_version` | Minimum compatible NodeForge version as a dotted numeric string. |
+| `nodeforge_max_version` | Maximum compatible version, or `null`. |
+| `contents` | Package-relative `functions`, `examples`, and `systems` directories that exist. |
+| `permissions.python` | Whether executable Python is allowed for declared package content. |
 
-## Content directories
+Content paths must be relative and cannot contain empty, `.` or `..` segments.
 
-### Functions
+## Functions
 
-The `functions` directory contains reusable `.nf` functions imported with `from functions import ...`.
+The declared `functions` directory contains reusable `.nf` scripts. Import them with `from functions import ...` after installation. Each public filename becomes an importable name. Public callable names must be unique across active packages.
 
-See [Imports](SYNTAX.md#imports) for using functions from installed packages.
+See [Imports](SYNTAX.md#imports).
 
-### Examples
+## Examples
 
-The `examples` directory contains complete scripts that can be added from the **Examples** catalog.
+The declared `examples` directory contains complete `.nf` scripts shown in the **Examples** catalog. Examples are catalog entries, not callable functions.
 
-### Systems
+## Systems
 
-The `systems` directory contains library constructors implemented by a package. Each system is stored in its own directory under the declared content root.
+A declared `systems` directory contains one subdirectory per system. A system directory must contain `system.py`. That module provides a `CONSTRUCTORS` mapping and may provide `load_handlers()`. Because systems execute Python, the package must declare `permissions.python: true`, and the user must approve Python when installing it.
 
 ## Installing a package
 
-1. Open the NodeForge **Library** panel.
-2. Open **Packages**.
-3. Choose the package archive or directory.
-4. Review the package information and requested permissions.
-5. Confirm the installation.
-6. Refresh the affected library catalogs.
+1. Open **Library → Packages**.
+2. Select a package directory or ZIP archive.
+3. Review its metadata and requested Python permission.
+4. Confirm installation.
 
-Packages containing Python require installation consent.
+A ZIP may contain the package at its root or inside one top-level directory. Absolute paths, path traversal, symbolic links, duplicate paths, and ambiguous package roots are rejected. Installing an already installed package requires replacement; replacement activates the new installation only after validation succeeds.
 
 ## Removing a package
 
 1. Open **Library → Packages**.
 2. Select the installed package.
-3. Remove the package.
-4. Refresh the library catalogs.
+3. Remove it.
 
-Duplicate public function, example, or constructor names are reported as package errors.
-
+Removal deletes the package from active package state, so its functions, examples, and constructors are no longer available.
