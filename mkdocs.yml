@@ -1,8 +1,8 @@
 site_name: NodeForge Documentation
 site_description: Documentation for NodeForge, a Blender add-on that compiles a Python-like DSL into Geometry Nodes.
-site_url: https://denikryt.github.io/NodeForge/
-repo_url: https://github.com/denikryt/NodeForge
-repo_name: denikryt/NodeForge
+site_url: https://denikryt.github.io/NodeForgeDocs/
+repo_url: https://github.com/denikryt/NodeForgeDocs
+repo_name: denikryt/NodeForgeDocs
 
 docs_dir: docs
 site_dir: site
@@ -13,12 +13,6 @@ copyright: Copyright &copy; 2026 denikryt
 
 theme:
   name: readthedocs
-  features:
-    - navigation.sections
-    - navigation.top
-    - search.highlight
-    - search.suggest
-    - content.code.copy
 
 nav:
   - Home: index.md
