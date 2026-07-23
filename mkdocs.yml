@@ -12,7 +12,7 @@ use_directory_urls: true
 copyright: Copyright &copy; 2026 denikryt
 
 theme:
-  name: material
+  name: readthedocs
   features:
     - navigation.sections
     - navigation.top
@@ -26,16 +26,16 @@ nav:
   - DSL:
       - Syntax: SYNTAX.md
       - Built-ins: BUILTINS.md
-      - Function Library: FUNCTIONS.md
-      - Packages: PACKAGES.md
       - Writing Functions: WRITING_FUNCTIONS.md
-  - L-systems:
-      - Reference: LSYSTEMS.md
-      - Scripting: LSYSTEMS_SCRIPTING.md
-  - Development:
-      - Architecture: ARCHITECTURE.md
-      - Architecture Layers: ARCHITECTURE_LAYERS.md
-      - Testing: TESTING.md
+      - Packages: PACKAGES.md
+      - DSL coverage: GEOMETRY_NODES_COVERAGE.md
+  - Libraries:
+      - Math:
+          - Methods: MATH_METHODS.md
+          - Functions: FUNCTIONS.md
+      - LSystem:
+          - Reference: LSYSTEMS.md
+          - Scripting: LSYSTEMS_SCRIPTING.md
 
 markdown_extensions:
   - admonition

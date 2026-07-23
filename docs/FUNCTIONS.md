@@ -1,49 +1,8 @@
-# Function Library Reference
+# Math Functions
 
-Function-library entries live in `functions/`. They are reusable operations built on top of the core DSL. They are not global built-ins: import them in each source file where they are used.
+The `functions` catalog of the Math library contains reusable functions written in the DSL. Import a function before calling it. See [Imports](SYNTAX.md#imports) for import syntax and name-resolution rules.
 
-```python
-from functions import layout_circle, circle_points
-pts = circle_points(32, radius=2.0)
-output('Geometry', pts)
-```
-
-Use this file to call existing library functions. Use [Writing Function Library Entries](WRITING_FUNCTIONS.md) when adding or changing functions under `functions/`.
-
-## Import rules
-
-NodeForge supports explicit imports, aliases, and star imports from the function catalog.
-
-```python
-from functions import smoothstep
-from functions import circle_points as circle
-from functions import *
-```
-
-Explicit imports are preferred for reusable scripts because they make dependencies visible at the top of the file. `from functions import *` imports all public function names from `functions/` into the current source file only. It does not add those names to the global core built-ins and does not make them available to other scripts.
-
-A star-imported function name is reserved in the current source file. Do not reuse that name for a local variable, loop variable, or local function. For example, after `from functions import *`, `circle_points = 1` is rejected with a compile error because `circle_points` is already an imported callable name. Use an alias with an explicit import when you need a different local name.
-
-Files or package directories whose names start with `_` are private. They cannot be imported explicitly and are not included in star imports.
-
-## Calling convention
-
-A function call creates or reuses the corresponding Geometry Nodes group and connects arguments to that group's input sockets.
-
-Use positional arguments when the call is short and the socket order is obvious. Use keyword arguments for named sockets, especially when several numeric parameters have the same type. The keyword name is the documented parameter name in each function section.
-
-```python
-from functions import remap
-x = input_float('X', default=0.25)
-y = remap(x, in_min=0.0, in_max=1.0, out_min=-1.0, out_max=1.0)
-output('Y', y)
-```
-
-Each current function-library entry exposes one output socket and can be used as an expression. The return type below is the type of that output socket.
-
-Angles are radians unless a function explicitly says otherwise. Use core `radians(...)` for degree-authored values.
-
-## Math helpers
+## Math Helpers
 
 ### `inverse_lerp(a=0.0, b=1.0, x=0.0)`
 
@@ -226,7 +185,7 @@ value_1 = sign(x)
 output('Direction', value_1)
 ```
 
-## Vector helpers
+## Vector Helpers
 
 ### `rotate2d(v=vector(1, 0, 0), angle=0.0)`
 
@@ -306,7 +265,7 @@ v = rotate_around_axis(vec_1, axis=vec_2, angle=value_3)
 output('Vector', v)
 ```
 
-## Point creation and layouts
+## Point Creation and Layouts
 
 Layout functions operate on point-domain geometry. They use the current point `index()` field and the explicit `count` parameter when present; they do not inspect the input geometry's point count.
 
@@ -481,7 +440,7 @@ pts = random_points(count=100, min=vec_1, max=vec_2, seed=42)
 output('Geometry', pts)
 ```
 
-## Geometry helper
+## Geometry Helper
 
 ### `copy_by_offsets(geometry, scale=vector(1/3, 1/3, 1))`
 
@@ -502,7 +461,7 @@ geo = copy_by_offsets(geo, scale=vec_1)
 output('Geometry', geo)
 ```
 
-## Sequence helper
+## Sequence Helper
 
 ### `fibonacci(n=8)`
 
@@ -521,7 +480,7 @@ value = fibonacci(n)
 output('Value', value)
 ```
 
-## Combined examples
+## Examples
 
 ### Instanced circular layout
 

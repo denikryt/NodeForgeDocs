@@ -1,8 +1,17 @@
 # NodeForge Documentation
 
-- [Architecture](ARCHITECTURE.md)
-- [Architecture Layers](ARCHITECTURE_LAYERS.md)
-- [Writing Function Library Entries](WRITING_FUNCTIONS.md)
-- [DSL Built-ins Reference](BUILTINS.md)
-- [L-systems](LSYSTEMS.md)
-- [Testing](TESTING.md)
+NodeForge compiles a Python-like DSL into Blender Geometry Nodes node groups.
+
+## Getting Started
+
+- [Get Started](GET_STARTED.md)
+- [DSL Syntax and Semantics](SYNTAX.md)
+- [Core DSL Built-ins](BUILTINS.md)
+- [Writing Functions](WRITING_FUNCTIONS.md)
+- [Packages](PACKAGES.md)
+
+## Libraries
+
+- [Math Methods](MATH_METHODS.md) and [Math Functions](FUNCTIONS.md)
+- [LSystem Reference](LSYSTEMS.md)
+- [Writing L-System Scripts](LSYSTEMS_SCRIPTING.md)

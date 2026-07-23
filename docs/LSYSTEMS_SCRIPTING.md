@@ -1,4 +1,4 @@
-# Writing L-system scripts
+# Writing L-System Scripts
 
 This guide shows how to write L-system scripts in NodeForge.
 

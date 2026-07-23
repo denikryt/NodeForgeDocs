@@ -6,10 +6,8 @@ NodeForge scripts use a DSL, or **domain-specific language**. The language inten
 
 Use this page as the beginner path. For complete reference material, continue with:
 
-- [DSL Syntax and Semantics](SYNTAX.md) — script syntax, imports, loops, automatic outputs, reusable modules, and unsupported Python features.
-- [Core DSL Built-ins Reference](BUILTINS.md) — `input_*`, `output`, math, vectors, fields, geometry primitives, instancing, raw nodes, and runtime loops.
-- [Function Library Reference](FUNCTIONS.md) — reusable helpers from the bundled `functions/` catalog.
-- [L-systems](LSYSTEMS.md) — L-system scripting and generated procedural systems.
+- [DSL Syntax and Semantics](SYNTAX.md) 
+- [Core DSL Built-ins Reference](BUILTINS.md)
 
 ## The basic workflow
 
@@ -136,13 +134,14 @@ Use `range(...)` when the number of loop iterations is known during compilation.
 
 ## Use the Library panel
 
-The **Library** panel contains three catalogs:
+The **Library** panel contains reusable scripts and package management tools:
 
 | Catalog | Purpose |
 | --- | --- |
 | **Local** | Your saved scripts. These are user-owned `.nf` files stored outside the add-on package in Blender’s user data area. |
-| **Functions** | Bundled reusable helper functions, such as layout and math helpers. |
-| **Examples** | Bundled example node groups and larger demos. |
+| **Functions** | Reusable functions provided by installed packages, including the Math library. |
+| **Examples** | Example scripts provided by installed packages. |
+| **Packages** | Install and remove NodeForge packages. |
 
 Each catalog has **Refresh** and **Add Node Group** actions.
 
@@ -201,7 +200,7 @@ output('Geometry', geo)
 
 Here `Spacing` from the saved script becomes the `spacing` argument of `cube_row(spacing)`. The saved script's `Geometry` output becomes the returned `geo` value.
 
-For the full module rules, see [Reusable modules](SYNTAX.md#reusable-modules). For bundled helpers, see [Function Library Reference](FUNCTIONS.md).
+For the import and call rules, see [Imports](SYNTAX.md#imports) and [Reusable Functions](SYNTAX.md#reusable-functions). For reusable functions from the Math library, see [Math Functions](FUNCTIONS.md).
 
 ## What to read next
 
@@ -209,7 +208,9 @@ Read these in order:
 
 1. [DSL Syntax and Semantics](SYNTAX.md) — learn the language rules and what is not Python.
 2. [Core DSL Built-ins Reference](BUILTINS.md) — learn the primitive functions available everywhere.
-3. [Function Library Reference](FUNCTIONS.md) — learn the reusable helper catalog.
-4. [L-systems](LSYSTEMS.md) — learn the procedural L-system features when you need them.
+3. [Writing Functions](WRITING_FUNCTIONS.md) — create reusable functions with the Core DSL.
+4. [Math Methods](MATH_METHODS.md) — use the methods added by the Math library.
+5. [Math Functions](FUNCTIONS.md) — use reusable DSL functions from the Math library.
+6. [LSystem](LSYSTEMS.md) — create geometry with L-system rules.
 
-The fastest way to learn is to load bundled entries from **Library → Examples**, inspect their source with **Load Script From Selected NodeGroup**, and then simplify or modify them in your own Text datablock.
+To study an installed example, add it from **Library → Examples**, load its source with **Load Script From Selected NodeGroup**, and edit the source in a Text datablock.

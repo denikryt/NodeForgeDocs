@@ -1,8 +1,8 @@
-# L-systems reference
+# LSystem Reference
 
-NodeForge L-systems generate geometry from rewrite rules. An `ls_system(...)` result is normal `Geometry`: you can `transform(...)`, `join(...)`, assign materials, and connect it to `output(...)`.
+The LSystem library generates geometry from rewrite rules. An `ls_system(...)` result is normal `Geometry`: you can `transform(...)`, `join(...)`, assign materials, and connect it to `output(...)`.
 
-For a practical walkthrough, see `LSYSTEMS_SCRIPTING.md`.
+For a practical walkthrough, see [Writing L-System Scripts](LSYSTEMS_SCRIPTING.md).
 
 ## Constructors
 
@@ -167,40 +167,13 @@ geo = ls_system(
 
 Changing runtime angle or step updates the evaluated geometry. Changing the axiom, rules, iteration count, or branch structure changes generated data and requires recompilation.
 
-## Backend selection
+## Limits
 
-Backend selection is internal compiler behavior. The script always uses the same `ls_system(...)` API.
+L-systems expand their symbol stream before geometry is generated. Large iteration counts can produce very large systems.
 
-| Expanded system | Backend behavior |
+| Limit | Value |
 | --- | --- |
-| Compile-time angle and step | Static baked backend. Geometry is baked into generated Curve/Object data. |
-| Runtime angle or step, no branches | Branch-free runtime backend. Runtime fields evaluate heading and position. |
-| Runtime angle or step, with branches | Branch-aware runtime backend. Branch origins are propagated through a bounded depth chain. |
+| Expanded symbols | `200000` |
+| Runtime branch depth | `32` |
 
-The returned value is always normal `Geometry`.
-
-## Generated-resource ownership
-
-NodeForge may create internal Curve, Mesh, and Object datablocks for L-systems. These resources are tagged as NodeForge-owned.
-
-NodeForge deletes only resources it owns. On update, it builds the new group first. If the new build fails, the previous working group remains active. If the new build succeeds, NodeForge switches to it and then cleans up old generated resources.
-
-## Limits and budgets
-
-L-systems can grow quickly because the symbol stream is expanded before geometry is created.
-
-| Limit or budget | Enforcement | Consequence |
-| --- | --- | --- |
-| `MAX_LSYSTEM_SYMBOLS = 200000` | Expansion hard limit in `systems/lsystem/expander.py`. | Expansion stops before backend analysis when the stream is too large. |
-| `MAX_LSYSTEM_BRANCH_DEPTH = 32` | Branch-aware runtime hard limit in `systems/lsystem/backends.py`. | Deeper branched runtime systems raise `CompileError`. |
-| At least one drawn `F` segment or marker point | Backend precondition. | Streams with no drawn segments and no markers raise `CompileError`. |
-
-Optional benchmark tests are available for maintainers:
-
-```bash
-NODEFORGE_LSYSTEM_BENCHMARK=1 \
-blender --background --factory-startup \
-  --python tests/run_pytest_in_blender.py -- tests/blender/lsystem/test_benchmarks.py
-```
-
-The benchmark prints `LSYSTEM_BENCHMARK_ENV` and `LSYSTEM_BENCHMARK_ROW` JSON lines. Treat timings as trend data, not fixed thresholds.
+A system must produce at least one drawn `F` segment or marker point. Exceeding a limit raises `CompileError`.

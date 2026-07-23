@@ -1,10 +1,8 @@
 # Core DSL Built-ins Reference
 
-Core built-ins are the primitive operations available in every NodeForge source file. They are registered by `builtins/registry.py` and do not require imports.
+Core built-ins are primitive operations registered by the NodeForge add-on and available without imports.
 
-Use this file for the compiler-level DSL vocabulary: inputs, outputs, math, vectors, fields, geometry primitives, instancing, raw Blender nodes, and runtime loops. Reusable helpers under `functions/` are documented in [Function Library Reference](FUNCTIONS.md).
-
-## Type names
+## Type Names
 
 | Type | Meaning |
 | --- | --- |
@@ -18,31 +16,26 @@ Use this file for the compiler-level DSL vocabulary: inputs, outputs, math, vect
 
 NodeForge values are typed socket wrappers. A value can be a constant lowered to a node, a linked runtime field, or geometry. Most built-ins accept either literal values or runtime values of the declared type.
 
-## Compile-time constants
+## Compile-Time Constants
 
-NodeForge exposes three lowercase mathematical constants in every source file. They are compile-time numeric constants, so they can be used anywhere a numeric literal can be used.
+NodeForge exposes three numeric constants in every source file.
 
-| Constant | Value | Typical use |
-| --- | --- | --- |
-| `pi` | π, approximately `3.141592653589793` | Half-turn angles, circle arcs, radians-based trigonometry. |
-| `tau` | 2π, approximately `6.283185307179586` | Full-turn angles and normalized circle formulas. |
-| `e` | Euler's number, approximately `2.718281828459045` | Exponential and natural-log formulas. |
+| Constant | Value |
+| --- | --- |
+| `pi` | π, approximately `3.141592653589793` |
+| `tau` | 2π, approximately `6.283185307179586` |
+| `e` | Euler’s number, approximately `2.718281828459045` |
 
 ```python
-radius = input_float('Radius', default=2.0)
-angle = input_float('Angle', default=pi / 4.0)
-cos_angle = cos(angle)
-x = cos_angle * radius
-sin_angle = sin(angle)
-y = sin_angle * radius
-pos = vector(x, y, 0)
-output('Position', pos)
+turn = tau
+half_turn = pi
+base = e
+output('Turn', turn)
+output('Half Turn', half_turn)
+output('Base', base)
 ```
 
-String literals, f-strings, imports, assignments, local functions, loops, conditionals, arrays, and automatic final outputs are documented in [DSL Syntax and Semantics](SYNTAX.md).
-
-
-## Compile-time helper calls
+## Compile-Time Helper Calls
 
 These helpers are evaluated during compilation. They do not create Geometry Nodes sockets and cannot operate on runtime values.
 
@@ -112,18 +105,6 @@ geo = cube(size=average)
 output('Geometry', geo)
 ```
 
-### Compile-time math calls
-
-The following math calls can be evaluated at compile time when all arguments are compile-time numbers: `sin`, `cos`, `tan`, `asin`, `acos`, `atan`, `sqrt`, `floor`, `ceil`, `round`, `abs`, `radians`, `degrees`, `exp`, and `ln`.
-
-```python
-angle = radians(45)
-x = cos(angle)
-y = sin(angle)
-pos = vector(x, y, 0)
-output('Position', pos)
-```
-
 ## Outputs
 
 ### `output(value)`
@@ -148,7 +129,7 @@ output('Geometry', geo_2)
 output(name='Height', value=height)
 ```
 
-Automatic final outputs are part of the source language semantics. See [DSL Syntax and Semantics](SYNTAX.md#automatic-final-outputs).
+Automatic final outputs are part of the source language semantics. See [DSL Syntax and Semantics](SYNTAX.md#inferred-group-sockets).
 
 ## Active Geometry stream statements
 
@@ -188,7 +169,7 @@ Returns: statement only.
 
 ```python
 pos = position()
-height = sin(pos.x * tau)
+height = pos.x * 0.5
 offset = vector(0, 0, height)
 new_pos = pos + offset
 set_position(new_pos)
@@ -261,11 +242,8 @@ Creates a Bool input socket.
 Returns: `Bool`.
 
 ```python
-center = input_bool('Center', default=True)
-vec_1 = vector(1, 0, 0)
-vec_2 = vector(0, 0, 0)
-pos = select(center, vec_1, vec_2)
-output('Position', pos)
+enabled = input_bool('Enabled', default=True)
+output('Enabled', enabled)
 ```
 
 ### `input_vector(name, default=vector(0, 0, 0))`
@@ -333,7 +311,7 @@ Returns the current element index field. Use it for per-element spacing, alterna
 pts = points(32)
 i = index()
 x = i * 0.1
-z = sin(i * 0.25)
+z = i * 0.25
 pos = vector(x, 0, z)
 pts = set_position(pts, pos)
 output('Geometry', pts)
@@ -346,204 +324,11 @@ Returns the current element ID field. Use it as a stable per-element random seed
 ```python
 pts = points(64)
 element_id = id()
-offset = random_value(-0.5, 0.5, seed=12, id=element_id)
+offset = (element_id % 10) * 0.1
 base_position = position()
 delta = vector(0, 0, offset)
 new_position = base_position + delta
 pts = set_position(pts, new_position)
-output('Geometry', pts)
-```
-
-## Scalar math
-
-Scalar math built-ins compile to Blender Math, Clamp, Mix, Switch, Map Range, Noise Texture, or Random Value nodes.
-
-### Unary functions
-
-| Function | Signature | Returns | Description |
-| --- | --- | --- | --- |
-| `sin` | `sin(value)` | `Float` | Sine. |
-| `cos` | `cos(value)` | `Float` | Cosine. |
-| `tan` | `tan(value)` | `Float` | Tangent. |
-| `asin` | `asin(value)` | `Float` | Arcsine. |
-| `acos` | `acos(value)` | `Float` | Arccosine. |
-| `atan` | `atan(value)` | `Float` | Arctangent. |
-| `sqrt` | `sqrt(value)` | `Float` | Square root. |
-| `abs` | `abs(value)` | `Float` | Absolute value. |
-| `floor` | `floor(value)` | `Float` | Floor. |
-| `ceil` | `ceil(value)` | `Float` | Ceiling. |
-| `round` | `round(value)` | `Float` | Rounded value. |
-| `fract` | `fract(value)` | `Float` | Fractional component. |
-| `radians` | `radians(value)` | `Float` | Degrees to radians. |
-| `degrees` | `degrees(value)` | `Float` | Radians to degrees. |
-| `exp` | `exp(value)` | `Float` | Exponential. |
-| `ln` | `ln(value)` | `Float` | Natural logarithm. |
-
-```python
-count = input_int('Count', default=64)
-pts = points(count)
-value_1 = index()
-value_2 = sin(value_1 * 0.25)
-wave = value_2 * 0.5
-value_3 = index()
-vec_4 = vector(value_3 * 0.1, 0, wave)
-pts = set_position(pts, vec_4)
-output('Geometry', pts)
-```
-
-### Binary functions
-
-| Function | Signature | Returns | Description |
-| --- | --- | --- | --- |
-| `min` | `min(a, b)` | `Float` | Minimum. |
-| `max` | `max(a, b)` | `Float` | Maximum. |
-| `pow` | `pow(a, b)` | `Float` | Power. |
-| `log` | `log(a, b)` | `Float` | Logarithm with explicit base. |
-| `atan2` | `atan2(a, b)` | `Float` | Two-argument arctangent. |
-| `mod` | `mod(a, b)` | `Float` | Modulo. |
-
-These functions also accept keyword arguments using the listed parameter names.
-
-```python
-size = input_float('Size', default=2.0)
-clamped = max(size, 0.1)
-value_1 = pow(clamped, 2.0)
-geo_2 = cube(size=value_1)
-output('Geometry', geo_2)
-```
-
-### `clamp(value, min, max)`
-
-Constrains a value between lower and upper bounds.
-
-| Parameter | Type | Description |
-| --- | --- | --- |
-| `value` | `Float` | Input value. |
-| `min` | `Float` | Lower bound. |
-| `max` | `Float` | Upper bound. |
-
-Returns: `Float`.
-
-```python
-height = input_float('Height', default=3.0)
-value_1 = clamp(height, 0.0, 2.0)
-output('Height', value_1)
-```
-
-### `mix(a, b, factor)`
-
-Interpolates between two compatible values. `factor=0` selects `a`; `factor=1` selects `b`.
-
-| Parameter | Type | Description |
-| --- | --- | --- |
-| `a` | `Float` or `Vector` | Start value. |
-| `b` | same as `a` | End value. |
-| `factor` | `Float` | Interpolation factor. |
-
-Returns: same type as `a`.
-
-```python
-t = input_float('Factor', default=0.5)
-vec_1 = vector(1, 1, 1)
-vec_2 = vector(2, 2, 0.5)
-scale = mix(vec_1, vec_2, t)
-geo_3 = cube()
-geo_4 = transform(geo_3, scale=scale)
-output('Geometry', geo_4)
-```
-
-### `select(cond, true, false)`
-
-Chooses between two values with a boolean condition. The second argument is the value used when `cond` is true; the third argument is the value used when `cond` is false.
-
-| Parameter | Type | Description |
-| --- | --- | --- |
-| `cond` | `Bool` | Selection condition. |
-| `true` | `Float`, `Int`, `Bool`, `Vector`, or `Geometry` | Value for true condition. |
-| `false` | same as `true` | Value for false condition. |
-
-Returns: same type as `true` and `false`.
-
-```python
-large = input_bool('Large', default=False)
-size = select(large, 3.0, 1.0)
-geo_1 = cube(size=size)
-output('Geometry', geo_1)
-```
-
-### `map_range(value, from_min, from_max, to_min, to_max)`
-
-Maps a value from one numeric range into another.
-
-| Parameter | Type | Description |
-| --- | --- | --- |
-| `value` | `Float` | Input value. |
-| `from_min` | `Float` | Source range lower bound. |
-| `from_max` | `Float` | Source range upper bound. |
-| `to_min` | `Float` | Target range lower bound. |
-| `to_max` | `Float` | Target range upper bound. |
-
-Returns: `Float`.
-
-```python
-count = input_int('Count', default=32)
-pts = points(count)
-value_1 = index()
-z = map_range(value_1, 0.0, count - 1.0, 0.0, 3.0)
-value_2 = index()
-vec_3 = vector(value_2 * 0.1, 0, z)
-pts = set_position(pts, vec_3)
-output('Geometry', pts)
-```
-
-### `noise(vector=position(), scale=..., detail=..., roughness=..., lacunarity=..., distortion=..., normalize=...)`
-
-Creates a 3D Noise Texture node and returns its Factor output.
-
-| Parameter | Type | Default | Description |
-| --- | --- | --- | --- |
-| `vector` | `Vector` | `position()` | Noise coordinate. At most one positional argument is accepted. |
-| `scale` | numeric | Blender default | Noise scale input. |
-| `detail` | numeric | Blender default | Noise detail input. |
-| `roughness` | numeric | Blender default | Noise roughness input. |
-| `lacunarity` | numeric | Blender default | Noise lacunarity input. |
-| `distortion` | numeric | Blender default | Noise distortion input. |
-| `normalize` | compile-time `Bool` | Blender default | Sets the Blender node `normalize` property when provided. |
-
-Returns: `Float`.
-
-```python
-pts = points(128)
-value_1 = index()
-coord = vector(value_1 * 0.08, 0, 0)
-z = noise(coord, scale=6.0, detail=8.0, roughness=0.55)
-value_2 = index()
-vec_3 = vector(value_2 * 0.05, 0, z)
-pts = set_position(pts, vec_3)
-output('Geometry', pts)
-```
-
-### `random_value()`
-### `random_value(min, max, seed=..., id=...)`
-
-Creates a Random Value node. With no positional arguments it returns a float in the default `0..1` range. With `min` and `max`, both bounds must be numeric or both must be vectors.
-
-| Parameter | Type | Default | Description |
-| --- | --- | --- | --- |
-| `min` | `Float` or `Vector` | `0.0` | Lower bound. Required when `max` is provided. |
-| `max` | same as `min` | `1.0` | Upper bound. Required when `min` is provided. |
-| `seed` | `Int` or compile-time numeric constant | Blender default | Random seed. |
-| `id` | `Int` | Blender default | Per-element random ID. |
-
-Returns: `Float` for numeric bounds, `Vector` for vector bounds.
-
-```python
-pts = points(100)
-vec_1 = vector(-2, -2, 0)
-vec_2 = vector(2, 2, 1)
-value_3 = index()
-pos = random_value(vec_1, vec_2, seed=12, id=value_3)
-pts = set_position(pts, pos)
 output('Geometry', pts)
 ```
 
@@ -635,10 +420,9 @@ Returns: `Geometry`.
 ```python
 geo = grid(16, 16)
 uv = grid_uv()
-vec_1 = vector(uv.x, uv.y, 0)
-value_2 = noise(vec_1)
-vec_3 = vector(uv.x * 2.0, uv.y * 2.0, value_2)
-geo = set_position(geo, vec_3)
+height = (uv.x + uv.y) * 0.5
+position = vector(uv.x * 2.0, uv.y * 2.0, height)
+geo = set_position(geo, position)
 output('Geometry', geo)
 ```
 
@@ -651,12 +435,10 @@ Returns: `Vector` with `.x` and `.y` in the `0..1` range.
 ```python
 geo = grid(8, 8)
 uv = grid_uv()
-value_1 = sin(uv.x * tau)
-value_2 = cos(uv.y * tau)
-height = value_1 * value_2
-value_3 = position()
-vec_4 = vector(0, 0, height)
-geo = set_position(geo, value_3 + vec_4)
+height = (uv.x - 0.5) * (uv.y - 0.5)
+base_position = position()
+offset = vector(0, 0, height)
+geo = set_position(geo, base_position + offset)
 output('Geometry', geo)
 ```
 
@@ -674,13 +456,9 @@ Returns: `Geometry`.
 
 ```python
 pts = points(32)
-value_1 = index()
-value_2 = mod(value_1, 2)
-mask = value_2 == 0
-value_3 = index()
-value_4 = index()
-value_5 = sin(value_4 * 0.4)
-pos = vector(value_3 * 0.1, 0, value_5)
+i = index()
+mask = (i % 2) == 0
+pos = vector(i * 0.1, 0, i * 0.02)
 pts = set_position(pts, pos, selection=mask)
 output('Geometry', pts)
 ```
@@ -702,12 +480,10 @@ Returns: `Geometry`.
 
 ```python
 pts = points(64)
-value_1 = index()
-vec_2 = vector(value_1 * 0.1, 0, 0)
-height = noise(vec_2, scale=4.0)
-value_3 = index()
-vec_4 = vector(value_3 * 0.05, 0, height)
-pts = set_position(pts, vec_4)
+i = index()
+height = i * 0.02
+pos = vector(i * 0.05, 0, height)
+pts = set_position(pts, pos)
 pts = store_named_attribute(pts, 'height', height, domain='POINT', type='FLOAT')
 output('Geometry', pts)
 ```

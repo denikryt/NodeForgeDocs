@@ -1,17 +1,20 @@
-# NodeForge Packages
+# Packages
 
-NodeForge packages install library content into the existing DSL namespaces without adding package-qualified import syntax.
-
-A package is a directory containing `nodeforge_package.json` and one or more declared content roots:
+Packages add reusable functions, examples, and library systems to NodeForge. A package is a directory containing `nodeforge_package.json` and one or more content directories.
 
 ```text
-nodeforge_package.json
-functions/
-examples/
-systems/
+example.library/
+├── nodeforge_package.json
+├── functions/
+├── examples/
+└── systems/
 ```
 
-The manifest describes package metadata and the package-owned roots:
+Only include directories used by the package.
+
+## Manifest
+
+The manifest defines the package metadata and content directories:
 
 ```json
 {
@@ -34,62 +37,49 @@ The manifest describes package metadata and the package-owned roots:
 }
 ```
 
-`functions`, `examples`, and `systems` are roots inside the package directory. They are not copied into global catalog folders. The active package inventory records which installed package directory contributes those roots.
+| Field | Description |
+| --- | --- |
+| `id` | Unique package identifier. |
+| `name` | Display name shown in NodeForge. |
+| `version` | Package version. |
+| `nodeforge_min_version` | Oldest supported NodeForge version. |
+| `nodeforge_max_version` | Newest supported NodeForge version, or `null`. |
+| `contents` | Package-relative content directories. |
+| `permissions.python` | Allows Python files inside declared content directories. |
 
-## Runtime behavior
+## Content directories
 
-A package state entry means the package is installed and active. Removing the state entry uninstalls the package from future NodeForge resolution. Package inventory does not provide a separate enable or disable state.
+### Functions
 
-Installed packages extend the existing public DSL surface:
+The `functions` directory contains reusable `.nf` functions imported with `from functions import ...`.
 
-```python
-from functions import smoothstep
-from examples import dragon_curve
+See [Imports](SYNTAX.md#imports) for using functions from installed packages.
 
-geo = ls_system(...)
-```
+### Examples
 
-Package inventory does not add package-scoped imports, qualified imports, dot access, import aliases, dependency resolution, manifest `exports`, manifest `imports`, manifest `dependencies`, manifest symbol lists, or file-level ownership maps.
+The `examples` directory contains complete scripts that can be added from the **Examples** catalog.
 
-Duplicate public names are errors. A package function, example, or system constructor must not collide with an already active public name.
+### Systems
 
-## Python permission
+The `systems` directory contains library constructors implemented by a package. Each system is stored in its own directory under the declared content root.
 
-Packages that contain Python under declared roots, or declare systems, require `permissions.python: true`. User-selected package archives also require explicit install-time consent before executable Python is accepted.
+## Installing a package
 
-NodeForge rescans declared roots when loading active state. If Python appears under a package that was installed without Python consent, the package is treated as inactive and appears as an invalid package diagnostic. Package diagnostics expose short package-item fields: `id`, `name`, `version`, `origin`, `status`, `path`, `python_required`, `python_allowed`, and `invalid_reason`.
+1. Open the NodeForge **Library** panel.
+2. Open **Packages**.
+3. Choose the package archive or directory.
+4. Review the package information and requested permissions.
+5. Confirm the installation.
+6. Refresh the affected library catalogs.
 
-Package roots are not added to `sys.path`. Native helpers and system modules load through private synthetic package names so relative imports work without creating public package import syntax.
+Packages containing Python require installation consent.
 
-## Systems
+## Removing a package
 
-A system is an immediate child directory under the declared `systems` root:
+1. Open **Library → Packages**.
+2. Select the installed package.
+3. Remove the package.
+4. Refresh the library catalogs.
 
-```text
-systems/<system_id>/system.py
-```
+Duplicate public function, example, or constructor names are reported as package errors.
 
-`system.py` declares public constructor names and provides a lazy handler loader:
-
-```python
-CONSTRUCTORS = ["example_constructor"]
-
-
-def load_handlers():
-    from .runtime import HANDLERS
-    return HANDLERS
-
-
-__all__ = ["CONSTRUCTORS", "load_handlers"]
-```
-
-Constructor discovery imports only `system.py` and reads `CONSTRUCTORS`. Runtime handlers are loaded later when a constructor is dispatched. `load_handlers()` must return a dict whose keys exactly match `CONSTRUCTORS` and whose values are callable handlers.
-
-## NodeForge-shipped packages
-
-NodeForge ships package source directories for:
-
-- `nodeforge.standard` — standard callable constructors, reusable non-L-system functions, and non-L-system examples.
-- `nodeforge.lsystem` — L-system constructors and L-system examples.
-
-On first package-inventory initialization, these sources are installed into the same user inventory used by all other packages. After seeding, they are ordinary package records. They can be uninstalled and reinstalled from the shipped source through package management UI.
