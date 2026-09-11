@@ -11,8 +11,11 @@ Core built-ins are primitive operations registered by the NodeForge add-on and a
 | `Int` | Integer value or field. |
 | `Bool` | Boolean value or field. |
 | `Vector` | 3-component vector value or field. |
-| `String` | Compile-time string expression. |
-| `Float`, `Int`, `Bool`, `Vector`, `Geometry` | Type tokens used by `node(..., typ=...)` and `node(..., outputs=...)`. |
+| `Material` | Blender material socket. |
+| `Object` | Blender object socket with Object Info access. |
+| `String` | Blender string socket. String literals can also be used as compile-time names and options. |
+| `Bundle` | Blender bundle socket containing named runtime values. |
+| `Float`, `Int`, `Bool`, `Vector`, `Geometry`, `Material`, `Object`, `String`, `Bundle` | Type tokens used by `node(..., typ=...)`, `node(..., outputs=...)`, local parameter annotations, and `bundle_get(..., typ=...)`. |
 
 NodeForge values are typed socket wrappers. A value can be a constant lowered to a node, a linked runtime field, or geometry. Most built-ins accept either literal values or runtime values of the declared type.
 
@@ -116,7 +119,7 @@ Creates a group output socket and connects a runtime value to it.
 | Parameter | Type | Description |
 | --- | --- | --- |
 | `name` | `String` | Optional output socket name. When omitted, the output socket is named `out`. Duplicate output names receive suffixes such as `_2`. |
-| `value` | `Float`, `Int`, `Bool`, `Vector`, or `Geometry` | Runtime value to expose on the node group. Arrays cannot be output directly; use `join(array)` or index the array first. |
+| `value` | runtime value | `Float`, `Int`, `Bool`, `Vector`, `Geometry`, `Material`, `Object`, `String`, or `Bundle` value to expose on the node group. Arrays and multi-output results cannot be output directly; index or unpack them first. |
 
 Returns: statement only.
 
@@ -129,7 +132,7 @@ output('Geometry', geo_2)
 output(name='Height', value=height)
 ```
 
-Automatic final outputs are part of the source language semantics. See [DSL Syntax and Semantics](SYNTAX.md#inferred-group-sockets).
+Automatic final outputs are part of the source language semantics. See [DSL Syntax and Semantics](SYNTAX.md#group-inputs-and-outputs).
 
 ## Active Geometry stream statements
 
@@ -143,11 +146,11 @@ Stores a named attribute on the active Geometry stream.
 
 | Parameter | Type | Default | Description |
 | --- | --- | --- | --- |
-| `name` | `String` | required | Attribute name. |
+| `name` | compile-time or runtime `String` | required | Attribute name. |
 | `value` | `Float`, `Int`, `Bool`, or `Vector` | required | Attribute value field. Arrays are rejected. |
 | `selection` | `Bool` | `True` | Optional field mask. |
-| `domain` | `String` | `"POINT"` | Attribute domain, for example `"POINT"`, `"EDGE"`, `"FACE"`, `"CORNER"`, or `"INSTANCE"`. |
-| `type` | `String` or `None` | `None` | Optional Blender data type override, for example `"FLOAT"`, `"INT"`, `"BOOLEAN"`, `"VECTOR"`, or `"COLOR"`. |
+| `domain` | compile-time `String` | `"POINT"` | `"POINT"`, `"EDGE"`, `"FACE"`, `"CORNER"`, `"CURVE"`, or `"INSTANCE"`. |
+| `type` | compile-time `String` or `None` | `None` | Optional Blender data type override, for example `"FLOAT"`, `"INT"`, `"BOOLEAN"`, `"VECTOR"`, or `"COLOR"`. |
 
 Returns: statement only.
 
@@ -155,6 +158,8 @@ Returns: statement only.
 height = position().z
 store('height', height, domain='POINT', type='FLOAT')
 ```
+
+The attribute name can come from `input_string(...)` when it must be selected at runtime.
 
 ### `set_position(position, selection=True)`
 
@@ -178,6 +183,8 @@ set_position(new_pos)
 ## Inputs
 
 Input built-ins create group input sockets. The `name` argument must be a compile-time string. Defaults must be compile-time values.
+
+Use each `input_*()` call as the complete right-hand side of a simple assignment. Every call creates a separate interface socket; `name` is its displayed label rather than the identity of the declaration. Two declarations may therefore use the same label and keep independent defaults.
 
 ### `input_geometry(name)`
 
@@ -263,6 +270,190 @@ offset = input_vector('Offset', default=vec_1)
 geo_2 = cube()
 geo_3 = transform(geo_2, translation=offset)
 output('Geometry', geo_3)
+```
+
+### `input_material(name)`
+
+Creates a Material input socket.
+
+| Parameter | Type | Default | Description |
+| --- | --- | --- | --- |
+| `name` | `String` | required | Input socket name. |
+
+Returns: `Material`.
+
+```python
+material = input_material('Material')
+geo = set_material(cube(size=1.0), material)
+output('Geometry', geo)
+```
+
+### `input_object(name)`
+
+Creates an Object input socket. Read the selected object's geometry and transforms through the Object properties described in [Object values](#object-values).
+
+| Parameter | Type | Default | Description |
+| --- | --- | --- | --- |
+| `name` | `String` | required | Input socket name. |
+
+Returns: `Object`.
+
+```python
+source = input_object('Source')
+source.info(transform_space='RELATIVE', as_instance=False)
+output('Geometry', source.geometry)
+```
+
+### `input_string(name, default="")`
+
+Creates a String input socket.
+
+| Parameter | Type | Default | Description |
+| --- | --- | --- | --- |
+| `name` | compile-time `String` | required | Input socket name. |
+| `default` | compile-time `String` | `""` | Socket default value. |
+
+Returns: runtime `String`.
+
+```python
+attribute_name = input_string('Attribute', default='weight')
+geo = store_named_attribute(cube(), attribute_name, position().z)
+output('Geometry', geo)
+```
+
+### `input_bundle(name)`
+
+Creates a Bundle input socket.
+
+| Parameter | Type | Default | Description |
+| --- | --- | --- | --- |
+| `name` | `String` | required | Input socket name. |
+
+Returns: `Bundle`.
+
+```python
+data = input_bundle('Data')
+factor = bundle_get(data, 'factor', typ=Float)
+output('Factor', factor)
+```
+
+## Interface Panels
+
+### `panel([input_a, input_b, ...], name="Name", collapsed=False)`
+
+Places existing group input sockets in a native Blender interface panel. Write `panel(...)` as a standalone top-level declaration after the referenced inputs.
+
+| Parameter | Type | Default | Description |
+| --- | --- | --- | --- |
+| `inputs` | literal list or tuple of input variable names | required | One or more group inputs in their panel order. |
+| `name` | compile-time `String` | required | Non-empty panel name. Panel names must be unique. |
+| `collapsed` | compile-time `Bool` | `False` | Whether the panel is closed by default. |
+
+Returns: statement only.
+
+Each group input can belong to one panel. Inputs omitted from `panel(...)` remain at the root of the group interface. The DSL creates root-level panels. Computed values and function results are not interface inputs and cannot be panel members.
+
+```python
+radius = input_float('Radius', default=1.0)
+segments = input_int('Segments', default=32)
+panel([radius, segments], name='Shape', collapsed=True)
+
+geo = cube(size=radius)
+output('Geometry', geo)
+```
+
+## Object Values
+
+An `Object` value exposes the outputs of Blender's Object Info node as properties.
+
+| Property | Returns | Description |
+| --- | --- | --- |
+| `.geometry` | `Geometry` | Geometry from the selected object. |
+| `.location` | `Vector` | Object location in the configured transform space. |
+| `.rotation` | `Vector` | Object rotation. |
+| `.scale` | `Vector` | Object scale. |
+
+### `object.info(transform_space="ORIGINAL", as_instance=True)`
+
+Configures the Object Info node used by subsequent property access and returns the same `Object` value.
+
+| Parameter | Type | Default | Description |
+| --- | --- | --- | --- |
+| `transform_space` | compile-time `String` | `"ORIGINAL"` | `"ORIGINAL"` or `"RELATIVE"`. |
+| `as_instance` | compile-time `Bool` | `True` | Return geometry as an instance when enabled. |
+
+You may call `.info()` more than once to set the options separately. Configure it before reading any Object property; the configuration is fixed when the first property creates the Object Info node.
+
+```python
+source = input_object('Source')
+source.info(transform_space='RELATIVE')
+source.info(as_instance=False)
+
+offset = source.location
+geo = transform(source.geometry, translation=-offset)
+output('Geometry', geo)
+```
+
+## Bundles
+
+Bundles carry named runtime values through one Blender socket. Bundle items support `Float`, `Int`, `Bool`, `Vector`, `Geometry`, `Material`, `Object`, `String`, and nested `Bundle` values. Bundles can cross group and reusable-function sockets and can be carried through runtime `if` and `repeat_range(...)` state.
+
+### `bundle(**items)`
+
+Creates a Bundle from named keyword items. The keyword names become item names.
+
+Returns: `Bundle`.
+
+```python
+weight = input_float('Weight', default=0.5)
+data = bundle(
+    geometry=cube(size=1.0),
+    weight=weight,
+)
+output('Data', data)
+```
+
+### `bundle_get(bundle, path, typ=Type)`
+
+Reads an item from a Bundle.
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `bundle` | `Bundle` | Bundle to read. |
+| `path` | `String` | Runtime bundle item path. |
+| `typ` | type token | Expected item type and output socket type. |
+
+Returns: the runtime type selected by `typ`.
+
+`typ=` is required because an incoming Bundle does not declare the type of each item to the script. The path can be a string literal or a runtime `String`.
+
+```python
+data = input_bundle('Data')
+path = input_string('Path', default='weight')
+weight = bundle_get(data, path, typ=Float)
+output('Weight', weight)
+```
+
+### `bundle_set(bundle, path, value)`
+
+Stores or replaces one item and returns the resulting Bundle.
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `bundle` | `Bundle` | Input Bundle. |
+| `path` | `String` | Runtime bundle item path. |
+| `value` | supported runtime value | Item value to store. |
+
+Returns: `Bundle`.
+
+The stored item type is inferred from `value`.
+
+```python
+data = input_bundle('Data')
+path = input_string('Path', default='weight')
+weight = input_float('Weight', default=1.0)
+updated = bundle_set(data, path, weight)
+output('Data', updated)
 ```
 
 ## Field inputs
@@ -470,11 +661,11 @@ Stores a named attribute on geometry.
 | Parameter | Type | Default | Description |
 | --- | --- | --- | --- |
 | `geometry` | `Geometry` | required | Input geometry. |
-| `name` | `String` | required | Attribute name. |
+| `name` | compile-time or runtime `String` | required | Attribute name. |
 | `value` | `Float`, `Int`, `Bool`, or `Vector` | required | Attribute value field. Arrays are rejected. |
 | `selection` | `Bool` | `True` | Optional field mask. |
-| `domain` | `String` | `"POINT"` | Attribute domain, for example `"POINT"`, `"EDGE"`, `"FACE"`, `"CORNER"`, or `"INSTANCE"`. |
-| `type` | `String` or `None` | `None` | Optional Blender data type override, for example `"FLOAT"`, `"INT"`, `"BOOLEAN"`, `"VECTOR"`, or `"COLOR"`. |
+| `domain` | compile-time `String` | `"POINT"` | `"POINT"`, `"EDGE"`, `"FACE"`, `"CORNER"`, `"CURVE"`, or `"INSTANCE"`. |
+| `type` | compile-time `String` or `None` | `None` | Optional Blender data type override, for example `"FLOAT"`, `"INT"`, `"BOOLEAN"`, `"VECTOR"`, or `"COLOR"`. |
 
 Returns: `Geometry`.
 
@@ -488,20 +679,62 @@ pts = store_named_attribute(pts, 'height', height, domain='POINT', type='FLOAT')
 output('Geometry', pts)
 ```
 
-### `set_material(geometry, material_name)`
+The attribute `name` can also be a runtime `String`, for example a value returned by `input_string(...)`.
 
-Assigns a material by name. The material is created when it does not exist.
+### `capture_attribute(geometry, value, selection=True, domain="POINT", type=None)`
+
+Captures a field on geometry as an anonymous attribute. The function returns both the updated Geometry and the captured field value.
+
+| Parameter | Type | Default | Description |
+| --- | --- | --- | --- |
+| `geometry` | `Geometry` | required | Geometry on which to capture the field. |
+| `value` | `Float`, `Int`, `Bool`, or `Vector` | required | Field to capture. |
+| `selection` | `Bool` | `True` | Optional field mask. |
+| `domain` | compile-time `String` | `"POINT"` | `"POINT"`, `"EDGE"`, `"FACE"`, `"CORNER"`, `"CURVE"`, or `"INSTANCE"`. |
+| `type` | compile-time `String` or `None` | `None` | Optional result type override: `"FLOAT"`, `"INT"`, `"BOOLEAN"`, or `"VECTOR"`. The value type is used when omitted. |
+
+Returns: `(Geometry, captured value)`.
+
+```python
+geo = grid(16, 16)
+height = position().z
+geo, captured_height = capture_attribute(
+    geo,
+    height,
+    domain='POINT',
+)
+output('Geometry', geo)
+output('Height', captured_height)
+```
+
+The two results can also be stored as one result and selected with a compile-time index.
+
+```python
+captured = capture_attribute(cube(), normal())
+geo = captured[0]
+captured_normal = captured[1]
+```
+
+### `set_material(geometry, material)`
+
+Assigns a material to geometry. Pass a runtime `Material` value or a compile-time material name. A named material is created when it does not exist.
 
 | Parameter | Type | Description |
 | --- | --- | --- |
 | `geometry` | `Geometry` | Input geometry. |
-| `material_name` | `String` | Compile-time Blender material name. |
+| `material` | `Material` or compile-time `String` | Material socket value or Blender material name. |
 
 Returns: `Geometry`.
 
 ```python
 geo = cube(size=2.0)
 geo = set_material(geo, 'NodeForge Material')
+output('Geometry', geo)
+```
+
+```python
+material = input_material('Material')
+geo = set_material(cube(size=2.0), material)
 output('Geometry', geo)
 ```
 
@@ -674,7 +907,7 @@ output('Geometry', shape)
 
 ## Instancing
 
-### `instance_on_points(instance, points, scale=None, rotation=None, realize=True)`
+### `instance_on_points(instance, points, selection=True, scale=None, rotation=None, realize=True)`
 
 Instances one geometry value on point geometry.
 
@@ -682,6 +915,7 @@ Instances one geometry value on point geometry.
 | --- | --- | --- | --- |
 | `instance` | `Geometry` | required | Geometry to instance. |
 | `points` | `Geometry` | required | Point geometry receiving the instances. |
+| `selection` | `Bool` | `True` | Points on which to create instances. |
 | `scale` | value accepted by the underlying instance helper | Blender default | Optional instance scale. |
 | `rotation` | value accepted by the underlying instance helper | Blender default | Optional instance rotation. |
 | `realize` | compile-time `Bool` | `True` | When true, realizes instances before returning. |
@@ -695,7 +929,8 @@ vec_2 = vector(value_1 * 0.3, 0, 0)
 pts = set_position(pts, vec_2)
 geo_3 = cube(size=0.15)
 vec_4 = vector(1, 1, 1)
-geo = instance_on_points(geo_3, pts, scale=vec_4, realize=True)
+selection = index() % 2 == 0
+geo = instance_on_points(geo_3, pts, selection=selection, scale=vec_4, realize=True)
 output('Geometry', geo)
 ```
 
@@ -728,7 +963,7 @@ Creates a Blender node directly. Use this for Blender node types that are not ex
 
 Single-output mode requires both `output=` and `typ=`. Multi-output mode uses `outputs={"Socket": TypeToken, ...}` and returns a result object whose outputs can be accessed with attribute syntax or item syntax.
 
-Supported type tokens: `Float`, `Int`, `Bool`, `Vector`, `Geometry`.
+Supported type tokens: `Float`, `Int`, `Bool`, `Vector`, `Geometry`, `Material`, `Object`, `String`, and `Bundle`.
 
 | Parameter | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -760,14 +995,14 @@ Runtime loops compile to Blender Repeat Zones. Use `repeat_range(...)` when the 
 
 ### `for i in repeat_range(steps): ...`
 
-Updates existing Geometry, Vector, Float, Int, and Bool variables inside one Repeat Zone. The body supports assignments, `geometry_builder` method statements, and nested `if` blocks. It must update at least one existing variable or builder state. Assigned names that did not exist before the loop are iteration-local temporaries rather than Repeat Zone state items.
+Updates existing Geometry, Vector, Float, Int, Bool, and Bundle variables inside one Repeat Zone. The body supports assignments, `geometry_builder` method statements, nested `if` blocks, and nested `repeat_range(...)` loops. It must update at least one existing variable or builder state. Assigned names that did not exist before the loop are iteration-local temporaries rather than Repeat Zone state items.
 
 State item order follows first assignment in the loop body, including nested branches. Conditional branches preserve omitted state values and merge changed state through Switch nodes. The loop index name cannot also be state, and state names cannot collide with Repeat Zone system socket names such as `Iterations` or `Iteration`.
 
 | Part | Type | Description |
 | --- | --- | --- |
 | `steps` | `Int` | Repeat count. May be an integer literal, compile-time integer, or runtime `Int` value. |
-| state variables | `Geometry`, `Vector`, `Float`, `Int`, or `Bool` | Existing variables assigned inside the loop. |
+| state variables | `Geometry`, `Vector`, `Float`, `Int`, `Bool`, or `Bundle` | Existing variables assigned inside the loop. |
 
 ```python
 n = input_int('N', default=8)

@@ -1,12 +1,12 @@
 # NodeForge Geometry Nodes Coverage
 
-This document shows the Blender Geometry Nodes areas and domains covered by NodeForge v0.49.49.
+This document shows the Blender Geometry Nodes areas and domains covered by NodeForge v0.51.4.
 
 | Geometry Nodes area | NodeForge | Note |
 | --- | --- | --- |
 | Geometry Nodes modifier workflow | Yes | Script compiles to a node group |
 | Node group inputs / outputs | Yes | `input_*`, implicit inputs, `output(...)` |
-| Group interface panels / metadata | No | No public DSL API |
+| Group interface panels / metadata | Partial | Root interface panels through `panel(...)` |
 | Inspection | No | No inspection/debug workflow |
 | Baking | No | No baking workflow |
 | Node-based tools | No | No tool metadata API |
@@ -16,27 +16,28 @@ This document shows the Blender Geometry Nodes areas and domains covered by Node
 | Runtime socket: Int | Yes | `Int` |
 | Runtime socket: Bool | Yes | `Bool` |
 | Runtime socket: Vector | Yes | `Vector` |
-| Runtime socket: String | Partial | Compile-time only |
+| Runtime socket: String | Yes | `String`, `input_string(...)` |
 | Runtime socket: Color | No | Missing type |
-| Runtime socket: Material | No | Missing type |
-| Runtime socket: Object | No | Missing type |
+| Runtime socket: Material | Yes | `Material`, `input_material(...)` |
+| Runtime socket: Object | Yes | `Object`, `input_object(...)` |
+| Runtime socket: Bundle | Yes | `Bundle`, `input_bundle(...)` |
 | Runtime socket: Collection | No | Missing type |
 | Runtime socket: Image | No | Missing type |
 | Runtime socket: Rotation | No | Missing type |
 | Runtime socket: Matrix | No | Missing type |
 | Constant input nodes | Partial | Supported types only |
-| Scene input nodes | No | No scene/object/camera wrappers |
+| Scene input nodes | Partial | Object Info through `Object` properties |
 | Import input nodes | No | No import-node wrappers |
 | Gizmo input nodes | No | No gizmo sockets |
 | Output nodes: Viewer | No | No wrapper |
 | Output nodes: Warning | No | No wrapper |
 | Fields: position / normal / index / id | Partial | `position()`, `normal()`, `index()`, `id()` |
 | Fields: radius / selection / active element | Partial | Selection via bool fields only |
-| Fields: evaluate / capture / domain conversion | No | No domain model |
+| Fields: evaluate / capture / domain conversion | Partial | `capture_attribute(...)` for supported field types and domains |
 | Attributes: store | Partial | `store(...)`, `store_named_attribute(...)` |
 | Attributes: read | No | No wrapper |
 | Attributes: statistics / domain size | No | No wrapper |
-| Attributes: blur / capture / remove | No | No wrappers |
+| Attributes: blur / capture / remove | Partial | Capture only |
 | Selection fields | Partial | Boolean expressions, `selection=` args |
 | Active geometry stream | Partial | `store(...)`, statement `set_position(...)` |
 | Math: scalar | Yes | Common math functions/operators |
@@ -48,13 +49,14 @@ This document shows the Blender Geometry Nodes areas and domains covered by Node
 | Texture nodes | Partial | Noise only |
 | Image texture | No | No `Image` socket |
 | Color utilities | No | No `Color` socket |
-| Runtime String socket | No | No public runtime `String` value type |
+| Runtime String socket | Yes | `input_string(...)`, raw/local/library sockets, runtime attribute names |
 | Compile-time strings | Yes | Names, identifiers, and raw-node declarations |
 | Vector construction | Yes | `vector(x, y, z)` |
 | Vector math | Partial | Common vector operations |
 | Rotation utilities | Partial | Helper functions only |
 | Matrix utilities | No | No `Matrix` socket |
 | Menu Switch / enum sockets | No | No menu/enum model |
+| Bundle operations | Partial | `bundle(...)`, `bundle_get(...)`, `bundle_set(...)` |
 | Geometry primitives | Partial | `empty_geometry`, `points`, `point`, `line`, `polyline`, `grid`, `cube` |
 | Geometry join | Yes | `join(...)` |
 | Geometry transform | Yes | `transform(...)` |
@@ -91,8 +93,8 @@ This document shows the Blender Geometry Nodes areas and domains covered by Node
 | Realize instances | Yes | `realize_instances(...)` |
 | Instance transform operations | Partial | Via `instance_on_points` args only |
 | Instance read/info nodes | No | No wrappers |
-| Instance selection / pick instance | No | No wrappers |
-| Object instancing | No | No `Object` socket/API |
+| Instance selection / pick instance | Partial | `selection=` in `instance_on_points(...)`; no Pick Instance control |
+| Object instancing | Partial | Object Info geometry through `input_object(...)` and `.geometry` |
 | Collection instancing | No | No `Collection` socket/API |
 | Points / point cloud generation | Partial | `points`, `point`, layout helpers |
 | Points distribution | No | No distribute-points wrappers |
@@ -103,20 +105,20 @@ This document shows the Blender Geometry Nodes areas and domains covered by Node
 | Volume operations | No | No volume operation wrappers |
 | Volume primitives | No | No volume primitive wrappers |
 | Volume conversion | No | No mesh/points-to-volume wrappers |
-| Materials: assign | Partial | `set_material(geo, "Name")` |
-| Materials: runtime material data | No | No `Material` socket |
+| Materials: assign | Partial | `set_material(geo, material)` with a name or runtime `Material` |
+| Materials: runtime material data | Yes | `input_material(...)`, raw/local/library sockets |
 | Materials: index / replace / selection | No | No wrappers |
 | Simulation Zone | No | No simulation-zone syntax |
-| Repeat Zone | Partial | `repeat_range(...)` state loop |
+| Repeat Zone | Partial | Nested `repeat_range(...)` state loops |
 | For Each Geometry Element Zone | No | No foreach-zone syntax |
 | Bake node | No | No wrapper |
 | Viewer node | No | No wrapper |
 | Warning node | No | No wrapper |
-| Local functions | Yes | `def ... return ...` subset |
+| Local functions | Yes | Typed parameters and single or flat multi-value returns |
 | Reusable library imports | Yes | `from functions/examples/local import ...` |
 | Compile-time `for` loops | Yes | Unrolled graph generation |
-| Runtime repeat loops | Partial | Repeat-style loop only |
-| Runtime `if` / switch logic | Partial | Compatible scalar/vector branch values merged through Switch nodes |
+| Runtime repeat loops | Partial | Nested repeat-style loops; supported state types only |
+| Runtime `if` / switch logic | Partial | Compatible Float, Int, Vector, Bool, Geometry, String, and Bundle branch values |
 | Arrays / compile-time lists | Partial | Compile-time structure only |
 | L-systems | Yes | NodeForge-specific system |
-| Raw Blender node creation | Raw only | `node(...)`; limited socket types |
+| Raw Blender node creation | Raw only | `node(...)`; NodeForge runtime socket types only |

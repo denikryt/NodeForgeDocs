@@ -21,16 +21,19 @@ The normal edit cycle is:
 3. Write a NodeForge script.
 4. Click **Compile Script** to create a new Geometry Nodes group node.
 5. Edit the script and click **Update Selected NodeGroup** to replace the selected generated group in place.
-6. Click **Load Script From Selected NodeGroup** to copy a generated group’s embedded script back into the selected text block.
+6. Click **Load Script From Selected NodeGroup** to copy a generated group's embedded script back into the selected text block.
 
 
-The three main buttons are:
+The main group actions are:
 
 | Button | What it does |
 | --- | --- |
 | **Compile Script** | Compiles the selected Text datablock into a new Geometry Nodes group and inserts it into the active Geometry Nodes editor when one is open. |
-| **Update Selected NodeGroup** | Recompiles the selected Text datablock into the selected generated group node. Existing links are preserved only when the updated interface can be matched unambiguously; incompatible socket type changes can make the update fail. |
+| **Update Selected NodeGroup** | Recompiles the selected Text datablock into the selected generated group. Compatible input values and links are preserved on every node that uses the same group. An ambiguous or incompatible interface change cancels the update and keeps the existing group. |
+| **Reload from Source** | Rebuilds a selected Local or package-backed group from its current catalog source. The group datablock, selected node, and compatible node input state are preserved. |
 | **Load Script From Selected NodeGroup** | Reads the script stored inside the selected generated group and writes it into the selected text block. If no text block is selected, NodeForge can create/use its scratch text block. |
+
+Compiled Geometry Nodes groups remain in the Blender file and continue evaluating when the NodeForge add-on is disabled or uninstalled.
 
 ## First script: one input, one output
 
@@ -130,7 +133,7 @@ What is happening:
 | `parts = []` / `parts.append(...)` | Collects Geometry values into a compile-time list. |
 | `join(parts)` | Combines the generated cubes into one Geometry output. |
 
-Use `range(...)` when the number of loop iterations is known during compilation. Use [`repeat_range(...)`](BUILTINS.md#for-i-in-repeat_rangesteps-) when the iteration count must be a runtime input or when you want a Blender Repeat Zone.
+Use `range(...)` when the number of loop iterations is known during compilation. Use [`repeat_range(...)`](BUILTINS.md#runtime-loops) when the iteration count must be a runtime input or when you want a Blender Repeat Zone.
 
 ## Use the Library panel
 
@@ -138,12 +141,12 @@ The **Library** panel contains reusable scripts and package management tools. Pa
 
 | Catalog | Purpose |
 | --- | --- |
-| **Local** | Your saved scripts. These are user-owned `.nf` files stored outside the add-on package in Blender’s user data area. |
+| **Local** | NodeForge-managed `.nf` files and read-only external source folders. |
 | **Functions** | Reusable DSL functions provided by installed packages. |
 | **Examples** | Example scripts provided by installed packages. |
 | **Packages** | Install and remove NodeForge packages. |
 
-Each catalog has **Refresh** and **Add Node Group** actions.
+Each script catalog has **Refresh** and **Add Node Group** actions.
 
 1. Open a catalog section, for example **Functions**.
 2. Click **Refresh** to scan that catalog.
@@ -157,19 +160,33 @@ Use **Local** when you want to keep a script as a reusable file instead of only 
 
 1. Write or load a script in a Text datablock.
 2. Open **Library → Local**.
-3. Optionally click **New Folder** to organize your scripts.
-4. Click **Save to Local**.
-5. Choose **Text Block** as the source, enter a script name, choose a folder if needed, and confirm.
-6. Click **Refresh** in **Local** to see the saved script.
-7. Select it and click **Add Node Group** to insert it into the current Geometry Nodes editor.
+3. Use the folder rows and arrow buttons to open the managed destination where the script should be stored.
+4. Optionally click **New Folder** to create a subfolder in the current managed directory.
+5. Click **Save**, enter the script name, and confirm. Enable **Overwrite** when replacing an existing file.
+6. Select the saved script and click **Add Node Group** to insert it into the current Geometry Nodes editor.
 
-You can also save from a selected generated group by choosing **Selected Group** in the **Save to Local** dialog. That uses the source embedded in the node group.
+The **Save** and **New Folder** actions are available only in NodeForge-managed Local directories.
+
+## Add an external Local folder
+
+Use **Add Folder...** to make an existing directory of `.nf` files available in Local without copying it.
+
+1. Open **Library → Local** and click **Add Folder...**.
+2. Select an existing folder.
+3. Select the linked folder row and use its arrow button to browse its scripts and subfolders.
+4. Select a script and click **Add Node Group**, or import it with `from local import ...`.
+
+External folders are read-only in NodeForge. Edit their `.nf` files with your normal editor, then select an inserted group and click **Reload from Source** to rebuild it from the current file. **Remove from Local** removes the folder registration and leaves the external files on disk.
+
+For managed Local content, **Delete File** removes a selected `.nf` file. **Delete Folder** removes a selected empty folder.
+
+Folders organize the Local browser, while import names remain flat. A file such as `shapes/cube_row.nf` is imported with `from local import cube_row`. If separate Local roots contain the same public filename, rename or remove one source before importing that name.
 
 ## Reuse a saved script from another script
 
 A saved Local script can be imported and called from another NodeForge script. This is the main reuse mechanism: write a script once, save it as a `.nf` file, then call it from other scripts like a function.
 
-The saved script's `input_*` declarations become function parameters. Its output becomes the value returned by the imported function.
+The saved script's `input_*` declarations become function parameters. One output becomes the returned value; multiple outputs can be unpacked or selected with a compile-time index.
 
 For example, save this as a Local script named `cube_row`:
 
@@ -199,6 +216,8 @@ output('Geometry', geo)
 ```
 
 Here `Spacing` from the saved script becomes the `spacing` argument of `cube_row(spacing)`. The saved script's `Geometry` output becomes the returned `geo` value.
+
+Existing compiled groups keep the Local dependency source snapshot used when they were built. Editing a Local file affects a group when you compile a new caller or use **Reload from Source** on the existing library-backed group.
 
 For the import and call rules, see [Imports](SYNTAX.md#imports) and [Reusable Functions](SYNTAX.md#reusable-functions). For reusable functions from the Math library, see [Math Functions](FUNCTIONS.md).
 
