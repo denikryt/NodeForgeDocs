@@ -1,37 +1,53 @@
 # Get Started with NodeForge
 
-NodeForge lets you write small Python-like scripts and compile them into Blender Geometry Nodes node groups. The script describes the interface and the node logic; NodeForge builds the actual node group for you.
+NodeForge compiles a Python-like script into a native Blender Geometry Nodes group. This page takes you from installing the add-on to compiling and updating your first generated node group.
 
-NodeForge scripts use a DSL, or **domain-specific language**. The language intentionally looks like Python: assignments, function calls, comments, arithmetic, `if`, `for`, lists, imports, and local helper functions use familiar Python syntax. It is not full Python. It only supports the constructs and built-ins that NodeForge knows how to compile into Geometry Nodes.
+## Install NodeForge
 
-Use this page as the beginner path. For complete reference material, continue with:
+1. Open the [NodeForge releases page](https://github.com/denikryt/NodeForge/releases).
+2. In the latest release, download the `NodeForge-v<version>-blender.zip` file from **Assets**.
+3. In Blender, open **Edit → Preferences → Add-ons**.
+4. Open the Add-ons menu and choose **Install from Disk...**.
+5. Select the downloaded ZIP file.
+6. Enable **NodeForge** in the add-on list.
 
-- [DSL Syntax and Semantics](SYNTAX.md) 
-- [Core DSL Built-ins Reference](BUILTINS.md)
+The installed add-on adds a **NodeForge** tab to the sidebar of the Geometry Node Editor.
 
-## The basic workflow
+## Create your first NodeForge group
 
-Open a Geometry Nodes editor, press `N`, and open the **NodeForge** tab in the sidebar. NodeForge reads source code from a Blender Text datablock. The generated node group stores a copy of its source, so you can load the script back later.
+1. Select a mesh object.
+2. Open the **Geometry Node Editor** and click **New** to create a Geometry Nodes modifier and node tree.
+3. Press `N` to open the sidebar, then select the **NodeForge** tab.
+4. Open a **Text Editor** in another Blender area and click **New** to create a Text datablock.
+5. Enter this script:
 
+```python
+geo = cube(size=2.0)
+output("Geometry", geo)
+```
 
-The normal edit cycle is:
+6. In the NodeForge sidebar, select the new Text datablock in **Text Script**.
+7. Click **Compile Script**. NodeForge compiles the text and adds the generated group node to the current Geometry Nodes tree.
+8. Connect the generated node **Geometry** output to the **Group Output** node **Geometry** input.
 
-1. Create or open a Blender Text datablock.
-2. Select that text in the NodeForge **Text Script** field.
-3. Write a NodeForge script.
-4. Click **Compile Script** to create a new Geometry Nodes group node.
-5. Edit the script and click **Update Selected NodeGroup** to replace the selected generated group in place.
-6. Click **Load Script From Selected NodeGroup** to copy a generated group's embedded script back into the selected text block.
+The object now displays the cube produced by the script.
 
+## Update the generated group
 
-The main group actions are:
+1. Edit the source in the Text Editor. For example, change `size=2.0` to `size=3.0`.
+2. Select the generated NodeForge group node in the Geometry Node Editor.
+3. Click **Update Selected NodeGroup** in the NodeForge sidebar.
+
+NodeForge recompiles the selected text into the same node group. The group name, compatible input values, and compatible links are preserved.
+
+## Main actions
 
 | Button | What it does |
 | --- | --- |
-| **Compile Script** | Compiles the selected Text datablock into a new Geometry Nodes group and inserts it into the active Geometry Nodes editor when one is open. |
-| **Update Selected NodeGroup** | Recompiles the selected Text datablock into the selected generated group. Compatible input values and links are preserved on every node that uses the same group. An ambiguous or incompatible interface change cancels the update and keeps the existing group. |
-| **Reload from Source** | Rebuilds a selected Local or package-backed group from its current catalog source. The group datablock, selected node, and compatible node input state are preserved. |
-| **Load Script From Selected NodeGroup** | Reads the script stored inside the selected generated group and writes it into the selected text block. If no text block is selected, NodeForge can create/use its scratch text block. |
+| **Compile Script** | Compiles the selected Text datablock into a new Geometry Nodes group and inserts it into the active Geometry Nodes editor. |
+| **Update Selected NodeGroup** | Recompiles the selected Text datablock into the selected generated group. Compatible input values and links are preserved. |
+| **Load Script From Selected NodeGroup** | Copies the source embedded in the selected generated group into the selected Text datablock. |
+| **Reload from Source** | Rebuilds a selected Local or package-backed group from its current catalog source. |
 
 Compiled Geometry Nodes groups remain in the Blender file and continue evaluating when the NodeForge add-on is disabled or uninstalled.
 
