@@ -1,12 +1,17 @@
 # Writing L-System Scripts
 
-The examples require the explicitly installed `nodeforge.lsystem` package with Python permission approved.
+Install the `nodeforge.lsystem` package through **Library → Packages** and approve its Python permission before using the examples on this page.
 
-This guide shows how to write L-system scripts in NodeForge.
+An L-system script has two stages:
 
-Use `LSYSTEMS.md` for constructor reference and implementation notes.
+1. The grammar starts from an axiom and applies rewrite rules for the selected number of iterations.
+2. A 3D turtle reads the resulting modules and creates curves and marker points.
 
-## Minimal example
+Use [L-System Reference](LSYSTEMS.md) for constructor signatures and the complete command table.
+
+## Minimal L-System
+
+This script draws a branching curve with runtime controls for angle and segment length.
 
 ```python
 angle = input_float("Angle", default=25.0)
@@ -23,239 +28,382 @@ geo = ls_system(
 output("Geometry", geo)
 ```
 
-What happens:
+The grammar is evaluated in this order:
 
-1. Start with the axiom string: `F`.
-2. Apply rewrite rules `ls_iterations(...)` times.
-3. Read the final string as turtle commands.
-4. Generate geometry from drawn `F` segments.
+1. Start with the axiom `F`.
+2. Replace every `F` with `F[+F]F[-F]F`.
+3. Repeat the rewrite for the requested iteration count.
+4. Interpret `F`, `+`, `-`, `[`, and `]` as turtle commands.
 
-## Basic parts
+Rules are parallel. Each iteration reads one complete generation and produces the next generation; replacements created during that iteration are not rewritten again until the next iteration.
 
-```python
-ls_axiom("F")
-```
+## Axiom and Grammar Symbols
 
-The starting string. There is exactly one axiom per `ls_system(...)`.
-
-If the axiom contains `F`, the system starts with drawable geometry. For example, `ls_axiom("F")` with zero iterations already draws one segment.
-
-If the axiom contains only grammar symbols such as `X`, `A`, or `B`, it does not draw anything by itself. Those symbols must be rewritten into `F` or other turtle commands before geometry appears.
+`ls_axiom(...)` defines the initial stream. A visible curve can start directly with `F`:
 
 ```python
-ls_rule("F", "F[+F]F[-F]F")
+geo = ls_system(
+    ls_axiom("F+F+F"),
+    ls_iterations(0),
+    ls_angle(120),
+    ls_step(1),
+)
+
+output("Geometry", geo)
 ```
 
-A rewrite rule. Every `F` becomes `F[+F]F[-F]F` during each iteration.
-
-```python
-ls_iterations(2)
-```
-
-How many rewrite passes to run. This is compile-time.
-
-```python
-ls_angle(angle)
-```
-
-Turn angle in degrees. `+` and `-` use this value.
-
-```python
-ls_step(step)
-```
-
-Forward distance for `F` and `f`.
-
-## Symbols
-
-| Symbol | Does |
-| --- | --- |
-| `F` | Move forward and draw a segment. |
-| `f` | Move forward without drawing. |
-| `+` | Turn left by `ls_angle(...)`. |
-| `-` | Turn right by `ls_angle(...)`. |
-| `[` | Save current position and direction. Start a branch. |
-| `]` | Restore saved position and direction. End a branch. |
-
-Other ASCII letters, digits, and `_` can be grammar symbols. They help control rewriting but do not draw anything if they remain in the final string.
-
-Example:
+Grammar symbols such as `A`, `B`, or `X` can control growth without drawing anything themselves. They become visible only when rewrite rules eventually produce drawing commands or markers.
 
 ```python
 geo = ls_system(
     ls_axiom("X"),
     ls_rule("X", "F+X"),
-    ls_iterations(3),
+    ls_iterations(5),
     ls_angle(60),
-    ls_step(0.1),
+    ls_step(0.15),
 )
-```
-
-`X` keeps the rewrite going. The drawn geometry comes from `F`.
-
-## How branches work
-
-This rule creates two side branches:
-
-```python
-ls_rule("F", "F[+F]F[-F]F")
-```
-
-Read it as:
-
-```text
-F     draw forward
-[+F]  save state, turn left, draw branch, restore state
-F     continue from the original trunk
-[-F]  save state, turn right, draw branch, restore state
-F     continue from the original trunk
-```
-
-`[` and `]` are important because they stop a side branch from moving the main trunk position.
-
-## Runtime controls
-
-These values can be runtime inputs:
-
-```python
-angle = input_float("Angle", default=24.0)
-step = input_float("Step", default=0.06)
-```
-
-Use them in the system:
-
-```python
-ls_angle(angle)
-ls_step(step)
-```
-
-Changing `angle` changes branch direction. Changing `step` changes segment length.
-
-The following are not runtime controls in the current implementation:
-
-```text
-axiom
-rules
-iteration count
-branch topology
-```
-
-Changing those means the L-system must be rebuilt.
-
-
-## Parameterized commands and marker points
-
-
-Rule strings may be assembled from compile-time string fragments before L-system validation runs:
-
-```python
-branch = "[+F]F[-F]"
-rule = f"F{branch}F"
-
-geo = ls_system(
-    ls_axiom("F"),
-    ls_rule("F", rule),
-    ls_iterations(2),
-    ls_angle(25),
-    ls_step(0.1),
-)
-```
-
-F-string interpolation is string-only. Interpolating runtime values, numeric constants, L-system parts, conversion flags, or format specs raises `CompileError`.
-
-Use `ls_param(...)` when one system needs multiple lengths or angles. Inside L-system strings, module arguments are either numeric literals or names declared with `ls_param(...)`; they are not Python expressions.
-
-```python
-main_angle = input_float("Main Angle", default=24)
-side_angle = input_float("Side Angle", default=35)
-branch_len = input_float("Branch Length", default=0.06)
-leaf_size = input_float("Leaf Size", default=0.8)
-
-plant = ls_system(
-    ls_axiom("X"),
-    ls_rule("X", "F(branch_len)[+(main_angle)XLeaf(leaf_size)][-(side_angle)XBud]FX"),
-    ls_rule("F", "F(branch_len)F(branch_len)"),
-    ls_iterations(4),
-    ls_angle(25),
-    ls_step(0.1),
-    ls_param("main_angle", main_angle),
-    ls_param("side_angle", side_angle),
-    ls_param("branch_len", branch_len),
-    ls_param("leaf_size", leaf_size),
-    ls_marker("Leaf", "size"),
-    ls_marker("Bud"),
-)
-
-leaf_points = ls_points(plant, marker="Leaf")
-bud_points = ls_points(plant, marker="Bud")
-```
-
-`Leaf(size)` and `Bud` are marker modules because they are declared with `ls_marker(...)`. They emit point data at the current turtle position. They do not create leaf or bud geometry by themselves; use the extracted points with tools such as `instance_on_points(...)`. Compact syntax is intentional: whitespace is invalid in L-system strings and is not used to distinguish modules.
-
-## Transforming and joining L-systems
-
-An L-system result is normal geometry.
-
-```python
-plant_a = ls_system(
-    ls_axiom("F"),
-    ls_rule("F", "F[+F]F[-F]F"),
-    ls_iterations(2),
-    ls_angle(25),
-    ls_step(0.1),
-)
-
-plant_b = ls_system(
-    ls_axiom("F"),
-    ls_rule("F", "F[+F]F[-F]F"),
-    ls_iterations(4),
-    ls_angle(25),
-    ls_step(0.07),
-)
-
-plant_b = transform(plant_b, translation=vector(1, 0, 0))
-geo = join(plant_a, plant_b)
 
 output("Geometry", geo)
 ```
 
-Use `translation`, not `position`, in `transform(...)`.
+Symbols without a rule stay unchanged from one generation to the next. If they reach the final stream and are not turtle commands or declared markers, the turtle ignores them.
 
-## Common patterns
+A rule may also delete a symbol with an empty replacement. This is useful for temporary grammar symbols.
 
-### Koch-style curve
+```python
+geo = ls_system(
+    ls_axiom("FAF"),
+    ls_rule("A", ""),
+    ls_iterations(1),
+    ls_angle(90),
+    ls_step(0.5),
+)
+
+output("Geometry", geo)
+```
+
+## Branches
+
+`[` saves the current position and orientation. `]` restores the saved state.
+
+```python
+geo = ls_system(
+    ls_axiom("F[+F]F[-F]F"),
+    ls_iterations(0),
+    ls_angle(35),
+    ls_step(0.4),
+)
+
+output("Geometry", geo)
+```
+
+Read the stream as:
+
+```text
+F     draw the trunk forward
+[+F]  save state, turn left, draw a side branch, restore state
+F     continue the trunk
+[-F]  save state, turn right, draw a side branch, restore state
+F     continue the trunk
+```
+
+The saved state includes the full 3D orientation, not only position. A roll or pitch made inside a branch therefore does not change the parent branch after `]`.
+
+## 3D Turtle Orientation
+
+The turtle begins at the origin, facing `+X`, with local Left along `+Y` and local Up along `+Z`.
+
+The six rotation commands are:
+
+| Command | Rotation |
+| --- | --- |
+| `+` | yaw left around local Up |
+| `-` | yaw right around local Up |
+| `^` | pitch up around local Left |
+| `&` | pitch down around local Left |
+| `/` | positive roll around local Heading |
+| `\` | negative roll around local Heading |
+
+Every unparameterized rotation uses `ls_angle(...)`. Add one argument to give a command its own angle.
+
+```python
+pitch = input_float("Pitch", default=35.0)
+roll = input_float("Roll", default=60.0)
+
+geo = ls_system(
+    ls_axiom("F/(roll)[&(pitch)F]F"),
+    ls_iterations(0),
+    ls_angle(25),
+    ls_step(1),
+    ls_param("pitch", pitch),
+    ls_param("roll", roll),
+)
+
+output("Geometry", geo)
+```
+
+Roll changes the local Left and Up axes. It does not move the turtle by itself, but it changes the plane used by later pitch or yaw operations. Rotation order therefore matters.
+
+For example, this script exposes two curves that use the same two rotations in different orders:
+
+```python
+first = ls_system(
+    ls_axiom("+(90)^(90)F"),
+    ls_iterations(0),
+    ls_angle(25),
+    ls_step(1),
+)
+
+second = ls_system(
+    ls_axiom("^(90)+(90)F"),
+    ls_iterations(0),
+    ls_angle(25),
+    ls_step(1),
+)
+second = transform(second, translation=vector(2, 0, 0))
+
+output("Geometry", join(first, second))
+```
+
+## Parameterized Commands
+
+Use command arguments when different modules need different distances or angles.
+
+The movement commands accept one distance:
+
+```text
+F(0.5)
+f(2.0)
+```
+
+The rotation commands accept one angle in degrees:
+
+```text
++(30)
+-(45)
+^(20)
+&(20)
+/(90)
+\(90)
+```
+
+A module argument can also reference a value declared with `ls_param(...)`. The declared value may be a runtime input.
+
+```python
+long_step = input_float("Long Step", default=1.5)
+short_step = input_float("Short Step", default=0.5)
+turn = input_float("Turn", default=70.0)
+
+geo = ls_system(
+    ls_axiom("F(long_step)+(turn)F(short_step)-(turn)F(long_step)"),
+    ls_iterations(0),
+    ls_angle(25),
+    ls_step(1),
+    ls_param("long_step", long_step),
+    ls_param("short_step", short_step),
+    ls_param("turn", turn),
+)
+
+output("Geometry", geo)
+```
+
+Arguments inside L-system strings are data references, not NodeForge expressions. Use a numeric literal or a single `ls_param(...)` name. Compute a value in the NodeForge script first, then bind the result with `ls_param(...)` when a more complex expression is needed.
+
+```python
+base = input_float("Base Length", default=0.4)
+length = base * 2.0
+
+geo = ls_system(
+    ls_axiom("F(length)+(90)F(length)"),
+    ls_iterations(0),
+    ls_angle(25),
+    ls_step(1),
+    ls_param("length", length),
+)
+
+output("Geometry", geo)
+```
+
+## Runtime Growth
+
+Pass a runtime `Int` to `ls_iterations(...)` when the number of rewrite generations should be adjustable from the node-group interface.
+
+```python
+iterations = input_int("Iterations", default=4)
+
+geo = ls_system(
+    ls_axiom("A"),
+    ls_rule("A", "FA"),
+    ls_iterations(iterations),
+    ls_angle(25),
+    ls_step(0.25),
+)
+
+output("Geometry", geo)
+```
+
+Changing **Iterations** changes topology without recompiling the script. A runtime value of `0` uses the axiom directly. Runtime values below `0` are treated as `0`.
+
+Runtime rewriting still uses compile-time grammar declarations. The axiom, rules, marker declarations, and parameter names do not become runtime strings.
+
+For runtime iterations, keep every branch local to one declared stream: the axiom and every rule replacement must each have balanced brackets. This form is valid:
+
+```python
+iterations = input_int("Iterations", default=3)
+
+geo = ls_system(
+    ls_axiom("A"),
+    ls_rule("A", "F[+A][-A]"),
+    ls_iterations(iterations),
+    ls_angle(30),
+    ls_step(0.2),
+)
+
+output("Geometry", geo)
+```
+
+A replacement that opens a branch while another replacement closes it is not valid in runtime iteration mode. Rules that rewrite `[` or `]` are also reserved from this mode.
+
+## Marker Points
+
+Markers place points in the turtle stream without drawing or moving the turtle. Declare the marker with `ls_marker(...)`, use its name in the axiom or a rule, and extract it with `ls_points(...)`.
+
+```python
+plant = ls_system(
+    ls_axiom("F[+FLeaf][-FLeaf]FLeaf"),
+    ls_iterations(0),
+    ls_angle(35),
+    ls_step(0.5),
+    ls_marker("Leaf"),
+)
+
+leaf_points = ls_points(plant, marker="Leaf")
+leaves = instance_on_points(cube(0.12), leaf_points)
+
+output("Geometry", join(plant, leaves))
+```
+
+A marker can carry numeric parameters. Each parameter becomes a point attribute with the name declared in `ls_marker(...)`.
+
+```python
+size = input_float("Leaf Size", default=0.25)
+
+plant = ls_system(
+    ls_axiom("FLeaf(size)+(45)FLeaf(size)"),
+    ls_iterations(0),
+    ls_angle(25),
+    ls_step(0.7),
+    ls_param("size", size),
+    ls_marker("Leaf", "size"),
+)
+
+leaf_points = ls_points(plant, marker="Leaf")
+leaves = instance_on_points(cube(0.12), leaf_points)
+
+output("Geometry", join(plant, leaves))
+```
+
+Marker points also carry two orientation vectors:
+
+- `nf_lsys_marker_tangent` is the turtle Heading at the marker.
+- `nf_lsys_marker_up` is the turtle Up vector at the marker.
+
+These vectors follow yaw, pitch, roll, and branch restoration, so marker orientation remains meaningful in spatial L-systems.
+
+## Spatial Plant with Runtime Growth
+
+This example combines runtime iterations, pitch, roll, a runtime step length, and leaf markers. It is a compact starting point for procedural 3D plants.
+
+```python
+growth_iterations = input_int("Growth Iterations", default=5)
+branch_angle = input_float("Branch Angle", default=35.0)
+node_rotation = input_float("Node Rotation", default=137.507764)
+step = input_float("Step", default=0.2)
+
+plant = ls_system(
+    ls_axiom("A"),
+    ls_rule("A", "F[&(branch_angle)B]/(node_rotation)A"),
+    ls_rule("B", "FLeaf"),
+    ls_iterations(growth_iterations),
+    ls_angle(25),
+    ls_step(step),
+    ls_param("branch_angle", branch_angle),
+    ls_param("node_rotation", node_rotation),
+    ls_marker("Leaf"),
+)
+
+leaf_points = ls_points(plant, marker="Leaf")
+leaves = instance_on_points(cube(0.08), leaf_points)
+
+output("Geometry", join(plant, leaves))
+```
+
+The roll angle separates successive branches around the trunk. The pitch angle moves each branch away from the current heading. Because both values are runtime parameters, their shape can be adjusted without recompiling.
+
+## Compile-Time String Composition
+
+Use f-strings when the grammar itself is assembled from compile-time string fragments.
+
+```python
+left = "[-F]"
+right = "[+F]"
+rule = f"F{left}F{right}F"
+
+geo = ls_system(
+    ls_axiom("F"),
+    ls_rule("F", rule),
+    ls_iterations(3),
+    ls_angle(25),
+    ls_step(0.1),
+)
+
+output("Geometry", geo)
+```
+
+F-string interpolation changes the compile-time grammar. Runtime numeric controls belong in `ls_param(...)` instead.
+
+## Transforming and Joining Results
+
+`ls_system(...)` returns ordinary geometry. Apply NodeForge geometry operations after the L-system is built.
+
+```python
+left = ls_system(
+    ls_axiom("F[+F][-F]F"),
+    ls_iterations(2),
+    ls_angle(30),
+    ls_step(0.15),
+)
+
+right = ls_system(
+    ls_axiom("F[+F][-F]F"),
+    ls_iterations(3),
+    ls_angle(22),
+    ls_step(0.12),
+)
+right = transform(right, translation=vector(1.5, 0, 0))
+
+output("Geometry", join(left, right))
+```
+
+Use `translation=` for positional transforms.
+
+## Common Patterns
+
+### Koch Curve
 
 ```python
 geo = ls_system(
     ls_axiom("F"),
     ls_rule("F", "F+F--F+F"),
-    ls_iterations(3),
+    ls_iterations(4),
     ls_angle(60),
-    ls_step(0.1),
+    ls_step(0.08),
 )
+
 output("Geometry", geo)
 ```
 
-### Branching plant
-
-```python
-angle = input_float("Angle", default=25.0)
-step = input_float("Step", default=0.12)
-
-geo = ls_system(
-    ls_axiom("F"),
-    ls_rule("F", "F[+F]F[-F]F"),
-    ls_iterations(3),
-    ls_angle(angle),
-    ls_step(step),
-)
-output("Geometry", geo)
-```
-
-
-### Classic fractal plant
-
-This is a common L-system plant pattern. `X` controls growth and does not draw; `F` draws the visible segments.
+### Classic Fractal Plant
 
 ```python
 angle = input_float("Angle", default=25.0)
@@ -269,50 +417,45 @@ geo = ls_system(
     ls_angle(angle),
     ls_step(step),
 )
-
 geo = transform(geo, rotation=vector(0, 0, radians(90)))
+
 output("Geometry", geo)
 ```
 
-### Grammar symbol for growth
+### 3D Branch Whorl
 
 ```python
+pitch = input_float("Pitch", default=35.0)
+roll = input_float("Roll", default=120.0)
+
 geo = ls_system(
-    ls_axiom("X"),
-    ls_rule("X", "F[+X][-X]FX"),
-    ls_rule("F", "FF"),
-    ls_iterations(4),
-    ls_angle(24),
-    ls_step(0.06),
+    ls_axiom("F[&(pitch)F]/(roll)[&(pitch)F]/(roll)[&(pitch)F]"),
+    ls_iterations(0),
+    ls_angle(25),
+    ls_step(0.8),
+    ls_param("pitch", pitch),
+    ls_param("roll", roll),
 )
+
 output("Geometry", geo)
 ```
 
-`X` does not draw. It controls where future growth happens.
+## Grammar Requirements
 
-## Errors to avoid
+Use these rules when writing axioms and replacements:
 
-Do not use unsupported characters in rules:
+- Keep whitespace out of L-system strings.
+- Use ASCII letters, digits, and `_` for ordinary grammar symbols.
+- Use only declared marker names for multi-character modules.
+- Give parameterized built-ins exactly one numeric literal or declared parameter name.
+- Declare every named module argument with `ls_param(...)`.
+- Match every `[` with a later `]` in the interpreted stream.
+- For runtime iterations, balance brackets separately in the axiom and in every replacement.
 
-```python
-ls_rule("F", "F → F+F")  # bad: Unicode arrow
-```
+The compiler reports invalid streams as `CompileError` before producing the node group whenever the invalid structure is known at compile time.
 
-Do not leave branches unmatched:
+## Performance
 
-```python
-ls_rule("F", "F[+F")  # bad: missing ]
-```
+L-system growth can be exponential. A rule that produces two recursive symbols may approximately double the active grammar each iteration; rules that produce three or more recursive symbols grow faster.
 
-Do not expect `f` to draw:
-
-```python
-ls_rule("F", "FfF")  # middle move creates a gap
-```
-
-Do not use `position=` in `transform(...)`:
-
-```python
-geo = transform(geo, position=vector(1, 0, 0))  # bad
-geo = transform(geo, translation=vector(1, 0, 0))  # good
-```
+Compile-time iteration mode stops expansion above `200000` modules. Runtime iteration mode performs the expansion during Geometry Nodes evaluation, so choose practical input ranges for **Iterations** instead of exposing an unrestricted large value.
