@@ -246,6 +246,7 @@ Read these in order:
 3. [Writing Functions](WRITING_FUNCTIONS.md) — create reusable functions with the Core DSL.
 4. [Math Methods](MATH_METHODS.md) — use the methods added by the Math library.
 5. [Math Functions](FUNCTIONS.md) — use reusable DSL functions from the Math library.
-6. [LSystem](LSYSTEMS.md) — create geometry with L-system rules.
+6. [Math Examples](MATH_EXAMPLES.md) — explore complete scripts included with the Math package.
+7. [LSystem](LSYSTEMS.md) — create geometry with L-system rules.
 
 To study an installed example, add it from **Library → Examples**, load its source with **Load Script From Selected NodeGroup**, and edit the source in a Text datablock.

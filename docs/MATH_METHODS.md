@@ -12,7 +12,7 @@ output('Value', value)
 
 ## Scalar Math Callables
 
-These names are available directly when the Math library is installed. They accept runtime values and create the corresponding Geometry Nodes operations. When all arguments are compile-time numbers, the compiler can evaluate supported calls during compilation.
+These names are available directly when the Math library is installed. They accept runtime values and create the corresponding Geometry Nodes operations. The scalar callables accept positional arguments or the parameter names shown below as keywords. When all arguments are compile-time numbers, the compiler can evaluate supported calls during compilation.
 
 ### Unary Callables
 
@@ -65,13 +65,14 @@ output('Value', result)
 
 ## Procedural Value Callables
 
-### `noise(vector=position(), scale=..., detail=..., roughness=..., lacunarity=..., distortion=..., normalize=...)`
+### `noise()`
+### `noise(vector, *, scale=..., detail=..., roughness=..., lacunarity=..., distortion=..., normalize=...)`
 
-Creates a 3D Noise Texture field and returns its Factor output.
+Creates a 3D Noise Texture field and returns its Factor output. Pass `vector` as the optional first positional argument. When it is omitted, `position()` is used. The remaining options are keyword arguments; omitted options keep the corresponding Blender Noise Texture defaults.
 
 | Parameter | Type | Description |
 | --- | --- | --- |
-| `vector` | `Vector` | Coordinate field. Defaults to `position()`. |
+| `vector` | `Vector` | Optional coordinate field passed positionally. Defaults to `position()`. |
 | `scale` | numeric | Noise scale. |
 | `detail` | numeric | Noise detail. |
 | `roughness` | numeric | Noise roughness. |

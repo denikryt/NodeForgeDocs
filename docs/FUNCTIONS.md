@@ -496,45 +496,4 @@ value = fibonacci(n)
 output('Value', value)
 ```
 
-## Examples
-
-### Instanced circular layout
-
-```python
-from functions import circle_points
-pts = circle_points(count=32, radius=3.0)
-geo_1 = cube(size=0.15)
-geo = instance_on_points(geo_1, pts)
-output('Geometry', geo)
-```
-
-### Grid with smooth height falloff
-
-```python
-from functions import grid_points, smoothstep
-vec_1 = vector(20, 20, 1)
-vec_2 = vector(0.2, 0.2, 0.0)
-grid = grid_points(count=vec_1, spacing=vec_2, centered=False)
-value_3 = position()
-vec_4 = vector(0, 0, 0)
-center_distance = distance(value_3, vec_4)
-value_5 = smoothstep(0.0, 2.5, center_distance)
-height = 1.0 - value_5
-value_6 = position()
-vec_7 = vector(0, 0, height)
-grid = set_position(grid, value_6 + vec_7)
-output('Geometry', grid)
-```
-
-### Spiral with rotated offset vectors
-
-```python
-from functions import spiral_points, rotate2d
-pts = spiral_points(count=96, radius=3.0, turns=4.0)
-vec_1 = vector(0.1, 0, 0)
-value_2 = index()
-offset = rotate2d(vec_1, value_2 * 0.2)
-value_3 = position()
-pts = set_position(pts, value_3 + offset)
-output('Geometry', pts)
-```
+For complete scripts included with the package, see [Math Examples](MATH_EXAMPLES.md).

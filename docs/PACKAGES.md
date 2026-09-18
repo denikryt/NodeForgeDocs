@@ -58,7 +58,9 @@ See [Imports](SYNTAX.md#imports).
 
 ## Examples
 
-The declared `examples` directory contains complete `.nf` scripts shown in the **Examples** catalog. Examples are catalog entries, not callable functions.
+The declared `examples` directory contains complete example entries shown in the **Examples** catalog. A simple entry is a top-level `.nf` or `.nodeforge` file. An entry that needs package-local Python support can use a directory containing `source.nf` and an optional `backend.py`.
+
+A package-local `backend.py` can expose helper callables through `BACKEND_BUILTINS`; those helpers are available only while compiling that entry's `source.nf`. Packages that include executable Python must declare `permissions.python: true`, and the user must approve that permission during installation.
 
 ## Systems
 

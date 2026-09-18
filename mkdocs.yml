@@ -27,6 +27,7 @@ nav:
       - Math:
           - Methods: MATH_METHODS.md
           - Functions: FUNCTIONS.md
+          - Examples: MATH_EXAMPLES.md
       - LSystem:
           - Reference: LSYSTEMS.md
           - Scripting: LSYSTEMS_SCRIPTING.md

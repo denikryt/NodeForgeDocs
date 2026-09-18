@@ -21,6 +21,6 @@ The compiled result is an ordinary Blender Geometry Nodes group. It can be inspe
 
 ## Libraries
 
-- [Math Methods](MATH_METHODS.md) and [Math Functions](FUNCTIONS.md)
+- [Math Methods](MATH_METHODS.md), [Math Functions](FUNCTIONS.md), and [Math Examples](MATH_EXAMPLES.md)
 - [LSystem Reference](LSYSTEMS.md)
 - [Writing L-System Scripts](LSYSTEMS_SCRIPTING.md)
