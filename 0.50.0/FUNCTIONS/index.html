@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://denikryt.github.io/NodeForgeDocs/0.50.0/FUNCTIONS/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Functions - NodeForge Documentation</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Functions";
+        var mkdocs_page_input_path = "FUNCTIONS.md";
+        var mkdocs_page_url = "/NodeForgeDocs/0.50.0/FUNCTIONS/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> NodeForge Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../GET_STARTED/">Get Started</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">DSL</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../CORE_CONCEPTS/">Core Concepts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SYNTAX/">Syntax</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../BUILTINS/">Built-ins</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../WRITING_FUNCTIONS/">Writing Functions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../PACKAGES/">Packages</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../GEOMETRY_NODES_COVERAGE/">Geometry Nodes Coverage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Libraries</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" >Math</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_METHODS/">Methods</a>
+                </li>
+                <li class="toctree-l2 current"><a class="reference internal current" href="#">Functions</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#math-helpers">Math Helpers</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#inverse_lerpa00-b10-x00">inverse_lerp(a=0.0, b=1.0, x=0.0)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#remapx00-in_min00-in_max10-out_min00-out_max10">remap(x=0.0, in_min=0.0, in_max=1.0, out_min=0.0, out_max=1.0)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#saturatex00">saturate(x=0.0)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#stepedge00-x00">step(edge=0.0, x=0.0)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#smoothstepedge000-edge110-x00">smoothstep(edge0=0.0, edge1=1.0, x=0.0)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#smootherstepedge000-edge110-x00">smootherstep(edge0=0.0, edge1=1.0, x=0.0)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#pingpongx00-length10">pingpong(x=0.0, length=1.0)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#wrapx00-min00-max10">wrap(x=0.0, min=0.0, max=1.0)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#signx00">sign(x=0.0)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#vector-helpers">Vector Helpers</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#rotate2dvvector1-0-0-angle00">rotate2d(v=vector(1, 0, 0), angle=0.0)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#polarradius10-angle00">polar(radius=1.0, angle=0.0)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#angle_betweenavector1-0-0-bvector0-1-0">angle_between(a=vector(1, 0, 0), b=vector(0, 1, 0))</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#rotate_around_axisvvector1-0-0-axisvector0-0-1-angle00">rotate_around_axis(v=vector(1, 0, 0), axis=vector(0, 0, 1), angle=0.0)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#point-creation-and-layouts">Point Creation and Layouts</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#layout_gridgeometry-countvector1-1-1-spacingvector1-1-1-centeredfalse">layout_grid(geometry, count=vector(1, 1, 1), spacing=vector(1, 1, 1), centered=False)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#grid_pointscountvector1-1-1-spacingvector1-1-1-centeredfalse">grid_points(count=vector(1, 1, 1), spacing=vector(1, 1, 1), centered=False)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#layout_circlegeometry-count16-radius10-start_angle00-end_angletau-include_endpointfalse">layout_circle(geometry, count=16, radius=1.0, start_angle=0.0, end_angle=tau, include_endpoint=False)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#circle_pointscount16-radius10-start_angle00-end_angletau-include_endpointfalse">circle_points(count=16, radius=1.0, start_angle=0.0, end_angle=tau, include_endpoint=False)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#layout_spiralgeometry-count16-radius10-turns10-height00-start_radius00-start_angle00">layout_spiral(geometry, count=16, radius=1.0, turns=1.0, height=0.0, start_radius=0.0, start_angle=0.0)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#spiral_pointscount16-radius10-turns10-height00-start_radius00-start_angle00">spiral_points(count=16, radius=1.0, turns=1.0, height=0.0, start_radius=0.0, start_angle=0.0)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#layout_randomgeometry-minvector-1-1-1-maxvector1-1-1-seed0">layout_random(geometry, min=vector(-1, -1, -1), max=vector(1, 1, 1), seed=0)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#random_pointscount16-minvector-1-1-1-maxvector1-1-1-seed0">random_points(count=16, min=vector(-1, -1, -1), max=vector(1, 1, 1), seed=0)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#geometry-helper">Geometry Helper</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#copy_by_offsetsgeometry-scalevector13-13-1">copy_by_offsets(geometry, scale=vector(1/3, 1/3, 1))</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#fractal-helper">Fractal Helper</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#sierpinski_carpetgeometry-steps2-scalevector13-13-1">sierpinski_carpet(geometry, steps=2, scale=vector(1/3, 1/3, 1))</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#sequence-helper">Sequence Helper</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#fibonaccin8">fibonacci(n=8)</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_EXAMPLES/">Examples</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >LSystem</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS/">Reference</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS_SCRIPTING/">Scripting</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">NodeForge Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Libraries</li>
+          <li class="breadcrumb-item">Math</li>
+      <li class="breadcrumb-item active">Functions</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/denikryt/NodeForgeDocs/edit/master/docs/FUNCTIONS.md">Edit on denikryt/NodeForgeDocs</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="math-functions">Math Functions<a class="headerlink" href="#math-functions" title="Permanent link">&para;</a></h1>
+<p>These reusable DSL functions are provided by the installed <code>nodeforge.math</code> package and are imported from <code>functions</code>.</p>
+<p>The <code>functions</code> catalog of the Math library contains reusable functions written in the DSL. Import a function before calling it. See <a href="../SYNTAX/#imports">Imports</a> for import syntax and name-resolution rules.</p>
+<h2 id="math-helpers">Math Helpers<a class="headerlink" href="#math-helpers" title="Permanent link">&para;</a></h2>
+<h3 id="inverse_lerpa00-b10-x00"><code>inverse_lerp(a=0.0, b=1.0, x=0.0)</code><a class="headerlink" href="#inverse_lerpa00-b10-x00" title="Permanent link">&para;</a></h3>
+<p>Computes the unbounded interpolation factor of <code>x</code> between <code>a</code> and <code>b</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>a</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Range start.</td>
+</tr>
+<tr>
+<td><code>b</code></td>
+<td><code>Float</code></td>
+<td><code>1.0</code></td>
+<td>Range end.</td>
+</tr>
+<tr>
+<td><code>x</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Value to measure inside the range.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Float</code>.</p>
+<pre class="highlight"><code class="language-python">from functions import inverse_lerp
+value_1 = input_float('Value', default=4.0)
+t = inverse_lerp(2.0, 6.0, value_1)
+output('Factor', t)</code></pre>
+<h3 id="remapx00-in_min00-in_max10-out_min00-out_max10"><code>remap(x=0.0, in_min=0.0, in_max=1.0, out_min=0.0, out_max=1.0)</code><a class="headerlink" href="#remapx00-in_min00-in_max10-out_min00-out_max10" title="Permanent link">&para;</a></h3>
+<p>Maps <code>x</code> from one numeric range to another. The result is not clamped.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Input value.</td>
+</tr>
+<tr>
+<td><code>in_min</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Source range lower bound.</td>
+</tr>
+<tr>
+<td><code>in_max</code></td>
+<td><code>Float</code></td>
+<td><code>1.0</code></td>
+<td>Source range upper bound.</td>
+</tr>
+<tr>
+<td><code>out_min</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Target range lower bound.</td>
+</tr>
+<tr>
+<td><code>out_max</code></td>
+<td><code>Float</code></td>
+<td><code>1.0</code></td>
+<td>Target range upper bound.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Float</code>.</p>
+<pre class="highlight"><code class="language-python">from functions import remap
+count = input_int('Count', default=32)
+pts = points(count)
+value_1 = index()
+z = remap(value_1, in_min=0.0, in_max=count - 1.0, out_min=-1.0, out_max=1.0)
+value_2 = index()
+vec_3 = vector(value_2 * 0.1, 0, z)
+pts = set_position(pts, vec_3)
+output('Geometry', pts)</code></pre>
+<h3 id="saturatex00"><code>saturate(x=0.0)</code><a class="headerlink" href="#saturatex00" title="Permanent link">&para;</a></h3>
+<p>Clamps <code>x</code> to the <code>0..1</code> range.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Input value.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Float</code>.</p>
+<pre class="highlight"><code class="language-python">from functions import saturate
+value = input_float('Value', default=1.25)
+value_1 = saturate(value)
+output('Clamped', value_1)</code></pre>
+<h3 id="stepedge00-x00"><code>step(edge=0.0, x=0.0)</code><a class="headerlink" href="#stepedge00-x00" title="Permanent link">&para;</a></h3>
+<p>Returns <code>1.0</code> when <code>x &gt;= edge</code>; otherwise returns <code>0.0</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>edge</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Threshold.</td>
+</tr>
+<tr>
+<td><code>x</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Value to test.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Float</code>.</p>
+<pre class="highlight"><code class="language-python">from functions import step
+value_1 = position()
+value_2 = noise(value_1, scale=3.0)
+mask_value = step(0.5, value_2)
+output('Mask', mask_value)</code></pre>
+<h3 id="smoothstepedge000-edge110-x00"><code>smoothstep(edge0=0.0, edge1=1.0, x=0.0)</code><a class="headerlink" href="#smoothstepedge000-edge110-x00" title="Permanent link">&para;</a></h3>
+<p>Returns a clamped Hermite interpolation from <code>0</code> to <code>1</code> between <code>edge0</code> and <code>edge1</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>edge0</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Lower transition edge.</td>
+</tr>
+<tr>
+<td><code>edge1</code></td>
+<td><code>Float</code></td>
+<td><code>1.0</code></td>
+<td>Upper transition edge.</td>
+</tr>
+<tr>
+<td><code>x</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Input value.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Float</code>.</p>
+<pre class="highlight"><code class="language-python">from functions import smoothstep
+pts = points(64)
+value_1 = index()
+t = smoothstep(0.0, 63.0, value_1)
+value_2 = index()
+vec_3 = vector(value_2 * 0.05, 0, t)
+pts = set_position(pts, vec_3)
+output('Geometry', pts)</code></pre>
+<h3 id="smootherstepedge000-edge110-x00"><code>smootherstep(edge0=0.0, edge1=1.0, x=0.0)</code><a class="headerlink" href="#smootherstepedge000-edge110-x00" title="Permanent link">&para;</a></h3>
+<p>Returns a clamped smoother interpolation from <code>0</code> to <code>1</code> between <code>edge0</code> and <code>edge1</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>edge0</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Lower transition edge.</td>
+</tr>
+<tr>
+<td><code>edge1</code></td>
+<td><code>Float</code></td>
+<td><code>1.0</code></td>
+<td>Upper transition edge.</td>
+</tr>
+<tr>
+<td><code>x</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Input value.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Float</code>.</p>
+<pre class="highlight"><code class="language-python">from functions import smootherstep
+x = input_float('X', default=0.35)
+value_1 = smootherstep(0.0, 1.0, x)
+output('Value', value_1)</code></pre>
+<h3 id="pingpongx00-length10"><code>pingpong(x=0.0, length=1.0)</code><a class="headerlink" href="#pingpongx00-length10" title="Permanent link">&para;</a></h3>
+<p>Wraps <code>x</code> into a repeating triangular wave between <code>0</code> and <code>length</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Input value.</td>
+</tr>
+<tr>
+<td><code>length</code></td>
+<td><code>Float</code></td>
+<td><code>1.0</code></td>
+<td>Peak value of the wave.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Float</code>.</p>
+<pre class="highlight"><code class="language-python">from functions import pingpong
+pts = points(80)
+value_1 = index()
+z = pingpong(value_1 * 0.1, 1.0)
+value_2 = index()
+vec_3 = vector(value_2 * 0.05, 0, z)
+pts = set_position(pts, vec_3)
+output('Geometry', pts)</code></pre>
+<h3 id="wrapx00-min00-max10"><code>wrap(x=0.0, min=0.0, max=1.0)</code><a class="headerlink" href="#wrapx00-min00-max10" title="Permanent link">&para;</a></h3>
+<p>Wraps <code>x</code> into the half-open range <code>[min, max)</code> using modulo arithmetic.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Input value.</td>
+</tr>
+<tr>
+<td><code>min</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Lower bound.</td>
+</tr>
+<tr>
+<td><code>max</code></td>
+<td><code>Float</code></td>
+<td><code>1.0</code></td>
+<td>Upper bound.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Float</code>.</p>
+<pre class="highlight"><code class="language-python">from functions import wrap
+value_1 = input_float('Angle', default=7.0)
+angle = wrap(value_1, min=0.0, max=tau)
+output('Angle', angle)</code></pre>
+<h3 id="signx00"><code>sign(x=0.0)</code><a class="headerlink" href="#signx00" title="Permanent link">&para;</a></h3>
+<p>Returns <code>-1.0</code> for negative values, <code>0.0</code> for zero, and <code>1.0</code> for positive values.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Input value.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Float</code>.</p>
+<pre class="highlight"><code class="language-python">from functions import sign
+x = input_float('X', default=-2.0)
+value_1 = sign(x)
+output('Direction', value_1)</code></pre>
+<h2 id="vector-helpers">Vector Helpers<a class="headerlink" href="#vector-helpers" title="Permanent link">&para;</a></h2>
+<h3 id="rotate2dvvector1-0-0-angle00"><code>rotate2d(v=vector(1, 0, 0), angle=0.0)</code><a class="headerlink" href="#rotate2dvvector1-0-0-angle00" title="Permanent link">&para;</a></h3>
+<p>Rotates the XY components of <code>v</code> around the Z axis. The original Z component is preserved.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>v</code></td>
+<td><code>Vector</code></td>
+<td><code>vector(1, 0, 0)</code></td>
+<td>Input vector.</td>
+</tr>
+<tr>
+<td><code>angle</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Rotation angle in radians.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Vector</code>.</p>
+<pre class="highlight"><code class="language-python">from functions import rotate2d
+vec_1 = vector(1, 0, 0)
+value_2 = radians(45)
+v = rotate2d(vec_1, value_2)
+output('Vector', v)</code></pre>
+<h3 id="polarradius10-angle00"><code>polar(radius=1.0, angle=0.0)</code><a class="headerlink" href="#polarradius10-angle00" title="Permanent link">&para;</a></h3>
+<p>Creates an XY vector from polar coordinates. Z is <code>0.0</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>radius</code></td>
+<td><code>Float</code></td>
+<td><code>1.0</code></td>
+<td>Distance from origin.</td>
+</tr>
+<tr>
+<td><code>angle</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Angle in radians.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Vector</code>.</p>
+<pre class="highlight"><code class="language-python">from functions import polar
+value_1 = radians(30)
+pos = polar(radius=2.0, angle=value_1)
+output('Vector', pos)</code></pre>
+<h3 id="angle_betweenavector1-0-0-bvector0-1-0"><code>angle_between(a=vector(1, 0, 0), b=vector(0, 1, 0))</code><a class="headerlink" href="#angle_betweenavector1-0-0-bvector0-1-0" title="Permanent link">&para;</a></h3>
+<p>Computes the angle between two vectors. Inputs are normalized internally and the dot product is clamped to <code>-1..1</code> before <code>acos(...)</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>a</code></td>
+<td><code>Vector</code></td>
+<td><code>vector(1, 0, 0)</code></td>
+<td>First vector.</td>
+</tr>
+<tr>
+<td><code>b</code></td>
+<td><code>Vector</code></td>
+<td><code>vector(0, 1, 0)</code></td>
+<td>Second vector.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Float</code>.</p>
+<pre class="highlight"><code class="language-python">from functions import angle_between
+vec_1 = vector(1, 0, 0)
+value_2 = position()
+vec_3 = normalize(value_2)
+angle = angle_between(vec_1, vec_3)
+output('Angle', angle)</code></pre>
+<h3 id="rotate_around_axisvvector1-0-0-axisvector0-0-1-angle00"><code>rotate_around_axis(v=vector(1, 0, 0), axis=vector(0, 0, 1), angle=0.0)</code><a class="headerlink" href="#rotate_around_axisvvector1-0-0-axisvector0-0-1-angle00" title="Permanent link">&para;</a></h3>
+<p>Rotates <code>v</code> around <code>axis</code> using Rodrigues' rotation formula. <code>axis</code> is normalized internally.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>v</code></td>
+<td><code>Vector</code></td>
+<td><code>vector(1, 0, 0)</code></td>
+<td>Input vector.</td>
+</tr>
+<tr>
+<td><code>axis</code></td>
+<td><code>Vector</code></td>
+<td><code>vector(0, 0, 1)</code></td>
+<td>Rotation axis.</td>
+</tr>
+<tr>
+<td><code>angle</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Rotation angle in radians.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Vector</code>.</p>
+<pre class="highlight"><code class="language-python">from functions import rotate_around_axis
+vec_1 = vector(1, 0, 0)
+vec_2 = vector(0, 1, 0)
+value_3 = radians(90)
+v = rotate_around_axis(vec_1, axis=vec_2, angle=value_3)
+output('Vector', v)</code></pre>
+<h2 id="point-creation-and-layouts">Point Creation and Layouts<a class="headerlink" href="#point-creation-and-layouts" title="Permanent link">&para;</a></h2>
+<p>Layout functions operate on point-domain geometry. They use the current point <code>index()</code> field and the explicit <code>count</code> parameter when present; they do not inspect the input geometry's point count.</p>
+<h3 id="layout_gridgeometry-countvector1-1-1-spacingvector1-1-1-centeredfalse"><code>layout_grid(geometry, count=vector(1, 1, 1), spacing=vector(1, 1, 1), centered=False)</code><a class="headerlink" href="#layout_gridgeometry-countvector1-1-1-spacingvector1-1-1-centeredfalse" title="Permanent link">&para;</a></h3>
+<p>Places existing points in a 3D lattice.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>geometry</code></td>
+<td><code>Geometry</code></td>
+<td>required</td>
+<td>Point geometry to position.</td>
+</tr>
+<tr>
+<td><code>count</code></td>
+<td><code>Vector</code></td>
+<td><code>vector(1, 1, 1)</code></td>
+<td>Lattice dimensions interpreted as <code>(count_x, count_y, count_z)</code>. Components are clamped to at least <code>1.0</code> for index math.</td>
+</tr>
+<tr>
+<td><code>spacing</code></td>
+<td><code>Vector</code></td>
+<td><code>vector(1, 1, 1)</code></td>
+<td>Per-axis spacing. Use <code>vector(s, s, s)</code> for uniform spacing.</td>
+</tr>
+<tr>
+<td><code>centered</code></td>
+<td><code>Bool</code></td>
+<td><code>False</code></td>
+<td>When true, positions are shifted by half of the layout extent so the lattice is centered around the origin. When false, positions use raw lattice coordinates from the origin.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Geometry</code>.</p>
+<pre class="highlight"><code class="language-python">from functions import layout_grid
+pts = points(12)
+vec_1 = vector(4, 3, 1)
+vec_2 = vector(0.5, 0.5, 0.0)
+pts = layout_grid(pts, count=vec_1, spacing=vec_2, centered=False)
+output('Geometry', pts)</code></pre>
+<h3 id="grid_pointscountvector1-1-1-spacingvector1-1-1-centeredfalse"><code>grid_points(count=vector(1, 1, 1), spacing=vector(1, 1, 1), centered=False)</code><a class="headerlink" href="#grid_pointscountvector1-1-1-spacingvector1-1-1-centeredfalse" title="Permanent link">&para;</a></h3>
+<p>Creates points and places them with <code>layout_grid(...)</code>. The point count is <code>max(count.x, 0) * max(count.y, 0) * max(count.z, 0)</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>count</code></td>
+<td><code>Vector</code></td>
+<td><code>vector(1, 1, 1)</code></td>
+<td>Number of generated points per axis. Zero or negative components produce zero generated points for that component.</td>
+</tr>
+<tr>
+<td><code>spacing</code></td>
+<td><code>Vector</code></td>
+<td><code>vector(1, 1, 1)</code></td>
+<td>Per-axis spacing.</td>
+</tr>
+<tr>
+<td><code>centered</code></td>
+<td><code>Bool</code></td>
+<td><code>False</code></td>
+<td>Passed to <code>layout_grid(...)</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Geometry</code>.</p>
+<pre class="highlight"><code class="language-python">from functions import grid_points
+vec_1 = vector(5, 4, 1)
+vec_2 = vector(0.5, 0.5, 0.0)
+grid = grid_points(count=vec_1, spacing=vec_2, centered=False)
+output('Geometry', grid)</code></pre>
+<h3 id="layout_circlegeometry-count16-radius10-start_angle00-end_angletau-include_endpointfalse"><code>layout_circle(geometry, count=16, radius=1.0, start_angle=0.0, end_angle=tau, include_endpoint=False)</code><a class="headerlink" href="#layout_circlegeometry-count16-radius10-start_angle00-end_angletau-include_endpointfalse" title="Permanent link">&para;</a></h3>
+<p>Places existing points on an XY circle or arc.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>geometry</code></td>
+<td><code>Geometry</code></td>
+<td>required</td>
+<td>Point geometry to position.</td>
+</tr>
+<tr>
+<td><code>count</code></td>
+<td><code>Int</code></td>
+<td><code>16</code></td>
+<td>Explicit count used to compute the normalized index.</td>
+</tr>
+<tr>
+<td><code>radius</code></td>
+<td><code>Float</code></td>
+<td><code>1.0</code></td>
+<td>Circle or arc radius.</td>
+</tr>
+<tr>
+<td><code>start_angle</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Start angle in radians.</td>
+</tr>
+<tr>
+<td><code>end_angle</code></td>
+<td><code>Float</code></td>
+<td><code>tau</code></td>
+<td>End angle in radians.</td>
+</tr>
+<tr>
+<td><code>include_endpoint</code></td>
+<td><code>Bool</code></td>
+<td><code>False</code></td>
+<td>When true, the last point reaches <code>end_angle</code>. For full circles the default avoids duplicating the first point.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Geometry</code>.</p>
+<pre class="highlight"><code class="language-python">from functions import layout_circle
+pts = points(24)
+pts = layout_circle(pts, count=24, radius=2.0, start_angle=0.0, end_angle=tau)
+output('Geometry', pts)</code></pre>
+<h3 id="circle_pointscount16-radius10-start_angle00-end_angletau-include_endpointfalse"><code>circle_points(count=16, radius=1.0, start_angle=0.0, end_angle=tau, include_endpoint=False)</code><a class="headerlink" href="#circle_pointscount16-radius10-start_angle00-end_angletau-include_endpointfalse" title="Permanent link">&para;</a></h3>
+<p>Creates point geometry and places the points with the same circle/arc formula used by <code>layout_circle(...)</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>count</code></td>
+<td><code>Int</code></td>
+<td><code>16</code></td>
+<td>Number of generated points. Negative values are clamped to zero for point generation.</td>
+</tr>
+<tr>
+<td><code>radius</code></td>
+<td><code>Float</code></td>
+<td><code>1.0</code></td>
+<td>Circle or arc radius.</td>
+</tr>
+<tr>
+<td><code>start_angle</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Start angle in radians.</td>
+</tr>
+<tr>
+<td><code>end_angle</code></td>
+<td><code>Float</code></td>
+<td><code>tau</code></td>
+<td>End angle in radians.</td>
+</tr>
+<tr>
+<td><code>include_endpoint</code></td>
+<td><code>Bool</code></td>
+<td><code>False</code></td>
+<td>When true, the last point reaches <code>end_angle</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Geometry</code>.</p>
+<pre class="highlight"><code class="language-python">from functions import circle_points
+arc = circle_points(count=16, radius=2.0, start_angle=0.0, end_angle=pi, include_endpoint=True)
+output('Geometry', arc)</code></pre>
+<h3 id="layout_spiralgeometry-count16-radius10-turns10-height00-start_radius00-start_angle00"><code>layout_spiral(geometry, count=16, radius=1.0, turns=1.0, height=0.0, start_radius=0.0, start_angle=0.0)</code><a class="headerlink" href="#layout_spiralgeometry-count16-radius10-turns10-height00-start_radius00-start_angle00" title="Permanent link">&para;</a></h3>
+<p>Places existing points along a radial spiral in the XY plane, with optional Z height.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>geometry</code></td>
+<td><code>Geometry</code></td>
+<td>required</td>
+<td>Point geometry to position.</td>
+</tr>
+<tr>
+<td><code>count</code></td>
+<td><code>Int</code></td>
+<td><code>16</code></td>
+<td>Explicit count used to compute the normalized index.</td>
+</tr>
+<tr>
+<td><code>radius</code></td>
+<td><code>Float</code></td>
+<td><code>1.0</code></td>
+<td>Final radius.</td>
+</tr>
+<tr>
+<td><code>turns</code></td>
+<td><code>Float</code></td>
+<td><code>1.0</code></td>
+<td>Number of full revolutions.</td>
+</tr>
+<tr>
+<td><code>height</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Final Z height.</td>
+</tr>
+<tr>
+<td><code>start_radius</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Initial radius.</td>
+</tr>
+<tr>
+<td><code>start_angle</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Initial angle in radians.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Geometry</code>.</p>
+<pre class="highlight"><code class="language-python">from functions import layout_spiral
+pts = points(96)
+pts = layout_spiral(pts, count=96, radius=3.0, turns=4.0, height=1.5)
+output('Geometry', pts)</code></pre>
+<h3 id="spiral_pointscount16-radius10-turns10-height00-start_radius00-start_angle00"><code>spiral_points(count=16, radius=1.0, turns=1.0, height=0.0, start_radius=0.0, start_angle=0.0)</code><a class="headerlink" href="#spiral_pointscount16-radius10-turns10-height00-start_radius00-start_angle00" title="Permanent link">&para;</a></h3>
+<p>Creates point geometry and places the points with <code>layout_spiral(...)</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>count</code></td>
+<td><code>Int</code></td>
+<td><code>16</code></td>
+<td>Number of generated points. Negative values are clamped to zero for point generation.</td>
+</tr>
+<tr>
+<td><code>radius</code></td>
+<td><code>Float</code></td>
+<td><code>1.0</code></td>
+<td>Final radius.</td>
+</tr>
+<tr>
+<td><code>turns</code></td>
+<td><code>Float</code></td>
+<td><code>1.0</code></td>
+<td>Number of full revolutions.</td>
+</tr>
+<tr>
+<td><code>height</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Final Z height.</td>
+</tr>
+<tr>
+<td><code>start_radius</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Initial radius.</td>
+</tr>
+<tr>
+<td><code>start_angle</code></td>
+<td><code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Initial angle in radians.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Geometry</code>.</p>
+<pre class="highlight"><code class="language-python">from functions import spiral_points
+spiral = spiral_points(count=128, radius=3.0, turns=5.0, height=2.0, start_radius=0.25)
+output('Geometry', spiral)</code></pre>
+<h3 id="layout_randomgeometry-minvector-1-1-1-maxvector1-1-1-seed0"><code>layout_random(geometry, min=vector(-1, -1, -1), max=vector(1, 1, 1), seed=0)</code><a class="headerlink" href="#layout_randomgeometry-minvector-1-1-1-maxvector1-1-1-seed0" title="Permanent link">&para;</a></h3>
+<p>Places existing points at random positions between vector bounds. The point index is used as the random ID.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>geometry</code></td>
+<td><code>Geometry</code></td>
+<td>required</td>
+<td>Point geometry to position.</td>
+</tr>
+<tr>
+<td><code>min</code></td>
+<td><code>Vector</code></td>
+<td><code>vector(-1, -1, -1)</code></td>
+<td>Lower random bound.</td>
+</tr>
+<tr>
+<td><code>max</code></td>
+<td><code>Vector</code></td>
+<td><code>vector(1, 1, 1)</code></td>
+<td>Upper random bound.</td>
+</tr>
+<tr>
+<td><code>seed</code></td>
+<td><code>Int</code></td>
+<td><code>0</code></td>
+<td>Random seed.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Geometry</code>.</p>
+<pre class="highlight"><code class="language-python">from functions import layout_random
+pts = points(50)
+vec_1 = vector(-2, -2, 0)
+vec_2 = vector(2, 2, 1)
+pts = layout_random(pts, min=vec_1, max=vec_2, seed=7)
+output('Geometry', pts)</code></pre>
+<h3 id="random_pointscount16-minvector-1-1-1-maxvector1-1-1-seed0"><code>random_points(count=16, min=vector(-1, -1, -1), max=vector(1, 1, 1), seed=0)</code><a class="headerlink" href="#random_pointscount16-minvector-1-1-1-maxvector1-1-1-seed0" title="Permanent link">&para;</a></h3>
+<p>Creates point geometry and places the points with <code>layout_random(...)</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>count</code></td>
+<td><code>Int</code></td>
+<td><code>16</code></td>
+<td>Number of generated points. Negative values are clamped to zero for point generation.</td>
+</tr>
+<tr>
+<td><code>min</code></td>
+<td><code>Vector</code></td>
+<td><code>vector(-1, -1, -1)</code></td>
+<td>Lower random bound.</td>
+</tr>
+<tr>
+<td><code>max</code></td>
+<td><code>Vector</code></td>
+<td><code>vector(1, 1, 1)</code></td>
+<td>Upper random bound.</td>
+</tr>
+<tr>
+<td><code>seed</code></td>
+<td><code>Int</code></td>
+<td><code>0</code></td>
+<td>Random seed.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Geometry</code>.</p>
+<pre class="highlight"><code class="language-python">from functions import random_points
+vec_1 = vector(-3, -3, 0)
+vec_2 = vector(3, 3, 2)
+pts = random_points(count=100, min=vec_1, max=vec_2, seed=42)
+output('Geometry', pts)</code></pre>
+<h2 id="geometry-helper">Geometry Helper<a class="headerlink" href="#geometry-helper" title="Permanent link">&para;</a></h2>
+<h3 id="copy_by_offsetsgeometry-scalevector13-13-1"><code>copy_by_offsets(geometry, scale=vector(1/3, 1/3, 1))</code><a class="headerlink" href="#copy_by_offsetsgeometry-scalevector13-13-1" title="Permanent link">&para;</a></h3>
+<p>Duplicates input geometry into the eight cells around the center of a 3x3 grid. This is the offset pattern used for Sierpinski-carpet style subdivision.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>geometry</code></td>
+<td><code>Geometry</code></td>
+<td>required</td>
+<td>Source geometry.</td>
+</tr>
+<tr>
+<td><code>scale</code></td>
+<td><code>Vector</code></td>
+<td><code>vector(1/3, 1/3, 1)</code></td>
+<td>Per-copy scale.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Geometry</code>.</p>
+<pre class="highlight"><code class="language-python">from functions import copy_by_offsets
+geo = cube(size=1.0)
+vec_1 = vector(1 / 3, 1 / 3, 1 / 3)
+geo = copy_by_offsets(geo, scale=vec_1)
+output('Geometry', geo)</code></pre>
+<h2 id="fractal-helper">Fractal Helper<a class="headerlink" href="#fractal-helper" title="Permanent link">&para;</a></h2>
+<h3 id="sierpinski_carpetgeometry-steps2-scalevector13-13-1"><code>sierpinski_carpet(geometry, steps=2, scale=vector(1/3, 1/3, 1))</code><a class="headerlink" href="#sierpinski_carpetgeometry-steps2-scalevector13-13-1" title="Permanent link">&para;</a></h3>
+<p>Repeatedly applies <code>copy_by_offsets</code> to create a Sierpinski-carpet-style arrangement. <code>steps</code> is a runtime <code>Int</code>; non-positive values perform no repeat iterations.</p>
+<pre class="highlight"><code class="language-python">from functions import sierpinski_carpet
+
+source = cube(size=1.0)
+geometry = sierpinski_carpet(source, steps=2)
+output('Geometry', geometry)</code></pre>
+<h2 id="sequence-helper">Sequence Helper<a class="headerlink" href="#sequence-helper" title="Permanent link">&para;</a></h2>
+<h3 id="fibonaccin8"><code>fibonacci(n=8)</code><a class="headerlink" href="#fibonaccin8" title="Permanent link">&para;</a></h3>
+<p>Computes the Fibonacci sequence with a runtime Repeat Zone. <code>F(0)=0</code>, <code>F(1)=1</code>, and <code>F(n)=F(n-1)+F(n-2)</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>n</code></td>
+<td><code>Int</code></td>
+<td><code>8</code></td>
+<td>Iteration count.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Int</code> or numeric value compatible with the Repeat Zone state.</p>
+<pre class="highlight"><code class="language-python">from functions import fibonacci
+n = input_int('N', default=10)
+value = fibonacci(n)
+output('Value', value)</code></pre>
+<p>For complete scripts included with the package, see <a href="../MATH_EXAMPLES/">Math Examples</a>.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../MATH_METHODS/" class="btn btn-neutral float-left" title="Methods"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../MATH_EXAMPLES/" class="btn btn-neutral float-right" title="Examples">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2026 denikryt</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/denikryt/NodeForgeDocs" class="fa fa-code-fork" style="color: #fcfcfc"> denikryt/NodeForgeDocs</a>
+        </span>
+    
+    
+      <span><a href="../MATH_METHODS/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../MATH_EXAMPLES/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+      <script src="../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

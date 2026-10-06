@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="Documentation for NodeForge, a Blender add-on that compiles a Python-like DSL into Geometry Nodes." /><link rel="canonical" href="https://denikryt.github.io/NodeForgeDocs/0.50.0/" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>NodeForge Documentation</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Home";
+        var mkdocs_page_input_path = "index.md";
+        var mkdocs_page_url = "/NodeForgeDocs/0.50.0/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="." class="icon icon-home"> NodeForge Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Home</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#what-nodeforge-is">What NodeForge is</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#getting-started">Getting Started</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#libraries">Libraries</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="GET_STARTED/">Get Started</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">DSL</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="CORE_CONCEPTS/">Core Concepts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="SYNTAX/">Syntax</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="BUILTINS/">Built-ins</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="WRITING_FUNCTIONS/">Writing Functions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="PACKAGES/">Packages</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="GEOMETRY_NODES_COVERAGE/">Geometry Nodes Coverage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Libraries</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Math</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="MATH_METHODS/">Methods</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="FUNCTIONS/">Functions</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="MATH_EXAMPLES/">Examples</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >LSystem</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="LSYSTEMS/">Reference</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="LSYSTEMS_SCRIPTING/">Scripting</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href=".">NodeForge Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Home</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/denikryt/NodeForgeDocs/edit/master/docs/index.md">Edit on denikryt/NodeForgeDocs</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="nodeforge-documentation">NodeForge Documentation<a class="headerlink" href="#nodeforge-documentation" title="Permanent link">&para;</a></h1>
+<p>NodeForge is a Python-like domain-specific language (DSL) that compiles source scripts into native Blender Geometry Nodes groups. Each script describes one group: its interface, the operations inside it, and the links that carry data between those operations.</p>
+<h2 id="what-nodeforge-is">What NodeForge is<a class="headerlink" href="#what-nodeforge-is" title="Permanent link">&para;</a></h2>
+<p>NodeForge uses familiar assignments, function calls, arithmetic, <code>if</code>, <code>for</code>, lists, imports, and local helper functions as a focused language for graph authoring.</p>
+<p>A source variable can hold compile-time data or represent a typed Geometry Nodes value. Operations on runtime values become nodes and links: group inputs supply values, expressions define data flow, and outputs connect that flow to the group interface.</p>
+<p>The language separates two evaluation layers:</p>
+<ul>
+<li><strong>Compile time</strong> resolves graph structure, declarations, and authoring decisions. A loop over <code>range(...)</code> is unrolled while the graph is built.</li>
+<li><strong>Runtime</strong> is represented inside the generated graph. Group-input values remain adjustable, runtime branches use Switch nodes, and <code>repeat_range(...)</code> creates a native Repeat Zone.</li>
+</ul>
+<p>The compiled result is an ordinary Blender Geometry Nodes group. It can be inspected and connected like a manually authored group, and it remains usable in the <code>.blend</code> file when the NodeForge add-on is disabled.</p>
+<p>Every generated group embeds its source. The source can be loaded into a Text datablock, edited, and compiled back into the same group while compatible external links and user-overridden input values are preserved.</p>
+<p>Read <a href="CORE_CONCEPTS/">Core Concepts</a> for the complete compilation and update model.</p>
+<h2 id="getting-started">Getting Started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="CORE_CONCEPTS/">Core Concepts</a></li>
+<li><a href="GET_STARTED/">Get Started</a></li>
+<li><a href="SYNTAX/">DSL Syntax and Semantics</a></li>
+<li><a href="GEOMETRY_NODES_COVERAGE/">Geometry Nodes Coverage</a></li>
+<li><a href="BUILTINS/">Core DSL Built-ins</a></li>
+<li><a href="WRITING_FUNCTIONS/">Writing Functions</a></li>
+<li><a href="PACKAGES/">Packages</a></li>
+</ul>
+<h2 id="libraries">Libraries<a class="headerlink" href="#libraries" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="MATH_METHODS/">Math Methods</a>, <a href="FUNCTIONS/">Math Functions</a>, and <a href="MATH_EXAMPLES/">Math Examples</a></li>
+<li><a href="LSYSTEMS/">LSystem Reference</a></li>
+<li><a href="LSYSTEMS_SCRIPTING/">Writing L-System Scripts</a></li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="GET_STARTED/" class="btn btn-neutral float-right" title="Get Started">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2026 denikryt</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/denikryt/NodeForgeDocs" class="fa fa-code-fork" style="color: #fcfcfc"> denikryt/NodeForgeDocs</a>
+        </span>
+    
+    
+    
+      <span><a href="GET_STARTED/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="search/main.js"></script>
+      <script src="js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 1.6.1
+Build Date UTC : 2026-10-06 22:59:53.873999+00:00
+-->

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://denikryt.github.io/NodeForgeDocs/0.50.0/PACKAGES/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Packages - NodeForge Documentation</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Packages";
+        var mkdocs_page_input_path = "PACKAGES.md";
+        var mkdocs_page_url = "/NodeForgeDocs/0.50.0/PACKAGES/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> NodeForge Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../GET_STARTED/">Get Started</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">DSL</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../CORE_CONCEPTS/">Core Concepts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SYNTAX/">Syntax</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../BUILTINS/">Built-ins</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../WRITING_FUNCTIONS/">Writing Functions</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Packages</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#manifest">Manifest</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#functions">Functions</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#systems">Systems</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#installing-a-package">Installing a package</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#removing-a-package">Removing a package</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../GEOMETRY_NODES_COVERAGE/">Geometry Nodes Coverage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Libraries</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Math</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_METHODS/">Methods</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../FUNCTIONS/">Functions</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_EXAMPLES/">Examples</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >LSystem</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS/">Reference</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS_SCRIPTING/">Scripting</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">NodeForge Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">DSL</li>
+      <li class="breadcrumb-item active">Packages</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/denikryt/NodeForgeDocs/edit/master/docs/PACKAGES.md">Edit on denikryt/NodeForgeDocs</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="packages">Packages<a class="headerlink" href="#packages" title="Permanent link">&para;</a></h1>
+<p>Packages add reusable DSL functions, examples, and optional library systems to NodeForge. Packages are not installed automatically. Each package must be installed explicitly from a directory or ZIP archive through <strong>Library → Packages</strong>.</p>
+<p>A package directory contains <code>nodeforge_package.json</code> and only the content directories it uses:</p>
+<pre class="highlight"><code class="language-text">example.library/
+├── nodeforge_package.json
+├── functions/
+├── examples/
+└── systems/</code></pre>
+<h2 id="manifest">Manifest<a class="headerlink" href="#manifest" title="Permanent link">&para;</a></h2>
+<pre class="highlight"><code class="language-json">{
+  "schema_version": 1,
+  "id": "vendor.demo",
+  "name": "Vendor Demo",
+  "version": "1.0.0",
+  "author": "Vendor",
+  "description": "Demo NodeForge package.",
+  "nodeforge_min_version": "0.49.47",
+  "nodeforge_max_version": null,
+  "contents": {
+    "functions": "functions",
+    "examples": "examples",
+    "systems": "systems"
+  },
+  "permissions": {
+    "python": false
+  }
+}</code></pre>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Requirement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>schema_version</code></td>
+<td>Integer <code>1</code>.</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td>Unique lowercase dotted identifier such as <code>vendor.demo</code>.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>Display name.</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td>Dotted numeric version string.</td>
+</tr>
+<tr>
+<td><code>author</code></td>
+<td>Package author.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>Package description.</td>
+</tr>
+<tr>
+<td><code>nodeforge_min_version</code></td>
+<td>Minimum compatible NodeForge version as a dotted numeric string.</td>
+</tr>
+<tr>
+<td><code>nodeforge_max_version</code></td>
+<td>Maximum compatible version, or <code>null</code>.</td>
+</tr>
+<tr>
+<td><code>contents</code></td>
+<td>Package-relative <code>functions</code>, <code>examples</code>, and <code>systems</code> directories that exist.</td>
+</tr>
+<tr>
+<td><code>permissions.python</code></td>
+<td>Whether executable Python is allowed for declared package content.</td>
+</tr>
+</tbody>
+</table>
+<p>Content paths must be relative and cannot contain empty, <code>.</code> or <code>..</code> segments.</p>
+<h2 id="functions">Functions<a class="headerlink" href="#functions" title="Permanent link">&para;</a></h2>
+<p>The declared <code>functions</code> directory contains reusable <code>.nf</code> scripts. Import them with <code>from functions import ...</code> after installation. Each public filename becomes an importable name. Public callable names must be unique across active packages.</p>
+<p>See <a href="../SYNTAX/#imports">Imports</a>.</p>
+<h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
+<p>The declared <code>examples</code> directory contains complete example entries shown in the <strong>Examples</strong> catalog. A simple entry is a top-level <code>.nf</code> or <code>.nodeforge</code> file. An entry that needs package-local Python support can use a directory containing <code>source.nf</code> and an optional <code>backend.py</code>.</p>
+<p>A package-local <code>backend.py</code> can expose helper callables through <code>BACKEND_BUILTINS</code>; those helpers are available only while compiling that entry's <code>source.nf</code>. Packages that include executable Python must declare <code>permissions.python: true</code>, and the user must approve that permission during installation.</p>
+<h2 id="systems">Systems<a class="headerlink" href="#systems" title="Permanent link">&para;</a></h2>
+<p>A declared <code>systems</code> directory contains one subdirectory per system. A system directory must contain <code>system.py</code>. That module provides a <code>CONSTRUCTORS</code> mapping and may provide <code>load_handlers()</code>. Because systems execute Python, the package must declare <code>permissions.python: true</code>, and the user must approve Python when installing it.</p>
+<h2 id="installing-a-package">Installing a package<a class="headerlink" href="#installing-a-package" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Open <strong>Library → Packages</strong>.</li>
+<li>Select a package directory or ZIP archive.</li>
+<li>Review its metadata and requested Python permission.</li>
+<li>Confirm installation.</li>
+</ol>
+<p>A ZIP may contain the package at its root or inside one top-level directory. Absolute paths, path traversal, symbolic links, duplicate paths, and ambiguous package roots are rejected. Installing an already installed package requires replacement; replacement activates the new installation only after validation succeeds.</p>
+<h2 id="removing-a-package">Removing a package<a class="headerlink" href="#removing-a-package" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Open <strong>Library → Packages</strong>.</li>
+<li>Select the installed package.</li>
+<li>Remove it.</li>
+</ol>
+<p>Removal deletes the package from active package state, so its functions, examples, and constructors are no longer available.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../WRITING_FUNCTIONS/" class="btn btn-neutral float-left" title="Writing Functions"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../GEOMETRY_NODES_COVERAGE/" class="btn btn-neutral float-right" title="Geometry Nodes Coverage">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2026 denikryt</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/denikryt/NodeForgeDocs" class="fa fa-code-fork" style="color: #fcfcfc"> denikryt/NodeForgeDocs</a>
+        </span>
+    
+    
+      <span><a href="../WRITING_FUNCTIONS/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../GEOMETRY_NODES_COVERAGE/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+      <script src="../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

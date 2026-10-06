@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://denikryt.github.io/NodeForgeDocs/0.50.0/MATH_METHODS/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Methods - NodeForge Documentation</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Methods";
+        var mkdocs_page_input_path = "MATH_METHODS.md";
+        var mkdocs_page_url = "/NodeForgeDocs/0.50.0/MATH_METHODS/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> NodeForge Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../GET_STARTED/">Get Started</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">DSL</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../CORE_CONCEPTS/">Core Concepts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SYNTAX/">Syntax</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../BUILTINS/">Built-ins</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../WRITING_FUNCTIONS/">Writing Functions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../PACKAGES/">Packages</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../GEOMETRY_NODES_COVERAGE/">Geometry Nodes Coverage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Libraries</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" >Math</a>
+    <ul class="current">
+                <li class="toctree-l2 current"><a class="reference internal current" href="#">Methods</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#scalar-math-callables">Scalar Math Callables</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#unary-callables">Unary Callables</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#binary-callables">Binary Callables</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#range-and-selection-callables">Range and Selection Callables</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#procedural-value-callables">Procedural Value Callables</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#noise">noise()</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#noisevector-scale-detail-roughness-lacunarity-distortion-normalize">noise(vector, *, scale=..., detail=..., roughness=..., lacunarity=..., distortion=..., normalize=...)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#random_value">random_value()</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#random_valuemin-max-seed-id">random_value(min, max, seed=..., id=...)</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../FUNCTIONS/">Functions</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_EXAMPLES/">Examples</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >LSystem</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS/">Reference</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS_SCRIPTING/">Scripting</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">NodeForge Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Libraries</li>
+          <li class="breadcrumb-item">Math</li>
+      <li class="breadcrumb-item active">Methods</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/denikryt/NodeForgeDocs/edit/master/docs/MATH_METHODS.md">Edit on denikryt/NodeForgeDocs</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="math-methods">Math Methods<a class="headerlink" href="#math-methods" title="Permanent link">&para;</a></h1>
+<p>These callables are provided by the <code>nodeforge.math</code> package, not by the Core DSL. Install that package explicitly before using them.</p>
+<p>The Math library adds scalar and procedural methods to the DSL. These methods are called directly in expressions.</p>
+<pre class="highlight"><code class="language-python">angle = input_float('Angle', default=0.0)
+value = sin(angle)
+output('Value', value)</code></pre>
+<h2 id="scalar-math-callables">Scalar Math Callables<a class="headerlink" href="#scalar-math-callables" title="Permanent link">&para;</a></h2>
+<p>These names are available directly when the Math library is installed. They accept runtime values and create the corresponding Geometry Nodes operations. The scalar callables accept positional arguments or the parameter names shown below as keywords. When all arguments are compile-time numbers, the compiler can evaluate supported calls during compilation.</p>
+<h3 id="unary-callables">Unary Callables<a class="headerlink" href="#unary-callables" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sin(value)</code></td>
+<td>Sine.</td>
+</tr>
+<tr>
+<td><code>cos(value)</code></td>
+<td>Cosine.</td>
+</tr>
+<tr>
+<td><code>tan(value)</code></td>
+<td>Tangent.</td>
+</tr>
+<tr>
+<td><code>asin(value)</code></td>
+<td>Arcsine.</td>
+</tr>
+<tr>
+<td><code>acos(value)</code></td>
+<td>Arccosine.</td>
+</tr>
+<tr>
+<td><code>atan(value)</code></td>
+<td>Arctangent.</td>
+</tr>
+<tr>
+<td><code>sqrt(value)</code></td>
+<td>Square root.</td>
+</tr>
+<tr>
+<td><code>abs(value)</code></td>
+<td>Absolute value.</td>
+</tr>
+<tr>
+<td><code>floor(value)</code></td>
+<td>Floor.</td>
+</tr>
+<tr>
+<td><code>ceil(value)</code></td>
+<td>Ceiling.</td>
+</tr>
+<tr>
+<td><code>round(value)</code></td>
+<td>Rounded value.</td>
+</tr>
+<tr>
+<td><code>fract(value)</code></td>
+<td>Fractional component.</td>
+</tr>
+<tr>
+<td><code>radians(value)</code></td>
+<td>Converts degrees to radians.</td>
+</tr>
+<tr>
+<td><code>degrees(value)</code></td>
+<td>Converts radians to degrees.</td>
+</tr>
+<tr>
+<td><code>exp(value)</code></td>
+<td>Exponential.</td>
+</tr>
+<tr>
+<td><code>ln(value)</code></td>
+<td>Natural logarithm.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="binary-callables">Binary Callables<a class="headerlink" href="#binary-callables" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>min(a, b)</code></td>
+<td>Minimum value.</td>
+</tr>
+<tr>
+<td><code>max(a, b)</code></td>
+<td>Maximum value.</td>
+</tr>
+<tr>
+<td><code>pow(a, b)</code></td>
+<td>Raises <code>a</code> to power <code>b</code>.</td>
+</tr>
+<tr>
+<td><code>log(a, b)</code></td>
+<td>Logarithm of <code>a</code> with base <code>b</code>.</td>
+</tr>
+<tr>
+<td><code>atan2(a, b)</code></td>
+<td>Two-argument arctangent.</td>
+</tr>
+<tr>
+<td><code>mod(a, b)</code></td>
+<td>Modulo.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="range-and-selection-callables">Range and Selection Callables<a class="headerlink" href="#range-and-selection-callables" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>clamp(value, min, max)</code></td>
+<td>Clamps a value to a range.</td>
+</tr>
+<tr>
+<td><code>mix(a, b, factor)</code></td>
+<td>Interpolates between two values.</td>
+</tr>
+<tr>
+<td><code>select(cond, true, false)</code></td>
+<td>Selects one value from a runtime boolean condition.</td>
+</tr>
+<tr>
+<td><code>map_range(value, from_min, from_max, to_min, to_max)</code></td>
+<td>Maps a value between ranges.</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight"><code class="language-python">value = input_float('Value', default=0.25)
+angle = radians(value * 360.0)
+wave = sin(angle)
+result = clamp(wave, -0.5, 0.5)
+output('Value', result)</code></pre>
+<h2 id="procedural-value-callables">Procedural Value Callables<a class="headerlink" href="#procedural-value-callables" title="Permanent link">&para;</a></h2>
+<h3 id="noise"><code>noise()</code><a class="headerlink" href="#noise" title="Permanent link">&para;</a></h3>
+<h3 id="noisevector-scale-detail-roughness-lacunarity-distortion-normalize"><code>noise(vector, *, scale=..., detail=..., roughness=..., lacunarity=..., distortion=..., normalize=...)</code><a class="headerlink" href="#noisevector-scale-detail-roughness-lacunarity-distortion-normalize" title="Permanent link">&para;</a></h3>
+<p>Creates a 3D Noise Texture field and returns its Factor output. Pass <code>vector</code> as the optional first positional argument. When it is omitted, <code>position()</code> is used. The remaining options are keyword arguments; omitted options keep the corresponding Blender Noise Texture defaults.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vector</code></td>
+<td><code>Vector</code></td>
+<td>Optional coordinate field passed positionally. Defaults to <code>position()</code>.</td>
+</tr>
+<tr>
+<td><code>scale</code></td>
+<td>numeric</td>
+<td>Noise scale.</td>
+</tr>
+<tr>
+<td><code>detail</code></td>
+<td>numeric</td>
+<td>Noise detail.</td>
+</tr>
+<tr>
+<td><code>roughness</code></td>
+<td>numeric</td>
+<td>Noise roughness.</td>
+</tr>
+<tr>
+<td><code>lacunarity</code></td>
+<td>numeric</td>
+<td>Noise lacunarity.</td>
+</tr>
+<tr>
+<td><code>distortion</code></td>
+<td>numeric</td>
+<td>Noise distortion.</td>
+</tr>
+<tr>
+<td><code>normalize</code></td>
+<td>compile-time <code>Bool</code></td>
+<td>Sets the node normalization option.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Float</code>.</p>
+<h3 id="random_value"><code>random_value()</code><a class="headerlink" href="#random_value" title="Permanent link">&para;</a></h3>
+<h3 id="random_valuemin-max-seed-id"><code>random_value(min, max, seed=..., id=...)</code><a class="headerlink" href="#random_valuemin-max-seed-id" title="Permanent link">&para;</a></h3>
+<p>Creates a Random Value field. With no bounds it returns a <code>Float</code> in the default range. Numeric bounds return <code>Float</code>; vector bounds return <code>Vector</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>min</code></td>
+<td><code>Float</code> or <code>Vector</code></td>
+<td>Lower bound.</td>
+</tr>
+<tr>
+<td><code>max</code></td>
+<td>same as <code>min</code></td>
+<td>Upper bound.</td>
+</tr>
+<tr>
+<td><code>seed</code></td>
+<td><code>Int</code></td>
+<td>Random seed.</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>Int</code></td>
+<td>Per-element identifier.</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight"><code class="language-python">pts = points(100)
+pos = random_value(vector(-2, -2, 0), vector(2, 2, 1), seed=12, id=index())
+pts = set_position(pts, pos)
+output('Geometry', pts)</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../GEOMETRY_NODES_COVERAGE/" class="btn btn-neutral float-left" title="Geometry Nodes Coverage"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../FUNCTIONS/" class="btn btn-neutral float-right" title="Functions">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2026 denikryt</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/denikryt/NodeForgeDocs" class="fa fa-code-fork" style="color: #fcfcfc"> denikryt/NodeForgeDocs</a>
+        </span>
+    
+    
+      <span><a href="../GEOMETRY_NODES_COVERAGE/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../FUNCTIONS/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+      <script src="../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

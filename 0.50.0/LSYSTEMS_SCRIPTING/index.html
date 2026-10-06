@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://denikryt.github.io/NodeForgeDocs/0.50.0/LSYSTEMS_SCRIPTING/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Scripting - NodeForge Documentation</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Scripting";
+        var mkdocs_page_input_path = "LSYSTEMS_SCRIPTING.md";
+        var mkdocs_page_url = "/NodeForgeDocs/0.50.0/LSYSTEMS_SCRIPTING/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> NodeForge Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../GET_STARTED/">Get Started</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">DSL</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../CORE_CONCEPTS/">Core Concepts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SYNTAX/">Syntax</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../BUILTINS/">Built-ins</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../WRITING_FUNCTIONS/">Writing Functions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../PACKAGES/">Packages</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../GEOMETRY_NODES_COVERAGE/">Geometry Nodes Coverage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Libraries</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" >Math</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_METHODS/">Methods</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../FUNCTIONS/">Functions</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_EXAMPLES/">Examples</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" >LSystem</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS/">Reference</a>
+                </li>
+                <li class="toctree-l2 current"><a class="reference internal current" href="#">Scripting</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#minimal-l-system">Minimal L-System</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#axiom-and-grammar-symbols">Axiom and Grammar Symbols</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#branches">Branches</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#3d-turtle-orientation">3D Turtle Orientation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#parameterized-commands">Parameterized Commands</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#runtime-growth">Runtime Growth</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#marker-points">Marker Points</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#spatial-plant-with-runtime-growth">Spatial Plant with Runtime Growth</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#compile-time-string-composition">Compile-Time String Composition</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#transforming-and-joining-results">Transforming and Joining Results</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#common-patterns">Common Patterns</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#koch-curve">Koch Curve</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#classic-fractal-plant">Classic Fractal Plant</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#3d-branch-whorl">3D Branch Whorl</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#grammar-requirements">Grammar Requirements</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#performance">Performance</a>
+    </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">NodeForge Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Libraries</li>
+          <li class="breadcrumb-item">LSystem</li>
+      <li class="breadcrumb-item active">Scripting</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/denikryt/NodeForgeDocs/edit/master/docs/LSYSTEMS_SCRIPTING.md">Edit on denikryt/NodeForgeDocs</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="writing-l-system-scripts">Writing L-System Scripts<a class="headerlink" href="#writing-l-system-scripts" title="Permanent link">&para;</a></h1>
+<p>Install the <code>nodeforge.lsystem</code> package through <strong>Library → Packages</strong> and approve its Python permission before using the examples on this page.</p>
+<p>An L-system script has two stages:</p>
+<ol>
+<li>The grammar starts from an axiom and applies rewrite rules for the selected number of iterations.</li>
+<li>A 3D turtle reads the resulting modules and creates curves and marker points.</li>
+</ol>
+<p>Use <a href="../LSYSTEMS/">L-System Reference</a> for constructor signatures and the complete command table.</p>
+<h2 id="minimal-l-system">Minimal L-System<a class="headerlink" href="#minimal-l-system" title="Permanent link">&para;</a></h2>
+<p>This script draws a branching curve with runtime controls for angle and segment length.</p>
+<pre class="highlight"><code class="language-python">angle = input_float("Angle", default=25.0)
+step = input_float("Step", default=0.1)
+
+geo = ls_system(
+    ls_axiom("F"),
+    ls_rule("F", "F[+F]F[-F]F"),
+    ls_iterations(2),
+    ls_angle(angle),
+    ls_step(step),
+)
+
+output("Geometry", geo)</code></pre>
+<p>The grammar is evaluated in this order:</p>
+<ol>
+<li>Start with the axiom <code>F</code>.</li>
+<li>Replace every <code>F</code> with <code>F[+F]F[-F]F</code>.</li>
+<li>Repeat the rewrite for the requested iteration count.</li>
+<li>Interpret <code>F</code>, <code>+</code>, <code>-</code>, <code>[</code>, and <code>]</code> as turtle commands.</li>
+</ol>
+<p>Rules are parallel. Each iteration reads one complete generation and produces the next generation; replacements created during that iteration are not rewritten again until the next iteration.</p>
+<h2 id="axiom-and-grammar-symbols">Axiom and Grammar Symbols<a class="headerlink" href="#axiom-and-grammar-symbols" title="Permanent link">&para;</a></h2>
+<p><code>ls_axiom(...)</code> defines the initial stream. A visible curve can start directly with <code>F</code>:</p>
+<pre class="highlight"><code class="language-python">geo = ls_system(
+    ls_axiom("F+F+F"),
+    ls_iterations(0),
+    ls_angle(120),
+    ls_step(1),
+)
+
+output("Geometry", geo)</code></pre>
+<p>Grammar symbols such as <code>A</code>, <code>B</code>, or <code>X</code> can control growth without drawing anything themselves. They become visible only when rewrite rules eventually produce drawing commands or markers.</p>
+<pre class="highlight"><code class="language-python">geo = ls_system(
+    ls_axiom("X"),
+    ls_rule("X", "F+X"),
+    ls_iterations(5),
+    ls_angle(60),
+    ls_step(0.15),
+)
+
+output("Geometry", geo)</code></pre>
+<p>Symbols without a rule stay unchanged from one generation to the next. If they reach the final stream and are not turtle commands or declared markers, the turtle ignores them.</p>
+<p>A rule may also delete a symbol with an empty replacement. This is useful for temporary grammar symbols.</p>
+<pre class="highlight"><code class="language-python">geo = ls_system(
+    ls_axiom("FAF"),
+    ls_rule("A", ""),
+    ls_iterations(1),
+    ls_angle(90),
+    ls_step(0.5),
+)
+
+output("Geometry", geo)</code></pre>
+<h2 id="branches">Branches<a class="headerlink" href="#branches" title="Permanent link">&para;</a></h2>
+<p><code>[</code> saves the current position and orientation. <code>]</code> restores the saved state.</p>
+<pre class="highlight"><code class="language-python">geo = ls_system(
+    ls_axiom("F[+F]F[-F]F"),
+    ls_iterations(0),
+    ls_angle(35),
+    ls_step(0.4),
+)
+
+output("Geometry", geo)</code></pre>
+<p>Read the stream as:</p>
+<pre class="highlight"><code class="language-text">F     draw the trunk forward
+[+F]  save state, turn left, draw a side branch, restore state
+F     continue the trunk
+[-F]  save state, turn right, draw a side branch, restore state
+F     continue the trunk</code></pre>
+<p>The saved state includes the full 3D orientation, not only position. A roll or pitch made inside a branch therefore does not change the parent branch after <code>]</code>.</p>
+<h2 id="3d-turtle-orientation">3D Turtle Orientation<a class="headerlink" href="#3d-turtle-orientation" title="Permanent link">&para;</a></h2>
+<p>The turtle begins at the origin, facing <code>+X</code>, with local Left along <code>+Y</code> and local Up along <code>+Z</code>.</p>
+<p>The six rotation commands are:</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Rotation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>+</code></td>
+<td>yaw left around local Up</td>
+</tr>
+<tr>
+<td><code>-</code></td>
+<td>yaw right around local Up</td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>pitch up around local Left</td>
+</tr>
+<tr>
+<td><code>&amp;</code></td>
+<td>pitch down around local Left</td>
+</tr>
+<tr>
+<td><code>/</code></td>
+<td>positive roll around local Heading</td>
+</tr>
+<tr>
+<td><code>\</code></td>
+<td>negative roll around local Heading</td>
+</tr>
+</tbody>
+</table>
+<p>Every unparameterized rotation uses <code>ls_angle(...)</code>. Add one argument to give a command its own angle.</p>
+<pre class="highlight"><code class="language-python">pitch = input_float("Pitch", default=35.0)
+roll = input_float("Roll", default=60.0)
+
+geo = ls_system(
+    ls_axiom("F/(roll)[&amp;(pitch)F]F"),
+    ls_iterations(0),
+    ls_angle(25),
+    ls_step(1),
+    ls_param("pitch", pitch),
+    ls_param("roll", roll),
+)
+
+output("Geometry", geo)</code></pre>
+<p>Roll changes the local Left and Up axes. It does not move the turtle by itself, but it changes the plane used by later pitch or yaw operations. Rotation order therefore matters.</p>
+<p>For example, this script exposes two curves that use the same two rotations in different orders:</p>
+<pre class="highlight"><code class="language-python">first = ls_system(
+    ls_axiom("+(90)^(90)F"),
+    ls_iterations(0),
+    ls_angle(25),
+    ls_step(1),
+)
+
+second = ls_system(
+    ls_axiom("^(90)+(90)F"),
+    ls_iterations(0),
+    ls_angle(25),
+    ls_step(1),
+)
+second = transform(second, translation=vector(2, 0, 0))
+
+output("Geometry", join(first, second))</code></pre>
+<h2 id="parameterized-commands">Parameterized Commands<a class="headerlink" href="#parameterized-commands" title="Permanent link">&para;</a></h2>
+<p>Use command arguments when different modules need different distances or angles.</p>
+<p>The movement commands accept one distance:</p>
+<pre class="highlight"><code class="language-text">F(0.5)
+f(2.0)</code></pre>
+<p>The rotation commands accept one angle in degrees:</p>
+<pre class="highlight"><code class="language-text">+(30)
+-(45)
+^(20)
+&amp;(20)
+/(90)
+\(90)</code></pre>
+<p>A module argument can also reference a value declared with <code>ls_param(...)</code>. The declared value may be a runtime input.</p>
+<pre class="highlight"><code class="language-python">long_step = input_float("Long Step", default=1.5)
+short_step = input_float("Short Step", default=0.5)
+turn = input_float("Turn", default=70.0)
+
+geo = ls_system(
+    ls_axiom("F(long_step)+(turn)F(short_step)-(turn)F(long_step)"),
+    ls_iterations(0),
+    ls_angle(25),
+    ls_step(1),
+    ls_param("long_step", long_step),
+    ls_param("short_step", short_step),
+    ls_param("turn", turn),
+)
+
+output("Geometry", geo)</code></pre>
+<p>Arguments inside L-system strings are data references, not NodeForge expressions. Use a numeric literal or a single <code>ls_param(...)</code> name. Compute a value in the NodeForge script first, then bind the result with <code>ls_param(...)</code> when a more complex expression is needed.</p>
+<pre class="highlight"><code class="language-python">base = input_float("Base Length", default=0.4)
+length = base * 2.0
+
+geo = ls_system(
+    ls_axiom("F(length)+(90)F(length)"),
+    ls_iterations(0),
+    ls_angle(25),
+    ls_step(1),
+    ls_param("length", length),
+)
+
+output("Geometry", geo)</code></pre>
+<h2 id="runtime-growth">Runtime Growth<a class="headerlink" href="#runtime-growth" title="Permanent link">&para;</a></h2>
+<p>Pass a runtime <code>Int</code> to <code>ls_iterations(...)</code> when the number of rewrite generations should be adjustable from the node-group interface.</p>
+<pre class="highlight"><code class="language-python">iterations = input_int("Iterations", default=4)
+
+geo = ls_system(
+    ls_axiom("A"),
+    ls_rule("A", "FA"),
+    ls_iterations(iterations),
+    ls_angle(25),
+    ls_step(0.25),
+)
+
+output("Geometry", geo)</code></pre>
+<p>Changing <strong>Iterations</strong> changes topology without recompiling the script. A runtime value of <code>0</code> uses the axiom directly. Runtime values below <code>0</code> are treated as <code>0</code>.</p>
+<p>Runtime rewriting still uses compile-time grammar declarations. The axiom, rules, marker declarations, and parameter names do not become runtime strings.</p>
+<p>For runtime iterations, keep every branch local to one declared stream: the axiom and every rule replacement must each have balanced brackets. This form is valid:</p>
+<pre class="highlight"><code class="language-python">iterations = input_int("Iterations", default=3)
+
+geo = ls_system(
+    ls_axiom("A"),
+    ls_rule("A", "F[+A][-A]"),
+    ls_iterations(iterations),
+    ls_angle(30),
+    ls_step(0.2),
+)
+
+output("Geometry", geo)</code></pre>
+<p>A replacement that opens a branch while another replacement closes it is not valid in runtime iteration mode. Rules that rewrite <code>[</code> or <code>]</code> are also reserved from this mode.</p>
+<h2 id="marker-points">Marker Points<a class="headerlink" href="#marker-points" title="Permanent link">&para;</a></h2>
+<p>Markers place points in the turtle stream without drawing or moving the turtle. Declare the marker with <code>ls_marker(...)</code>, use its name in the axiom or a rule, and extract it with <code>ls_points(...)</code>.</p>
+<pre class="highlight"><code class="language-python">plant = ls_system(
+    ls_axiom("F[+FLeaf][-FLeaf]FLeaf"),
+    ls_iterations(0),
+    ls_angle(35),
+    ls_step(0.5),
+    ls_marker("Leaf"),
+)
+
+leaf_points = ls_points(plant, marker="Leaf")
+leaves = instance_on_points(cube(0.12), leaf_points)
+
+output("Geometry", join(plant, leaves))</code></pre>
+<p>A marker can carry numeric parameters. Each parameter becomes a point attribute with the name declared in <code>ls_marker(...)</code>.</p>
+<pre class="highlight"><code class="language-python">size = input_float("Leaf Size", default=0.25)
+
+plant = ls_system(
+    ls_axiom("FLeaf(size)+(45)FLeaf(size)"),
+    ls_iterations(0),
+    ls_angle(25),
+    ls_step(0.7),
+    ls_param("size", size),
+    ls_marker("Leaf", "size"),
+)
+
+leaf_points = ls_points(plant, marker="Leaf")
+leaves = instance_on_points(cube(0.12), leaf_points)
+
+output("Geometry", join(plant, leaves))</code></pre>
+<p>Marker points also carry two orientation vectors:</p>
+<ul>
+<li><code>nf_lsys_marker_tangent</code> is the turtle Heading at the marker.</li>
+<li><code>nf_lsys_marker_up</code> is the turtle Up vector at the marker.</li>
+</ul>
+<p>These vectors follow yaw, pitch, roll, and branch restoration, so marker orientation remains meaningful in spatial L-systems.</p>
+<h2 id="spatial-plant-with-runtime-growth">Spatial Plant with Runtime Growth<a class="headerlink" href="#spatial-plant-with-runtime-growth" title="Permanent link">&para;</a></h2>
+<p>This example combines runtime iterations, pitch, roll, a runtime step length, and leaf markers. It is a compact starting point for procedural 3D plants.</p>
+<pre class="highlight"><code class="language-python">growth_iterations = input_int("Growth Iterations", default=5)
+branch_angle = input_float("Branch Angle", default=35.0)
+node_rotation = input_float("Node Rotation", default=137.507764)
+step = input_float("Step", default=0.2)
+
+plant = ls_system(
+    ls_axiom("A"),
+    ls_rule("A", "F[&amp;(branch_angle)B]/(node_rotation)A"),
+    ls_rule("B", "FLeaf"),
+    ls_iterations(growth_iterations),
+    ls_angle(25),
+    ls_step(step),
+    ls_param("branch_angle", branch_angle),
+    ls_param("node_rotation", node_rotation),
+    ls_marker("Leaf"),
+)
+
+leaf_points = ls_points(plant, marker="Leaf")
+leaves = instance_on_points(cube(0.08), leaf_points)
+
+output("Geometry", join(plant, leaves))</code></pre>
+<p>The roll angle separates successive branches around the trunk. The pitch angle moves each branch away from the current heading. Because both values are runtime parameters, their shape can be adjusted without recompiling.</p>
+<h2 id="compile-time-string-composition">Compile-Time String Composition<a class="headerlink" href="#compile-time-string-composition" title="Permanent link">&para;</a></h2>
+<p>Use f-strings when the grammar itself is assembled from compile-time string fragments.</p>
+<pre class="highlight"><code class="language-python">left = "[-F]"
+right = "[+F]"
+rule = f"F{left}F{right}F"
+
+geo = ls_system(
+    ls_axiom("F"),
+    ls_rule("F", rule),
+    ls_iterations(3),
+    ls_angle(25),
+    ls_step(0.1),
+)
+
+output("Geometry", geo)</code></pre>
+<p>F-string interpolation changes the compile-time grammar. Runtime numeric controls belong in <code>ls_param(...)</code> instead.</p>
+<h2 id="transforming-and-joining-results">Transforming and Joining Results<a class="headerlink" href="#transforming-and-joining-results" title="Permanent link">&para;</a></h2>
+<p><code>ls_system(...)</code> returns ordinary geometry. Apply NodeForge geometry operations after the L-system is built.</p>
+<pre class="highlight"><code class="language-python">left = ls_system(
+    ls_axiom("F[+F][-F]F"),
+    ls_iterations(2),
+    ls_angle(30),
+    ls_step(0.15),
+)
+
+right = ls_system(
+    ls_axiom("F[+F][-F]F"),
+    ls_iterations(3),
+    ls_angle(22),
+    ls_step(0.12),
+)
+right = transform(right, translation=vector(1.5, 0, 0))
+
+output("Geometry", join(left, right))</code></pre>
+<p>Use <code>translation=</code> for positional transforms.</p>
+<h2 id="common-patterns">Common Patterns<a class="headerlink" href="#common-patterns" title="Permanent link">&para;</a></h2>
+<h3 id="koch-curve">Koch Curve<a class="headerlink" href="#koch-curve" title="Permanent link">&para;</a></h3>
+<pre class="highlight"><code class="language-python">geo = ls_system(
+    ls_axiom("F"),
+    ls_rule("F", "F+F--F+F"),
+    ls_iterations(4),
+    ls_angle(60),
+    ls_step(0.08),
+)
+
+output("Geometry", geo)</code></pre>
+<h3 id="classic-fractal-plant">Classic Fractal Plant<a class="headerlink" href="#classic-fractal-plant" title="Permanent link">&para;</a></h3>
+<pre class="highlight"><code class="language-python">angle = input_float("Angle", default=25.0)
+step = input_float("Step", default=0.04)
+
+geo = ls_system(
+    ls_axiom("X"),
+    ls_rule("X", "F+[[X]-X]-F[-FX]+X"),
+    ls_rule("F", "FF"),
+    ls_iterations(5),
+    ls_angle(angle),
+    ls_step(step),
+)
+geo = transform(geo, rotation=vector(0, 0, radians(90)))
+
+output("Geometry", geo)</code></pre>
+<h3 id="3d-branch-whorl">3D Branch Whorl<a class="headerlink" href="#3d-branch-whorl" title="Permanent link">&para;</a></h3>
+<pre class="highlight"><code class="language-python">pitch = input_float("Pitch", default=35.0)
+roll = input_float("Roll", default=120.0)
+
+geo = ls_system(
+    ls_axiom("F[&amp;(pitch)F]/(roll)[&amp;(pitch)F]/(roll)[&amp;(pitch)F]"),
+    ls_iterations(0),
+    ls_angle(25),
+    ls_step(0.8),
+    ls_param("pitch", pitch),
+    ls_param("roll", roll),
+)
+
+output("Geometry", geo)</code></pre>
+<h2 id="grammar-requirements">Grammar Requirements<a class="headerlink" href="#grammar-requirements" title="Permanent link">&para;</a></h2>
+<p>Use these rules when writing axioms and replacements:</p>
+<ul>
+<li>Keep whitespace out of L-system strings.</li>
+<li>Use ASCII letters, digits, and <code>_</code> for ordinary grammar symbols.</li>
+<li>Use only declared marker names for multi-character modules.</li>
+<li>Give parameterized built-ins exactly one numeric literal or declared parameter name.</li>
+<li>Declare every named module argument with <code>ls_param(...)</code>.</li>
+<li>Match every <code>[</code> with a later <code>]</code> in the interpreted stream.</li>
+<li>For runtime iterations, balance brackets separately in the axiom and in every replacement.</li>
+</ul>
+<p>The compiler reports invalid streams as <code>CompileError</code> before producing the node group whenever the invalid structure is known at compile time.</p>
+<h2 id="performance">Performance<a class="headerlink" href="#performance" title="Permanent link">&para;</a></h2>
+<p>L-system growth can be exponential. A rule that produces two recursive symbols may approximately double the active grammar each iteration; rules that produce three or more recursive symbols grow faster.</p>
+<p>Compile-time iteration mode stops expansion above <code>200000</code> modules. Runtime iteration mode performs the expansion during Geometry Nodes evaluation, so choose practical input ranges for <strong>Iterations</strong> instead of exposing an unrestricted large value.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../LSYSTEMS/" class="btn btn-neutral float-left" title="Reference"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2026 denikryt</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/denikryt/NodeForgeDocs" class="fa fa-code-fork" style="color: #fcfcfc"> denikryt/NodeForgeDocs</a>
+        </span>
+    
+    
+      <span><a href="../LSYSTEMS/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+      <script src="../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

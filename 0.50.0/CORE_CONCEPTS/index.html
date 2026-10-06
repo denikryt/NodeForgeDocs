@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://denikryt.github.io/NodeForgeDocs/0.50.0/CORE_CONCEPTS/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Core Concepts - NodeForge Documentation</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Core Concepts";
+        var mkdocs_page_input_path = "CORE_CONCEPTS.md";
+        var mkdocs_page_url = "/NodeForgeDocs/0.50.0/CORE_CONCEPTS/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> NodeForge Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../GET_STARTED/">Get Started</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">DSL</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Core Concepts</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#one-script-describes-one-node-group">One script describes one node group</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#dsl-compilation">DSL compilation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#compile-time">Compile time</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#runtime">Runtime</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#group-inputs-are-runtime-parameters">Group inputs are runtime parameters</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#generated-groups-remain-native-blender-data">Generated groups remain native Blender data</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#embedded-source-and-updates">Embedded source and updates</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SYNTAX/">Syntax</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../BUILTINS/">Built-ins</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../WRITING_FUNCTIONS/">Writing Functions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../PACKAGES/">Packages</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../GEOMETRY_NODES_COVERAGE/">Geometry Nodes Coverage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Libraries</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Math</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_METHODS/">Methods</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../FUNCTIONS/">Functions</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_EXAMPLES/">Examples</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >LSystem</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS/">Reference</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS_SCRIPTING/">Scripting</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">NodeForge Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">DSL</li>
+      <li class="breadcrumb-item active">Core Concepts</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/denikryt/NodeForgeDocs/edit/master/docs/CORE_CONCEPTS.md">Edit on denikryt/NodeForgeDocs</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="core-concepts">Core Concepts<a class="headerlink" href="#core-concepts" title="Permanent link">&para;</a></h1>
+<p>NodeForge is a domain-specific language (DSL) for authoring Blender Geometry Nodes groups. A source file describes one group: its interface, the operations inside it, and the data flow between those operations. The compiler turns that description into a native <code>GeometryNodeTree</code>.</p>
+<h2 id="one-script-describes-one-node-group">One script describes one node group<a class="headerlink" href="#one-script-describes-one-node-group" title="Permanent link">&para;</a></h2>
+<p>The top-level script owns the generated group interface and body.</p>
+<pre class="highlight"><code class="language-python">size = input_float('Size', default=1.0)
+scaled = size * 2.0
+geometry = cube(size=scaled)
+output('Geometry', geometry)</code></pre>
+<p>This source describes the following parts of the group:</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Node-group result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>input_float('Size', ...)</code></td>
+<td>A Float input socket named <strong>Size</strong>.</td>
+</tr>
+<tr>
+<td><code>size * 2.0</code></td>
+<td>A math operation linked to the <strong>Size</strong> input.</td>
+</tr>
+<tr>
+<td><code>cube(size=scaled)</code></td>
+<td>A Cube operation whose size receives the math result.</td>
+</tr>
+<tr>
+<td><code>output('Geometry', geometry)</code></td>
+<td>A Geometry output socket linked to the cube result.</td>
+</tr>
+</tbody>
+</table>
+<p>The generated data flow is approximately:</p>
+<pre class="highlight"><code class="language-text">Size group input → Math (Multiply) → Cube → Geometry group output</code></pre>
+<p>The variable <code>size</code> is a compiler handle for a typed Geometry Nodes value. It is not the current numeric value of the socket. Changing <strong>Size</strong> on a group-node instance makes Blender evaluate the existing graph with the new value.</p>
+<p>Assignments give readable names to values in this data flow. Arithmetic, comparisons, function calls, and supported control flow either produce graph operations or guide the compiler while it builds the graph.</p>
+<h2 id="dsl-compilation">DSL compilation<a class="headerlink" href="#dsl-compilation" title="Permanent link">&para;</a></h2>
+<p>NodeForge uses familiar Python syntax as the surface language and gives that syntax Geometry Nodes semantics. The compiler processes a script through these stages:</p>
+<pre class="highlight"><code class="language-text">NodeForge source
+    ↓
+Python AST parsing
+    ↓
+DSL validation and compile-time preprocessing
+    ↓
+runtime type and group-interface inference
+    ↓
+Geometry Nodes materialization
+    ↓
+native GeometryNodeTree</code></pre>
+<p>The compiler tracks runtime types such as <code>Geometry</code>, <code>Float</code>, <code>Int</code>, <code>Bool</code>, <code>Vector</code>, <code>Material</code>, <code>Object</code>, <code>String</code>, and <code>Bundle</code>. These types determine which sockets and operations can be connected. Compile-time values use compiler-owned representations such as numbers, strings, vectors, lists, and tuples.</p>
+<p>The documented language defines which Python syntax has NodeForge meaning. See <a href="../SYNTAX/">DSL Syntax and Semantics</a> for the supported statements, expressions, types, and restrictions.</p>
+<h2 id="compile-time">Compile time<a class="headerlink" href="#compile-time" title="Permanent link">&para;</a></h2>
+<p>Compile-time values are available while NodeForge is deciding what graph to create. They can control socket names, defaults, options, list structure, imports, and authoring loops.</p>
+<pre class="highlight"><code class="language-python">count = 3
+spacing = input_float('Spacing', default=1.5)
+
+parts = []
+for index in range(count):
+    offset = vector(index * spacing, 0, 0)
+    part = transform(cube(size=1.0), translation=offset)
+    parts.append(part)
+
+output('Geometry', join(parts))</code></pre>
+<p>Here <code>count</code>, <code>index</code>, and the list structure are compile-time data. The compiler unrolls <code>range(3)</code> and creates three cube-and-transform paths. <code>spacing</code> remains a runtime socket value, so each generated offset path stays connected to the adjustable <strong>Spacing</strong> input.</p>
+<p>A compile-time <code>if</code> selects one source branch during compilation. Compile-time arithmetic can also be resolved before nodes are created when the receiving operation permits it.</p>
+<h2 id="runtime">Runtime<a class="headerlink" href="#runtime" title="Permanent link">&para;</a></h2>
+<p>Runtime values exist as sockets, fields, and state in the generated Geometry Nodes graph. Values returned by <code>input_*()</code> are group inputs, so they can be changed on each group-node instance without recompiling the script.</p>
+<pre class="highlight"><code class="language-python">steps = input_int('Steps', default=4)
+distance = input_float('Distance', default=0.5)
+geometry = cube(size=1.0)
+
+for index in repeat_range(steps):
+    geometry = transform(
+        geometry,
+        translation=vector(distance, 0, 0),
+    )
+
+output('Geometry', geometry)</code></pre>
+<p><code>repeat_range(...)</code> creates a native Blender Repeat Zone. The compiler materializes the loop body inside the zone, carries changed values as repeat state, and connects <strong>Steps</strong> to the zone's iteration count. Changing <strong>Steps</strong> changes the evaluated iteration count without rebuilding the group.</p>
+<p>The two loop forms serve different authoring needs:</p>
+<table>
+<thead>
+<tr>
+<th>Form</th>
+<th>Compilation result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>for ... in range(...)</code></td>
+<td>The compiler unrolls the body and generates one graph fragment per iteration. The range arguments must be known at compile time.</td>
+</tr>
+<tr>
+<td><code>for ... in repeat_range(...)</code></td>
+<td>The compiler creates a Repeat Zone and materializes the body once inside it. The iteration count may be a runtime <code>Int</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>A runtime <code>Bool</code> used by an <code>if</code> statement creates both compatible branches and merges their results with Switch nodes. A compile-time condition selects one branch before materialization.</p>
+<h2 id="group-inputs-are-runtime-parameters">Group inputs are runtime parameters<a class="headerlink" href="#group-inputs-are-runtime-parameters" title="Permanent link">&para;</a></h2>
+<p>An <code>input_*()</code> declaration creates an exposed node-group socket. The source supplies its label, type, and default value.</p>
+<pre class="highlight"><code class="language-python">radius = input_float('Radius', default=1.0)
+segments = input_int('Segments', default=32)
+enabled = input_bool('Enabled', default=True)</code></pre>
+<p>Every instance of the generated group can have its own input values or incoming links. These parameters participate in the surrounding Geometry Nodes graph and update through normal Blender evaluation.</p>
+<p>An <code>output(...)</code> declaration creates a group output and connects the selected runtime value to it. The script therefore defines both the public interface and the internal implementation of the group.</p>
+<h2 id="generated-groups-remain-native-blender-data">Generated groups remain native Blender data<a class="headerlink" href="#generated-groups-remain-native-blender-data" title="Permanent link">&para;</a></h2>
+<p>The compiler creates ordinary Blender nodes, sockets, links, interface panels, and zones. The resulting group can be opened and inspected in the Geometry Node Editor, connected from another graph, copied, and saved in a <code>.blend</code> file. Compiled groups continue evaluating when the NodeForge add-on is disabled or uninstalled.</p>
+<h2 id="embedded-source-and-updates">Embedded source and updates<a class="headerlink" href="#embedded-source-and-updates" title="Permanent link">&para;</a></h2>
+<p>Every generated NodeForge group stores the source that created it. Select a generated group node and use <strong>Load Script From Selected NodeGroup</strong> to copy the embedded source into a Blender Text datablock.</p>
+<p>After editing the source, use <strong>Update Selected NodeGroup</strong> to rebuild the selected group in place. NodeForge compiles a replacement first and then updates the existing group datablock. For the selected group-node instance, it restores compatible incoming and outgoing links by socket name and preserves input values that differ from the previous script defaults.</p>
+<p>This workflow keeps the generated group connected to the surrounding graph while its implementation evolves:</p>
+<ol>
+<li>Load or open the source.</li>
+<li>Edit and test the DSL script.</li>
+<li>Select the generated group node.</li>
+<li>Run <strong>Update Selected NodeGroup</strong>.</li>
+<li>Inspect the rebuilt internals and the preserved external connections.</li>
+</ol>
+<p>Keep reusable source in <code>.nf</code> files or another version-controlled source location. The embedded copy makes each generated group self-describing inside the <code>.blend</code> file, while the source file provides a practical history for reviewing and reproducing changes.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../GET_STARTED/" class="btn btn-neutral float-left" title="Get Started"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../SYNTAX/" class="btn btn-neutral float-right" title="Syntax">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2026 denikryt</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/denikryt/NodeForgeDocs" class="fa fa-code-fork" style="color: #fcfcfc"> denikryt/NodeForgeDocs</a>
+        </span>
+    
+    
+      <span><a href="../GET_STARTED/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../SYNTAX/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+      <script src="../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

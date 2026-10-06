@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://denikryt.github.io/NodeForgeDocs/0.50.0/GEOMETRY_NODES_COVERAGE/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Geometry Nodes Coverage - NodeForge Documentation</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Geometry Nodes Coverage";
+        var mkdocs_page_input_path = "GEOMETRY_NODES_COVERAGE.md";
+        var mkdocs_page_url = "/NodeForgeDocs/0.50.0/GEOMETRY_NODES_COVERAGE/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> NodeForge Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../GET_STARTED/">Get Started</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">DSL</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../CORE_CONCEPTS/">Core Concepts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SYNTAX/">Syntax</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../BUILTINS/">Built-ins</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../WRITING_FUNCTIONS/">Writing Functions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../PACKAGES/">Packages</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Geometry Nodes Coverage</a>
+    <ul class="current">
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Libraries</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Math</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_METHODS/">Methods</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../FUNCTIONS/">Functions</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_EXAMPLES/">Examples</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >LSystem</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS/">Reference</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS_SCRIPTING/">Scripting</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">NodeForge Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">DSL</li>
+      <li class="breadcrumb-item active">Geometry Nodes Coverage</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/denikryt/NodeForgeDocs/edit/master/docs/GEOMETRY_NODES_COVERAGE.md">Edit on denikryt/NodeForgeDocs</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="nodeforge-geometry-nodes-coverage">NodeForge Geometry Nodes Coverage<a class="headerlink" href="#nodeforge-geometry-nodes-coverage" title="Permanent link">&para;</a></h1>
+<p>This document shows the Blender Geometry Nodes areas and domains covered by NodeForge v0.51.4.</p>
+<table>
+<thead>
+<tr>
+<th>Geometry Nodes area</th>
+<th>NodeForge</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Geometry Nodes modifier workflow</td>
+<td>Yes</td>
+<td>Script compiles to a node group</td>
+</tr>
+<tr>
+<td>Node group inputs / outputs</td>
+<td>Yes</td>
+<td><code>input_*</code>, implicit inputs, <code>output(...)</code></td>
+</tr>
+<tr>
+<td>Group interface panels / metadata</td>
+<td>Partial</td>
+<td>Root interface panels through <code>panel(...)</code></td>
+</tr>
+<tr>
+<td>Inspection</td>
+<td>No</td>
+<td>No inspection/debug workflow</td>
+</tr>
+<tr>
+<td>Baking</td>
+<td>No</td>
+<td>No baking workflow</td>
+</tr>
+<tr>
+<td>Node-based tools</td>
+<td>No</td>
+<td>No tool metadata API</td>
+</tr>
+<tr>
+<td>Gizmos</td>
+<td>No</td>
+<td>No gizmo API</td>
+</tr>
+<tr>
+<td>Runtime socket: Geometry</td>
+<td>Yes</td>
+<td><code>Geometry</code></td>
+</tr>
+<tr>
+<td>Runtime socket: Float</td>
+<td>Yes</td>
+<td><code>Float</code></td>
+</tr>
+<tr>
+<td>Runtime socket: Int</td>
+<td>Yes</td>
+<td><code>Int</code></td>
+</tr>
+<tr>
+<td>Runtime socket: Bool</td>
+<td>Yes</td>
+<td><code>Bool</code></td>
+</tr>
+<tr>
+<td>Runtime socket: Vector</td>
+<td>Yes</td>
+<td><code>Vector</code></td>
+</tr>
+<tr>
+<td>Runtime socket: String</td>
+<td>Yes</td>
+<td><code>String</code>, <code>input_string(...)</code></td>
+</tr>
+<tr>
+<td>Runtime socket: Color</td>
+<td>No</td>
+<td>Missing type</td>
+</tr>
+<tr>
+<td>Runtime socket: Material</td>
+<td>Yes</td>
+<td><code>Material</code>, <code>input_material(...)</code></td>
+</tr>
+<tr>
+<td>Runtime socket: Object</td>
+<td>Yes</td>
+<td><code>Object</code>, <code>input_object(...)</code></td>
+</tr>
+<tr>
+<td>Runtime socket: Bundle</td>
+<td>Yes</td>
+<td><code>Bundle</code>, <code>input_bundle(...)</code></td>
+</tr>
+<tr>
+<td>Runtime socket: Collection</td>
+<td>No</td>
+<td>Missing type</td>
+</tr>
+<tr>
+<td>Runtime socket: Image</td>
+<td>No</td>
+<td>Missing type</td>
+</tr>
+<tr>
+<td>Runtime socket: Rotation</td>
+<td>No</td>
+<td>Missing type</td>
+</tr>
+<tr>
+<td>Runtime socket: Matrix</td>
+<td>No</td>
+<td>Missing type</td>
+</tr>
+<tr>
+<td>Constant input nodes</td>
+<td>Partial</td>
+<td>Supported types only</td>
+</tr>
+<tr>
+<td>Scene input nodes</td>
+<td>Partial</td>
+<td>Object Info through <code>Object</code> properties</td>
+</tr>
+<tr>
+<td>Import input nodes</td>
+<td>No</td>
+<td>No import-node wrappers</td>
+</tr>
+<tr>
+<td>Gizmo input nodes</td>
+<td>No</td>
+<td>No gizmo sockets</td>
+</tr>
+<tr>
+<td>Output nodes: Viewer</td>
+<td>No</td>
+<td>No wrapper</td>
+</tr>
+<tr>
+<td>Output nodes: Warning</td>
+<td>No</td>
+<td>No wrapper</td>
+</tr>
+<tr>
+<td>Fields: position / normal / index / id</td>
+<td>Partial</td>
+<td><code>position()</code>, <code>normal()</code>, <code>index()</code>, <code>id()</code></td>
+</tr>
+<tr>
+<td>Fields: radius / selection / active element</td>
+<td>Partial</td>
+<td>Selection via bool fields only</td>
+</tr>
+<tr>
+<td>Fields: evaluate / capture / domain conversion</td>
+<td>Partial</td>
+<td><code>capture_attribute(...)</code> for supported field types and domains</td>
+</tr>
+<tr>
+<td>Attributes: store</td>
+<td>Partial</td>
+<td><code>store(...)</code>, <code>store_named_attribute(...)</code></td>
+</tr>
+<tr>
+<td>Attributes: read</td>
+<td>No</td>
+<td>No wrapper</td>
+</tr>
+<tr>
+<td>Attributes: statistics / domain size</td>
+<td>No</td>
+<td>No wrapper</td>
+</tr>
+<tr>
+<td>Attributes: blur / capture / remove</td>
+<td>Partial</td>
+<td>Capture only</td>
+</tr>
+<tr>
+<td>Selection fields</td>
+<td>Partial</td>
+<td>Boolean expressions, <code>selection=</code> args</td>
+</tr>
+<tr>
+<td>Active geometry stream</td>
+<td>Partial</td>
+<td><code>store(...)</code>, statement <code>set_position(...)</code></td>
+</tr>
+<tr>
+<td>Math: scalar</td>
+<td>Yes</td>
+<td>Common math functions/operators</td>
+</tr>
+<tr>
+<td>Math: integer / bitwise</td>
+<td>Partial</td>
+<td>Basic ints, no bitwise layer</td>
+</tr>
+<tr>
+<td>Math: boolean</td>
+<td>Yes</td>
+<td><code>and</code>, <code>or</code>, <code>not</code>, comparisons</td>
+</tr>
+<tr>
+<td>Math: map / mix / clamp / switch</td>
+<td>Yes</td>
+<td><code>map_range</code>, <code>mix</code>, <code>clamp</code>, <code>select</code></td>
+</tr>
+<tr>
+<td>Random values</td>
+<td>Partial</td>
+<td><code>random_value(...)</code></td>
+</tr>
+<tr>
+<td>Noise texture</td>
+<td>Partial</td>
+<td><code>noise(...)</code> only</td>
+</tr>
+<tr>
+<td>Texture nodes</td>
+<td>Partial</td>
+<td>Noise only</td>
+</tr>
+<tr>
+<td>Image texture</td>
+<td>No</td>
+<td>No <code>Image</code> socket</td>
+</tr>
+<tr>
+<td>Color utilities</td>
+<td>No</td>
+<td>No <code>Color</code> socket</td>
+</tr>
+<tr>
+<td>Runtime String socket</td>
+<td>Yes</td>
+<td><code>input_string(...)</code>, raw/local/library sockets, runtime attribute names</td>
+</tr>
+<tr>
+<td>Compile-time strings</td>
+<td>Yes</td>
+<td>Names, identifiers, and raw-node declarations</td>
+</tr>
+<tr>
+<td>Vector construction</td>
+<td>Yes</td>
+<td><code>vector(x, y, z)</code></td>
+</tr>
+<tr>
+<td>Vector math</td>
+<td>Partial</td>
+<td>Common vector operations</td>
+</tr>
+<tr>
+<td>Rotation utilities</td>
+<td>Partial</td>
+<td>Helper functions only</td>
+</tr>
+<tr>
+<td>Matrix utilities</td>
+<td>No</td>
+<td>No <code>Matrix</code> socket</td>
+</tr>
+<tr>
+<td>Menu Switch / enum sockets</td>
+<td>No</td>
+<td>No menu/enum model</td>
+</tr>
+<tr>
+<td>Bundle operations</td>
+<td>Partial</td>
+<td><code>bundle(...)</code>, <code>bundle_get(...)</code>, <code>bundle_set(...)</code></td>
+</tr>
+<tr>
+<td>Geometry primitives</td>
+<td>Partial</td>
+<td><code>empty_geometry</code>, <code>points</code>, <code>point</code>, <code>line</code>, <code>polyline</code>, <code>grid</code>, <code>cube</code></td>
+</tr>
+<tr>
+<td>Geometry join</td>
+<td>Yes</td>
+<td><code>join(...)</code></td>
+</tr>
+<tr>
+<td>Geometry transform</td>
+<td>Yes</td>
+<td><code>transform(...)</code></td>
+</tr>
+<tr>
+<td>Geometry set position</td>
+<td>Yes</td>
+<td><code>set_position(...)</code></td>
+</tr>
+<tr>
+<td>Geometry read nodes</td>
+<td>Partial</td>
+<td>Position/normal/index/id only</td>
+</tr>
+<tr>
+<td>Geometry sample nodes</td>
+<td>No</td>
+<td>No sample/proximity/raycast wrappers</td>
+</tr>
+<tr>
+<td>Geometry write nodes</td>
+<td>Partial</td>
+<td>Set position and store attribute only</td>
+</tr>
+<tr>
+<td>Geometry material nodes</td>
+<td>Partial</td>
+<td><code>set_material(...)</code> only</td>
+</tr>
+<tr>
+<td>Geometry operations</td>
+<td>Partial</td>
+<td>Join/transform only</td>
+</tr>
+<tr>
+<td>Geometry delete / separate / duplicate / merge</td>
+<td>No</td>
+<td>No wrappers</td>
+</tr>
+<tr>
+<td>Geometry bounding box / convex hull</td>
+<td>No</td>
+<td>No wrappers</td>
+</tr>
+<tr>
+<td>Geometry sort / split to instances</td>
+<td>No</td>
+<td>No wrappers</td>
+</tr>
+<tr>
+<td>Geometry to instance</td>
+<td>No</td>
+<td>No wrapper</td>
+</tr>
+<tr>
+<td>Mesh primitives</td>
+<td>Partial</td>
+<td>Cube, grid, line-like output</td>
+</tr>
+<tr>
+<td>Mesh read nodes</td>
+<td>No</td>
+<td>No vertex/edge/face topology API</td>
+</tr>
+<tr>
+<td>Mesh sample nodes</td>
+<td>No</td>
+<td>No sample-nearest/surface wrappers</td>
+</tr>
+<tr>
+<td>Mesh write nodes</td>
+<td>No</td>
+<td>No face-set/shade-smooth/normal wrappers</td>
+</tr>
+<tr>
+<td>Mesh operations</td>
+<td>No</td>
+<td>No extrude, subdivide, boolean, triangulate wrappers</td>
+</tr>
+<tr>
+<td>Mesh topology nodes</td>
+<td>No</td>
+<td>No topology construction/read API</td>
+</tr>
+<tr>
+<td>Mesh normals</td>
+<td>No</td>
+<td>Only <code>normal()</code> field</td>
+</tr>
+<tr>
+<td>Mesh conversion</td>
+<td>No</td>
+<td>No mesh-to-curve/points/volume wrappers</td>
+</tr>
+<tr>
+<td>UV maps / UV sampling</td>
+<td>Partial</td>
+<td><code>grid_uv()</code> only</td>
+</tr>
+<tr>
+<td>Curve primitives</td>
+<td>Partial</td>
+<td><code>line</code>, <code>polyline</code>, L-system curves</td>
+</tr>
+<tr>
+<td>Curve read nodes</td>
+<td>No</td>
+<td>No length/tangent/handle wrappers</td>
+</tr>
+<tr>
+<td>Curve sample nodes</td>
+<td>No</td>
+<td>No sample/resample wrappers</td>
+</tr>
+<tr>
+<td>Curve write nodes</td>
+<td>No</td>
+<td>No radius/tilt/handle/spline wrappers</td>
+</tr>
+<tr>
+<td>Curve operations</td>
+<td>No</td>
+<td>No trim, fill, fillet, curve-to-mesh wrappers</td>
+</tr>
+<tr>
+<td>Curve topology nodes</td>
+<td>No</td>
+<td>No spline/control-point topology API</td>
+</tr>
+<tr>
+<td>Curve conversion</td>
+<td>No</td>
+<td>No curve-to-mesh/points/grease-pencil wrappers</td>
+</tr>
+<tr>
+<td>Grease Pencil read nodes</td>
+<td>No</td>
+<td>No Grease Pencil API</td>
+</tr>
+<tr>
+<td>Grease Pencil write nodes</td>
+<td>No</td>
+<td>No Grease Pencil API</td>
+</tr>
+<tr>
+<td>Grease Pencil operations</td>
+<td>No</td>
+<td>No Grease Pencil API</td>
+</tr>
+<tr>
+<td>Instances on points</td>
+<td>Yes</td>
+<td><code>instance_on_points(...)</code></td>
+</tr>
+<tr>
+<td>Realize instances</td>
+<td>Yes</td>
+<td><code>realize_instances(...)</code></td>
+</tr>
+<tr>
+<td>Instance transform operations</td>
+<td>Partial</td>
+<td>Via <code>instance_on_points</code> args only</td>
+</tr>
+<tr>
+<td>Instance read/info nodes</td>
+<td>No</td>
+<td>No wrappers</td>
+</tr>
+<tr>
+<td>Instance selection / pick instance</td>
+<td>Partial</td>
+<td><code>selection=</code> in <code>instance_on_points(...)</code>; no Pick Instance control</td>
+</tr>
+<tr>
+<td>Object instancing</td>
+<td>Partial</td>
+<td>Object Info geometry through <code>input_object(...)</code> and <code>.geometry</code></td>
+</tr>
+<tr>
+<td>Collection instancing</td>
+<td>No</td>
+<td>No <code>Collection</code> socket/API</td>
+</tr>
+<tr>
+<td>Points / point cloud generation</td>
+<td>Partial</td>
+<td><code>points</code>, <code>point</code>, layout helpers</td>
+</tr>
+<tr>
+<td>Points distribution</td>
+<td>No</td>
+<td>No distribute-points wrappers</td>
+</tr>
+<tr>
+<td>Points write nodes</td>
+<td>No</td>
+<td>No set-point-radius wrapper</td>
+</tr>
+<tr>
+<td>Points conversion</td>
+<td>No</td>
+<td>No points-to-volume/curves/vertices wrappers</td>
+</tr>
+<tr>
+<td>Volume read nodes</td>
+<td>No</td>
+<td>No volume grid API</td>
+</tr>
+<tr>
+<td>Volume sample nodes</td>
+<td>No</td>
+<td>No volume grid API</td>
+</tr>
+<tr>
+<td>Volume operations</td>
+<td>No</td>
+<td>No volume operation wrappers</td>
+</tr>
+<tr>
+<td>Volume primitives</td>
+<td>No</td>
+<td>No volume primitive wrappers</td>
+</tr>
+<tr>
+<td>Volume conversion</td>
+<td>No</td>
+<td>No mesh/points-to-volume wrappers</td>
+</tr>
+<tr>
+<td>Materials: assign</td>
+<td>Partial</td>
+<td><code>set_material(geo, material)</code> with a name or runtime <code>Material</code></td>
+</tr>
+<tr>
+<td>Materials: runtime material data</td>
+<td>Yes</td>
+<td><code>input_material(...)</code>, raw/local/library sockets</td>
+</tr>
+<tr>
+<td>Materials: index / replace / selection</td>
+<td>No</td>
+<td>No wrappers</td>
+</tr>
+<tr>
+<td>Simulation Zone</td>
+<td>No</td>
+<td>No simulation-zone syntax</td>
+</tr>
+<tr>
+<td>Repeat Zone</td>
+<td>Partial</td>
+<td>Nested <code>repeat_range(...)</code> state loops</td>
+</tr>
+<tr>
+<td>For Each Geometry Element Zone</td>
+<td>No</td>
+<td>No foreach-zone syntax</td>
+</tr>
+<tr>
+<td>Bake node</td>
+<td>No</td>
+<td>No wrapper</td>
+</tr>
+<tr>
+<td>Viewer node</td>
+<td>No</td>
+<td>No wrapper</td>
+</tr>
+<tr>
+<td>Warning node</td>
+<td>No</td>
+<td>No wrapper</td>
+</tr>
+<tr>
+<td>Local functions</td>
+<td>Yes</td>
+<td>Typed parameters and single or flat multi-value returns</td>
+</tr>
+<tr>
+<td>Reusable library imports</td>
+<td>Yes</td>
+<td><code>from functions/examples/local import ...</code></td>
+</tr>
+<tr>
+<td>Compile-time <code>for</code> loops</td>
+<td>Yes</td>
+<td>Unrolled graph generation</td>
+</tr>
+<tr>
+<td>Runtime repeat loops</td>
+<td>Partial</td>
+<td>Nested repeat-style loops; supported state types only</td>
+</tr>
+<tr>
+<td>Runtime <code>if</code> / switch logic</td>
+<td>Partial</td>
+<td>Compatible Float, Int, Vector, Bool, Geometry, String, and Bundle branch values</td>
+</tr>
+<tr>
+<td>Arrays / compile-time lists</td>
+<td>Partial</td>
+<td>Compile-time structure only</td>
+</tr>
+<tr>
+<td>L-systems</td>
+<td>Yes</td>
+<td>NodeForge-specific system</td>
+</tr>
+<tr>
+<td>Raw Blender node creation</td>
+<td>Raw only</td>
+<td><code>node(...)</code>; NodeForge runtime socket types only</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../PACKAGES/" class="btn btn-neutral float-left" title="Packages"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../MATH_METHODS/" class="btn btn-neutral float-right" title="Methods">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2026 denikryt</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/denikryt/NodeForgeDocs" class="fa fa-code-fork" style="color: #fcfcfc"> denikryt/NodeForgeDocs</a>
+        </span>
+    
+    
+      <span><a href="../PACKAGES/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../MATH_METHODS/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+      <script src="../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

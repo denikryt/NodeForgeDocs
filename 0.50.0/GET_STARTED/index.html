@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://denikryt.github.io/NodeForgeDocs/0.50.0/GET_STARTED/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Get Started - NodeForge Documentation</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Get Started";
+        var mkdocs_page_input_path = "GET_STARTED.md";
+        var mkdocs_page_url = "/NodeForgeDocs/0.50.0/GET_STARTED/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> NodeForge Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Get Started</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#install-nodeforge">Install NodeForge</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#create-your-first-nodeforge-group">Create your first NodeForge group</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#update-the-generated-group">Update the generated group</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#main-actions">Main actions</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#first-script-one-input-one-output">First script: one input, one output</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#first-geometry-script-adjustable-cube">First geometry script: adjustable cube</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#use-the-objects-input-geometry">Use the object's input geometry</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#add-variables-and-transforms">Add variables and transforms</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#build-a-small-shape-with-a-loop">Build a small shape with a loop</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#use-the-library-panel">Use the Library panel</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#save-your-own-script-to-local">Save your own script to Local</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#add-an-external-local-folder">Add an external Local folder</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#reuse-a-saved-script-from-another-script">Reuse a saved script from another script</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#what-to-read-next">What to read next</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">DSL</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../CORE_CONCEPTS/">Core Concepts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SYNTAX/">Syntax</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../BUILTINS/">Built-ins</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../WRITING_FUNCTIONS/">Writing Functions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../PACKAGES/">Packages</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../GEOMETRY_NODES_COVERAGE/">Geometry Nodes Coverage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Libraries</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Math</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_METHODS/">Methods</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../FUNCTIONS/">Functions</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_EXAMPLES/">Examples</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >LSystem</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS/">Reference</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS_SCRIPTING/">Scripting</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">NodeForge Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Get Started</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/denikryt/NodeForgeDocs/edit/master/docs/GET_STARTED.md">Edit on denikryt/NodeForgeDocs</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="get-started-with-nodeforge">Get Started with NodeForge<a class="headerlink" href="#get-started-with-nodeforge" title="Permanent link">&para;</a></h1>
+<p>NodeForge compiles a Python-like DSL script into a native Blender Geometry Nodes group. The script defines the group's interface and internal data flow. This page takes you from installing the add-on to compiling and updating your first generated group; see <a href="../CORE_CONCEPTS/">Core Concepts</a> for the complete language model.</p>
+<h2 id="install-nodeforge">Install NodeForge<a class="headerlink" href="#install-nodeforge" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Open the <a href="https://github.com/denikryt/NodeForge/releases">NodeForge releases page</a>.</li>
+<li>In the latest release, download the <code>NodeForge-v&lt;version&gt;-blender.zip</code> file from <strong>Assets</strong>.</li>
+<li>In Blender, open <strong>Edit → Preferences → Add-ons</strong>.</li>
+<li>Open the Add-ons menu and choose <strong>Install from Disk...</strong>.</li>
+<li>Select the downloaded ZIP file.</li>
+<li>Enable <strong>NodeForge</strong> in the add-on list.</li>
+</ol>
+<p>The installed add-on adds a <strong>NodeForge</strong> tab to the sidebar of the Geometry Node Editor.</p>
+<h2 id="create-your-first-nodeforge-group">Create your first NodeForge group<a class="headerlink" href="#create-your-first-nodeforge-group" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Select a mesh object.</li>
+<li>Open the <strong>Geometry Node Editor</strong> and click <strong>New</strong> to create a Geometry Nodes modifier and node tree.</li>
+<li>Press <code>N</code> to open the sidebar, then select the <strong>NodeForge</strong> tab.</li>
+<li>Open a <strong>Text Editor</strong> in another Blender area and click <strong>New</strong> to create a Text datablock.</li>
+<li>Enter this script:</li>
+</ol>
+<pre class="highlight"><code class="language-python">geo = cube(size=2.0)
+output("Geometry", geo)</code></pre>
+<ol>
+<li>In the NodeForge sidebar, select the new Text datablock in <strong>Text Script</strong>.</li>
+<li>Click <strong>Compile Script</strong>. NodeForge compiles the text and adds the generated group node to the current Geometry Nodes tree.</li>
+<li>Connect the generated node <strong>Geometry</strong> output to the <strong>Group Output</strong> node <strong>Geometry</strong> input.</li>
+</ol>
+<p>The object now displays the cube produced by the script.</p>
+<h2 id="update-the-generated-group">Update the generated group<a class="headerlink" href="#update-the-generated-group" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Edit the source in the Text Editor. For example, change <code>size=2.0</code> to <code>size=3.0</code>.</li>
+<li>Select the generated NodeForge group node in the Geometry Node Editor.</li>
+<li>Click <strong>Update Selected NodeGroup</strong> in the NodeForge sidebar.</li>
+</ol>
+<p>NodeForge recompiles the selected text into the same node group. The group name, compatible input values, and compatible links are preserved.</p>
+<p>The rebuilt group also stores the edited source. Use <strong>Load Script From Selected NodeGroup</strong> to recover that source into a Text datablock and continue editing it later.</p>
+<h2 id="main-actions">Main actions<a class="headerlink" href="#main-actions" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Compile Script</strong></td>
+<td>Compiles the selected Text datablock into a new Geometry Nodes group and inserts it into the active Geometry Nodes editor.</td>
+</tr>
+<tr>
+<td><strong>Update Selected NodeGroup</strong></td>
+<td>Recompiles the selected Text datablock into the selected generated group. Compatible input values and links are preserved.</td>
+</tr>
+<tr>
+<td><strong>Load Script From Selected NodeGroup</strong></td>
+<td>Copies the source embedded in the selected generated group into the selected Text datablock.</td>
+</tr>
+<tr>
+<td><strong>Reload from Source</strong></td>
+<td>Rebuilds a selected Local or package-backed group from its current catalog source.</td>
+</tr>
+</tbody>
+</table>
+<p>Compiled Geometry Nodes groups remain in the Blender file and continue evaluating when the NodeForge add-on is disabled or uninstalled.</p>
+<h2 id="first-script-one-input-one-output">First script: one input, one output<a class="headerlink" href="#first-script-one-input-one-output" title="Permanent link">&para;</a></h2>
+<p>Start with the smallest useful node group: one float input and one float output.</p>
+<pre class="highlight"><code class="language-python">value = input_float('Value', default=1.0)
+output('Value', value)</code></pre>
+<p>What this means:</p>
+<table>
+<thead>
+<tr>
+<th>Line</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>input_float('Value', default=1.0)</code></td>
+<td>Creates a float input socket named <code>Value</code> with default value <code>1.0</code>.</td>
+</tr>
+<tr>
+<td><code>value = ...</code></td>
+<td>Stores that socket value in the script variable <code>value</code>.</td>
+</tr>
+<tr>
+<td><code>output('Value', value)</code></td>
+<td>Creates an output socket named <code>Value</code> and connects the value to it.</td>
+</tr>
+</tbody>
+</table>
+<p>After compiling, the generated node group has one input socket and one output socket. This is not visually exciting, but it shows the core model: <strong>inputs create node-group inputs, outputs create node-group outputs</strong>.</p>
+<h2 id="first-geometry-script-adjustable-cube">First geometry script: adjustable cube<a class="headerlink" href="#first-geometry-script-adjustable-cube" title="Permanent link">&para;</a></h2>
+<p>Now create geometry. This script makes a cube whose size is controlled by a group input.</p>
+<pre class="highlight"><code class="language-python">size = input_float('Size', default=2.0)
+geo = cube(size=size)
+output('Geometry', geo)</code></pre>
+<p>The generated group has:</p>
+<table>
+<thead>
+<tr>
+<th>Socket</th>
+<th>Direction</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Size</code></td>
+<td>Input</td>
+<td>Float</td>
+</tr>
+<tr>
+<td><code>Geometry</code></td>
+<td>Output</td>
+<td>Geometry</td>
+</tr>
+</tbody>
+</table>
+<p>The important difference from normal Python is that <code>geo</code> is not a mesh object in Python memory. It is a Geometry Nodes value being built by the compiler.</p>
+<h2 id="use-the-objects-input-geometry">Use the object's input geometry<a class="headerlink" href="#use-the-objects-input-geometry" title="Permanent link">&para;</a></h2>
+<p>A compiled NodeForge group can process geometry supplied by the surrounding Geometry Nodes tree. Declare a Geometry input in the script, then connect the surrounding tree's geometry to that socket on the generated group node. The generated NodeForge group is a nested node group; it is not itself the modifier's root node tree.</p>
+<pre class="highlight"><code class="language-python">geo = input_geometry('Geometry')
+scale = vector(1, 1, 2)
+result = transform(geo, scale=scale)
+output('Geometry', result)</code></pre>
+<p>After compiling, connect the object's geometry to the generated group's <code>Geometry</code> input if it is not connected automatically. In a Geometry Nodes modifier, this is the socket that carries the mesh or curve from the object in the scene.</p>
+<p>Use this when you want to modify an existing object instead of generating all geometry from scratch with functions like <code>cube(...)</code>.</p>
+<h2 id="add-variables-and-transforms">Add variables and transforms<a class="headerlink" href="#add-variables-and-transforms" title="Permanent link">&para;</a></h2>
+<p>Use variables to keep scripts readable. The following script creates a cube and scales it in Z.</p>
+<pre class="highlight"><code class="language-python">size = input_float('Size', default=1.0)
+height = input_float('Height', default=3.0)
+
+base = cube(size=size)
+scale = vector(1, 1, height)
+geo = transform(base, scale=scale)
+
+output('Geometry', geo)</code></pre>
+<p>This pattern is usually clearer than nesting calls directly inside other calls. Write each meaningful value once, name it, and pass the name to the next operation.</p>
+<h2 id="build-a-small-shape-with-a-loop">Build a small shape with a loop<a class="headerlink" href="#build-a-small-shape-with-a-loop" title="Permanent link">&para;</a></h2>
+<p>Lists and compile-time <code>for</code> loops are useful for generating repeated geometry. This example creates a row of five cubes.</p>
+<pre class="highlight"><code class="language-python">spacing = input_float('Spacing', default=1.25)
+count = 5
+
+parts = []
+for i in range(count):
+    base = cube(size=1.0)
+    offset = vector(i * spacing, 0, 0)
+    moved = transform(base, translation=offset)
+    parts.append(moved)
+
+geo = join(parts)
+output('Geometry', geo)</code></pre>
+<p>What is happening:</p>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>count = 5</code></td>
+<td>A compile-time value. NodeForge knows it while compiling.</td>
+</tr>
+<tr>
+<td><code>range(count)</code></td>
+<td>Unrolls the loop during compilation.</td>
+</tr>
+<tr>
+<td><code>parts = []</code> / <code>parts.append(...)</code></td>
+<td>Collects Geometry values into a compile-time list.</td>
+</tr>
+<tr>
+<td><code>join(parts)</code></td>
+<td>Combines the generated cubes into one Geometry output.</td>
+</tr>
+</tbody>
+</table>
+<p>Use <code>range(...)</code> when the number of loop iterations is known during compilation. Use <a href="../BUILTINS/#runtime-loops"><code>repeat_range(...)</code></a> when the iteration count must be a runtime input or when you want a Blender Repeat Zone.</p>
+<h2 id="use-the-library-panel">Use the Library panel<a class="headerlink" href="#use-the-library-panel" title="Permanent link">&para;</a></h2>
+<p>The <strong>Library</strong> panel contains reusable scripts and package management tools. Package-provided entries appear only after that package has been installed explicitly:</p>
+<table>
+<thead>
+<tr>
+<th>Catalog</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Local</strong></td>
+<td>NodeForge-managed <code>.nf</code> files and read-only external source folders.</td>
+</tr>
+<tr>
+<td><strong>Functions</strong></td>
+<td>Reusable DSL functions provided by installed packages.</td>
+</tr>
+<tr>
+<td><strong>Examples</strong></td>
+<td>Example scripts provided by installed packages.</td>
+</tr>
+<tr>
+<td><strong>Packages</strong></td>
+<td>Install and remove NodeForge packages.</td>
+</tr>
+</tbody>
+</table>
+<p>Each script catalog has <strong>Refresh</strong> and <strong>Add Node Group</strong> actions.</p>
+<ol>
+<li>Open a catalog section, for example <strong>Functions</strong>.</li>
+<li>Click <strong>Refresh</strong> to scan that catalog.</li>
+<li>Select an entry from the list.</li>
+<li>Click <strong>Add Node Group</strong> to insert that entry into the active Geometry Nodes editor.</li>
+<li>Select the inserted group node and click <strong>Load Script From Selected NodeGroup</strong> if you want to inspect or edit the stored source.</li>
+</ol>
+<h2 id="save-your-own-script-to-local">Save your own script to Local<a class="headerlink" href="#save-your-own-script-to-local" title="Permanent link">&para;</a></h2>
+<p>Use <strong>Local</strong> when you want to keep a script as a reusable file instead of only keeping it as a node group inside the Blender file.</p>
+<ol>
+<li>Write or load a script in a Text datablock.</li>
+<li>Open <strong>Library → Local</strong>.</li>
+<li>Use the folder rows and arrow buttons to open the managed destination where the script should be stored.</li>
+<li>Optionally click <strong>New Folder</strong> to create a subfolder in the current managed directory.</li>
+<li>Click <strong>Save</strong>, enter the script name, and confirm. Enable <strong>Overwrite</strong> when replacing an existing file.</li>
+<li>Select the saved script and click <strong>Add Node Group</strong> to insert it into the current Geometry Nodes editor.</li>
+</ol>
+<p>The <strong>Save</strong> and <strong>New Folder</strong> actions are available only in NodeForge-managed Local directories.</p>
+<h2 id="add-an-external-local-folder">Add an external Local folder<a class="headerlink" href="#add-an-external-local-folder" title="Permanent link">&para;</a></h2>
+<p>Use <strong>Add Folder...</strong> to make an existing directory of <code>.nf</code> files available in Local without copying it.</p>
+<ol>
+<li>Open <strong>Library → Local</strong> and click <strong>Add Folder...</strong>.</li>
+<li>Select an existing folder.</li>
+<li>Select the linked folder row and use its arrow button to browse its scripts and subfolders.</li>
+<li>Select a script and click <strong>Add Node Group</strong>, or import it with <code>from local import ...</code>.</li>
+</ol>
+<p>External folders are read-only in NodeForge. Edit their <code>.nf</code> files with your normal editor, then select an inserted group and click <strong>Reload from Source</strong> to rebuild it from the current file. <strong>Remove from Local</strong> removes the folder registration and leaves the external files on disk.</p>
+<p>For managed Local content, <strong>Delete File</strong> removes a selected <code>.nf</code> file. <strong>Delete Folder</strong> removes a selected empty folder.</p>
+<p>Folders organize the Local browser, while import names remain flat. A file such as <code>shapes/cube_row.nf</code> is imported with <code>from local import cube_row</code>. If separate Local roots contain the same public filename, rename or remove one source before importing that name.</p>
+<h2 id="reuse-a-saved-script-from-another-script">Reuse a saved script from another script<a class="headerlink" href="#reuse-a-saved-script-from-another-script" title="Permanent link">&para;</a></h2>
+<p>A saved Local script can be imported and called from another NodeForge script. This is the main reuse mechanism: write a script once, save it as a <code>.nf</code> file, then call it from other scripts like a function.</p>
+<p>The saved script's <code>input_*</code> declarations become function parameters. One output becomes the returned value; multiple outputs can be unpacked or selected with a compile-time index.</p>
+<p>For example, save this as a Local script named <code>cube_row</code>:</p>
+<pre class="highlight"><code class="language-python">spacing = input_float('Spacing', default=1.25)
+count = 5
+
+parts = []
+for i in range(count):
+    base = cube(size=1.0)
+    offset = vector(i * spacing, 0, 0)
+    moved = transform(base, translation=offset)
+    parts.append(moved)
+
+geo = join(parts)
+output('Geometry', geo)</code></pre>
+<p>Then use it from another script:</p>
+<pre class="highlight"><code class="language-python">from local import cube_row
+
+spacing = input_float('Spacing', default=2.0)
+geo = cube_row(spacing)
+output('Geometry', geo)</code></pre>
+<p>Here <code>Spacing</code> from the saved script becomes the <code>spacing</code> argument of <code>cube_row(spacing)</code>. The saved script's <code>Geometry</code> output becomes the returned <code>geo</code> value.</p>
+<p>Existing compiled groups keep the Local dependency source snapshot used when they were built. Editing a Local file affects a group when you compile a new caller or use <strong>Reload from Source</strong> on the existing library-backed group.</p>
+<p>For the import and call rules, see <a href="../SYNTAX/#imports">Imports</a> and <a href="../SYNTAX/#reusable-functions">Reusable Functions</a>. For reusable functions from the Math library, see <a href="../FUNCTIONS/">Math Functions</a>.</p>
+<h2 id="what-to-read-next">What to read next<a class="headerlink" href="#what-to-read-next" title="Permanent link">&para;</a></h2>
+<p>Read these in order:</p>
+<ol>
+<li><a href="../CORE_CONCEPTS/">Core Concepts</a> — understand how source becomes a node-group interface, nodes, links, and runtime state.</li>
+<li><a href="../SYNTAX/">DSL Syntax and Semantics</a> — learn the supported language rules.</li>
+<li><a href="../BUILTINS/">Core DSL Built-ins Reference</a> — learn the primitive functions available everywhere.</li>
+<li><a href="../WRITING_FUNCTIONS/">Writing Functions</a> — create reusable functions with the Core DSL.</li>
+<li><a href="../MATH_METHODS/">Math Methods</a> — use the methods added by the Math library.</li>
+<li><a href="../FUNCTIONS/">Math Functions</a> — use reusable DSL functions from the Math library.</li>
+<li><a href="../MATH_EXAMPLES/">Math Examples</a> — explore complete scripts included with the Math package.</li>
+<li><a href="../LSYSTEMS/">LSystem</a> — create geometry with L-system rules.</li>
+</ol>
+<p>To study an installed example, add it from <strong>Library → Examples</strong>, load its source with <strong>Load Script From Selected NodeGroup</strong>, and edit the source in a Text datablock.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href=".." class="btn btn-neutral float-left" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../CORE_CONCEPTS/" class="btn btn-neutral float-right" title="Core Concepts">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2026 denikryt</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/denikryt/NodeForgeDocs" class="fa fa-code-fork" style="color: #fcfcfc"> denikryt/NodeForgeDocs</a>
+        </span>
+    
+    
+      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../CORE_CONCEPTS/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+      <script src="../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

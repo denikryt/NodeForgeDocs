@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://denikryt.github.io/NodeForgeDocs/0.50.0/SYNTAX/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Syntax - NodeForge Documentation</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Syntax";
+        var mkdocs_page_input_path = "SYNTAX.md";
+        var mkdocs_page_url = "/NodeForgeDocs/0.50.0/SYNTAX/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> NodeForge Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../GET_STARTED/">Get Started</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">DSL</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../CORE_CONCEPTS/">Core Concepts</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Syntax</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#names-and-assignments">Names and Assignments</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#literals">Literals</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#value-types">Value Types</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#runtime-types">Runtime Types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#compile-time-types">Compile-Time Types</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#function-calls">Function Calls</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#operators-and-expressions">Operators and Expressions</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#compile-time-and-runtime-values">Compile-Time and Runtime Values</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#strings-and-f-strings">Strings and F-Strings</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#lists-and-tuples">Lists and Tuples</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#attribute-access-and-indexing">Attribute Access and Indexing</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#comments">Comments</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#group-inputs-and-outputs">Group Inputs and Outputs</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#explicit-inputs">Explicit Inputs</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#interface-panels">Interface Panels</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#implicit-inputs">Implicit Inputs</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#explicit-outputs">Explicit Outputs</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#implicit-final-output">Implicit Final Output</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#reusable-functions">Reusable Functions</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#imports">Imports</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#local-functions">Local Functions</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#if-statements">If Statements</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#for-statements">For Statements</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#geometry-builder">Geometry Builder</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#unsupported-python-syntax">Unsupported Python Syntax</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../BUILTINS/">Built-ins</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../WRITING_FUNCTIONS/">Writing Functions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../PACKAGES/">Packages</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../GEOMETRY_NODES_COVERAGE/">Geometry Nodes Coverage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Libraries</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Math</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_METHODS/">Methods</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../FUNCTIONS/">Functions</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_EXAMPLES/">Examples</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >LSystem</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS/">Reference</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS_SCRIPTING/">Scripting</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">NodeForge Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">DSL</li>
+      <li class="breadcrumb-item active">Syntax</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/denikryt/NodeForgeDocs/edit/master/docs/SYNTAX.md">Edit on denikryt/NodeForgeDocs</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="dsl-syntax-and-semantics">DSL Syntax and Semantics<a class="headerlink" href="#dsl-syntax-and-semantics" title="Permanent link">&para;</a></h1>
+<p>NodeForge uses a Python-like domain-specific language for building Blender Geometry Nodes groups. Source expressions describe graph operations and data flow; they are compiled into nodes and links according to the types of their values.</p>
+<p>Read <a href="../CORE_CONCEPTS/">Core Concepts</a> for the relationship between source code, group sockets, compile-time structure, and runtime Geometry Nodes values.</p>
+<h2 id="names-and-assignments">Names and Assignments<a class="headerlink" href="#names-and-assignments" title="Permanent link">&para;</a></h2>
+<p>An assignment binds a name to a value.</p>
+<pre class="highlight"><code class="language-python">size = 2.0</code></pre>
+<p>The assigned name can be used in later statements.</p>
+<pre class="highlight"><code class="language-python">width = 2.0
+height = width</code></pre>
+<p>Assigning another value to the same name replaces the previous value.</p>
+<pre class="highlight"><code class="language-python">size = 1.0
+size = 2.0</code></pre>
+<p>An assignment target must be a single name.</p>
+<h2 id="literals">Literals<a class="headerlink" href="#literals" title="Permanent link">&para;</a></h2>
+<p>NodeForge supports integer, floating-point, Boolean, string, and <code>None</code> literals.</p>
+<pre class="highlight"><code class="language-python">count = 4
+scale = 0.5
+enabled = True
+name = 'Height'
+missing = None</code></pre>
+<p>Strings can use single or double quotes.</p>
+<h2 id="value-types">Value Types<a class="headerlink" href="#value-types" title="Permanent link">&para;</a></h2>
+<p>NodeForge supports runtime socket values and compile-time values.</p>
+<h3 id="runtime-types">Runtime Types<a class="headerlink" href="#runtime-types" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Geometry</code></td>
+<td>Geometry socket value.</td>
+</tr>
+<tr>
+<td><code>Float</code></td>
+<td>Floating-point scalar or field.</td>
+</tr>
+<tr>
+<td><code>Int</code></td>
+<td>Integer scalar or field. Some operations accept it as a numeric field or return a <code>Float</code>; the called operation defines the result type.</td>
+</tr>
+<tr>
+<td><code>Bool</code></td>
+<td>Boolean scalar or field.</td>
+</tr>
+<tr>
+<td><code>Vector</code></td>
+<td>Three-component vector or field.</td>
+</tr>
+<tr>
+<td><code>Material</code></td>
+<td>Blender material socket value.</td>
+</tr>
+<tr>
+<td><code>Object</code></td>
+<td>Blender object socket value with Object Info properties.</td>
+</tr>
+<tr>
+<td><code>String</code></td>
+<td>Blender string socket value.</td>
+</tr>
+<tr>
+<td><code>Bundle</code></td>
+<td>Blender bundle socket containing named runtime values.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="compile-time-types">Compile-Time Types<a class="headerlink" href="#compile-time-types" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Integer</td>
+<td>Whole number.</td>
+</tr>
+<tr>
+<td>Float</td>
+<td>Floating-point number.</td>
+</tr>
+<tr>
+<td>Boolean</td>
+<td><code>True</code> or <code>False</code>.</td>
+</tr>
+<tr>
+<td>String</td>
+<td>Text value.</td>
+</tr>
+<tr>
+<td><code>None</code></td>
+<td>Absence of a value.</td>
+</tr>
+<tr>
+<td>Vector</td>
+<td>Three-component value. <code>vector(...)</code> is compile-time only when all arguments are compile-time; runtime arguments produce a runtime <code>Vector</code>.</td>
+</tr>
+<tr>
+<td>List</td>
+<td>Ordered mutable collection.</td>
+</tr>
+<tr>
+<td>Tuple</td>
+<td>Ordered immutable collection.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="function-calls">Function Calls<a class="headerlink" href="#function-calls" title="Permanent link">&para;</a></h2>
+<p>A function call uses a function name followed by parentheses.</p>
+<pre class="highlight"><code class="language-python">direction = vector(1, 0, 0)</code></pre>
+<p>Arguments can be positional or named.</p>
+<pre class="highlight"><code class="language-python">size = input_float('Size', default=2.0)</code></pre>
+<p>The returned value can be assigned to a name.</p>
+<pre class="highlight"><code class="language-python">geometry = cube(size=2.0)</code></pre>
+<p>Calls can be nested.</p>
+<pre class="highlight"><code class="language-python">geometry = transform(cube(size=2.0), translation=vector(0, 0, 1))</code></pre>
+<p>Assigning intermediate values is usually easier to read.</p>
+<pre class="highlight"><code class="language-python">base = cube(size=2.0)
+offset = vector(0, 0, 1)
+geometry = transform(base, translation=offset)</code></pre>
+<p>Only simple function names can be called. Supported method calls are documented in the sections that introduce them.</p>
+<h2 id="operators-and-expressions">Operators and Expressions<a class="headerlink" href="#operators-and-expressions" title="Permanent link">&para;</a></h2>
+<p>Expressions combine values and produce a result.</p>
+<table>
+<thead>
+<tr>
+<th>Syntax</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>a + b</code></td>
+<td>Addition.</td>
+</tr>
+<tr>
+<td><code>a - b</code></td>
+<td>Subtraction.</td>
+</tr>
+<tr>
+<td><code>a * b</code></td>
+<td>Multiplication.</td>
+</tr>
+<tr>
+<td><code>a / b</code></td>
+<td>Division.</td>
+</tr>
+<tr>
+<td><code>a ** b</code></td>
+<td>Power.</td>
+</tr>
+<tr>
+<td><code>a % b</code></td>
+<td>Modulo.</td>
+</tr>
+<tr>
+<td><code>-a</code>, <code>+a</code></td>
+<td>Unary sign.</td>
+</tr>
+<tr>
+<td><code>not a</code></td>
+<td>Boolean NOT.</td>
+</tr>
+<tr>
+<td><code>a and b</code>, <code>a or b</code></td>
+<td>Boolean AND and OR.</td>
+</tr>
+<tr>
+<td><code>a &lt; b</code>, <code>a &lt;= b</code>, <code>a &gt; b</code>, <code>a &gt;= b</code>, <code>a == b</code>, <code>a != b</code></td>
+<td>Comparisons.</td>
+</tr>
+<tr>
+<td><code>x if condition else y</code></td>
+<td>Conditional expression.</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight"><code class="language-python">width = 2.0
+height = 3.0
+area = width * height
+is_large = area &gt; 5.0
+result = area if is_large else 0.0</code></pre>
+<p>Operations are type-checked. The operands must support the selected operation.</p>
+<h2 id="compile-time-and-runtime-values">Compile-Time and Runtime Values<a class="headerlink" href="#compile-time-and-runtime-values" title="Permanent link">&para;</a></h2>
+<p>A compile-time value is resolved while the script is compiled.</p>
+<pre class="highlight"><code class="language-python">socket_name = 'Height'
+default_height = 1.0
+height = input_float(socket_name, default=default_height)</code></pre>
+<p>A runtime value is represented in the generated node group and can change when Blender evaluates that group.</p>
+<pre class="highlight"><code class="language-python">height = input_float('Height', default=1.0)
+scaled_height = height * 2.0</code></pre>
+<p>The operation receiving a value determines whether it must be available at compile time or can remain a runtime value.</p>
+<p>Compile-time <code>range(...)</code> loops generate repeated graph structure, while runtime <code>repeat_range(...)</code> loops create native Blender Repeat Zones. See <a href="../CORE_CONCEPTS/#compile-time">Compile time and runtime</a> for examples of both forms.</p>
+<p>Compile-time helper calls are documented in <a href="../BUILTINS/#compile-time-helper-calls">Core DSL Built-ins</a>.</p>
+<h2 id="strings-and-f-strings">Strings and F-Strings<a class="headerlink" href="#strings-and-f-strings" title="Permanent link">&para;</a></h2>
+<p>String literals are compile-time values when NodeForge needs a name, identifier, or option while compiling the script.</p>
+<pre class="highlight"><code class="language-python">name = 'Height'
+height = input_float(name, default=1.0)</code></pre>
+<p>Compile-time strings can be concatenated.</p>
+<pre class="highlight"><code class="language-python">prefix = 'Generated'
+input_name = prefix + ' Value'
+value = input_float(input_name, default=1.0)</code></pre>
+<p>F-strings are supported when every interpolated value is a compile-time string.</p>
+<pre class="highlight"><code class="language-python">prefix = 'Generated'
+input_name = f'{prefix} Value'
+value = input_float(input_name, default=1.0)</code></pre>
+<p>Runtime interpolation, conversion flags, and format specifications are unsupported.</p>
+<p><code>input_string(...)</code> creates a runtime <code>String</code> socket. Runtime strings can be passed to operations that accept a String field, such as the attribute name in <code>store_named_attribute(...)</code> and Bundle paths. A runtime string cannot be used where a compile-time name or option is required.</p>
+<h2 id="lists-and-tuples">Lists and Tuples<a class="headerlink" href="#lists-and-tuples" title="Permanent link">&para;</a></h2>
+<p>Lists and tuples group values at script level.</p>
+<pre class="highlight"><code class="language-python">sizes = [0.5, 1.0, 2.0]
+offset = (1.0, 0.0, 0.0)</code></pre>
+<p>They can also contain runtime values.</p>
+<pre class="highlight"><code class="language-python">first = cube(size=1.0)
+second = cube(size=2.0)
+parts = [first, second]
+geometry = join(parts)</code></pre>
+<p>A list can be extended with <code>append(...)</code>.</p>
+<pre class="highlight"><code class="language-python">parts = []
+parts.append(cube(size=1.0))
+parts.append(cube(size=2.0))
+geometry = join(parts)</code></pre>
+<p>Lists and tuples cannot be exposed directly as group sockets.</p>
+<p>Functions with multiple outputs return a fixed tuple-like result. Unpack it into a flat list or tuple of names, or select an element with a compile-time integer index.</p>
+<pre class="highlight"><code class="language-python">geo, captured = capture_attribute(cube(), position().z)</code></pre>
+<h2 id="attribute-access-and-indexing">Attribute Access and Indexing<a class="headerlink" href="#attribute-access-and-indexing" title="Permanent link">&para;</a></h2>
+<p>Vector components are available through <code>.x</code>, <code>.y</code>, and <code>.z</code>.</p>
+<pre class="highlight"><code class="language-python">direction = vector(1, 2, 3)
+x = direction.x</code></pre>
+<p>Vectors also support compile-time integer indices <code>0</code>, <code>1</code>, and <code>2</code>.</p>
+<pre class="highlight"><code class="language-python">direction = vector(1, 2, 3)
+y = direction[1]</code></pre>
+<p>Lists and tuples support compile-time integer indexing.</p>
+<pre class="highlight"><code class="language-python">values = [0.5, 1.0, 2.0]
+size = values[1]</code></pre>
+<p>A runtime value cannot be used as an index.</p>
+<p><code>Object</code> values provide <code>.geometry</code>, <code>.location</code>, <code>.rotation</code>, and <code>.scale</code>. Configure their Object Info node with <code>.info(...)</code> before the first property access. See <a href="../BUILTINS/#object-values">Object Values</a>.</p>
+<h2 id="comments">Comments<a class="headerlink" href="#comments" title="Permanent link">&para;</a></h2>
+<p>A comment starts with <code>#</code> and continues to the end of the line.</p>
+<pre class="highlight"><code class="language-python"># Store the initial size.
+size = 2.0</code></pre>
+<h2 id="group-inputs-and-outputs">Group Inputs and Outputs<a class="headerlink" href="#group-inputs-and-outputs" title="Permanent link">&para;</a></h2>
+<p>Group sockets can be declared explicitly or inferred from name usage.</p>
+<h3 id="explicit-inputs">Explicit Inputs<a class="headerlink" href="#explicit-inputs" title="Permanent link">&para;</a></h3>
+<p>An <code>input_*</code> call declares an input socket. It must be the complete right-hand side of a simple assignment.</p>
+<pre class="highlight"><code class="language-python">width = input_float('Width', default=2.0)</code></pre>
+<p>Every declaration creates a new input socket. Its string argument is the displayed socket label, so separate declarations may use the same label and retain different defaults.</p>
+<pre class="highlight"><code class="language-python">first = input_float('Value', default=1.0)
+second = input_float('Value', default=2.0)
+output('Sum', first + second)</code></pre>
+<p>Call reusable groups with duplicate input labels positionally. A keyword cannot identify which duplicate label to use.</p>
+<h3 id="interface-panels">Interface Panels<a class="headerlink" href="#interface-panels" title="Permanent link">&para;</a></h3>
+<p>Use <code>panel(...)</code> to organize previously declared inputs in Blender's node-group interface.</p>
+<pre class="highlight"><code class="language-python">radius = input_float('Radius', default=1.0)
+segments = input_int('Segments', default=32)
+panel([radius, segments], name='Shape', collapsed=True)</code></pre>
+<p>Panels are standalone top-level declarations. Their members must be group input variable names, and each input can belong to one panel. See <a href="../BUILTINS/#interface-panels"><code>panel(...)</code></a> for the complete reference.</p>
+<h3 id="implicit-inputs">Implicit Inputs<a class="headerlink" href="#implicit-inputs" title="Permanent link">&para;</a></h3>
+<p>A name read before assignment becomes an implicit group input when it does not resolve to another declared name.</p>
+<pre class="highlight"><code class="language-python">geometry = cube(size=width)</code></pre>
+<p>Here, <code>width</code> becomes an implicit group input. Its type must be inferable from the parameter position where it is used. If the use site does not provide one unambiguous expected socket type, compilation fails; use an explicit <code>input_*</code> declaration instead.</p>
+<h3 id="explicit-outputs">Explicit Outputs<a class="headerlink" href="#explicit-outputs" title="Permanent link">&para;</a></h3>
+<p>The <code>output(...)</code> call declares an output socket.</p>
+<pre class="highlight"><code class="language-python">geometry = cube(size=2.0)
+output('Geometry', geometry)</code></pre>
+<h3 id="implicit-final-output">Implicit Final Output<a class="headerlink" href="#implicit-final-output" title="Permanent link">&para;</a></h3>
+<p>The final top-level assignment or expression can define one implicit output.</p>
+<pre class="highlight"><code class="language-python">geometry = cube(size=2.0)
+geometry</code></pre>
+<p>A final assignment uses its variable name. A final expression uses <code>out</code>. The value must be a supported runtime output: <code>Geometry</code>, <code>Vector</code>, <code>Float</code>, <code>Int</code>, <code>Bool</code>, <code>Material</code>, <code>Object</code>, <code>String</code>, or <code>Bundle</code>. A statement without a resulting value cannot define an implicit output.</p>
+<h2 id="reusable-functions">Reusable Functions<a class="headerlink" href="#reusable-functions" title="Permanent link">&para;</a></h2>
+<p>A reusable function is a saved DSL script whose group inputs become call parameters. One output becomes the call result. Multiple outputs become a fixed result that can be unpacked or indexed.</p>
+<pre class="highlight"><code class="language-python">size = input_float('Size', default=1.0)
+geometry = cube(size=size)
+output('Geometry', geometry)</code></pre>
+<pre class="highlight"><code class="language-python">from local import analyze_geometry
+
+geometry, value = analyze_geometry(cube(size=1.0))
+output('Geometry', geometry)
+output('Value', value)</code></pre>
+<p>Reusable function calls share one backing function group by default. Add <code>__unique__=True</code> when one supported call needs its own shallow function-group copy, for example when you intend to edit a Curve Map node separately for that occurrence.</p>
+<pre class="highlight"><code class="language-python">def remap_curve(value: Float):
+    return node(
+        'ShaderNodeFloatCurve',
+        inputs={'Factor': 1.0, 'Value': value},
+        output='Value',
+        typ=Float,
+    )
+
+value_a = input_float('A')
+value_b = input_float('B')
+first = remap_curve(value_a, __unique__=True)
+second = remap_curve(value_b, __unique__=True)</code></pre>
+<p><code>__unique__</code> must be a compile-time <code>Bool</code>. It is supported by script-local <code>def</code> calls and editable <code>.nf</code> functions imported from <code>functions</code> or <code>examples</code>. Omitting it or passing <code>__unique__=False</code> uses the shared group. Local catalog calls, core built-ins, systems, backend helpers, and <code>node(...)</code> use their normal call behavior.</p>
+<p>The copy is shallow, so nested reusable dependencies remain shared unless their calls also use <code>__unique__=True</code>. A unique group's manual Blender-node state is preserved when an update leaves that function unchanged. Changing the function source or a reusable dependency used by it rebuilds the group from source.</p>
+<p>See <a href="../WRITING_FUNCTIONS/">Writing Functions</a> for creating and saving a local reusable function.</p>
+<h2 id="imports">Imports<a class="headerlink" href="#imports" title="Permanent link">&para;</a></h2>
+<p>Imports are allowed only at top level. Reusable scripts can be imported from <code>functions</code>, <code>examples</code>, or <code>local</code>.</p>
+<pre class="highlight"><code class="language-python">from functions import circle_points
+from local import move_geometry</code></pre>
+<p>An alias changes the name used in the current script.</p>
+<pre class="highlight"><code class="language-python">from functions import circle_points as make_circle</code></pre>
+<p>A star import adds every public name from the selected catalog.</p>
+<pre class="highlight"><code class="language-python">from functions import *</code></pre>
+<p>Names beginning with <code>_</code> are private and excluded from imports. Public callable names must be unique across active package catalogs; conflicting names make the package inventory invalid. Plain imports, relative imports, block-local imports, and imports from arbitrary Python modules are unsupported.</p>
+<h2 id="local-functions">Local Functions<a class="headerlink" href="#local-functions" title="Permanent link">&para;</a></h2>
+<p>A script-local function is declared with <code>def</code> and returns one value or a flat tuple of values with <code>return</code>.</p>
+<pre class="highlight"><code class="language-python">def double(value):
+    result = value * 2.0
+    return result
+
+x = input_float('X', default=1.0)
+y = double(x)
+output('Y', y)</code></pre>
+<p>Parameters are names without default values. Add a NodeForge type token annotation when a parameter's type cannot be inferred unambiguously from the call.</p>
+<pre class="highlight"><code class="language-python">def inspect(value: Float, pos: Vector):
+    return value * 2.0, pos.z, value &gt; 0.0
+
+value = input_float('Value', default=1.0)
+pos = input_vector('Position')
+doubled, height, positive = inspect(value, pos)
+output('Doubled', doubled)
+output('Height', height)
+output('Positive', positive)</code></pre>
+<p>Annotations support <code>Float</code>, <code>Int</code>, <code>Bool</code>, <code>Vector</code>, <code>Geometry</code>, <code>Material</code>, <code>Object</code>, <code>String</code>, and <code>Bundle</code>. An annotation constrains the generated function input socket; unannotated parameters use call-site type inference. A tuple return must be flat and non-empty. A local function must contain a return statement. Nested function declarations are unsupported.</p>
+<p>The generated function call node uses a readable title derived from the function name. For example, <code>mix_biomes()</code> appears as <strong>Mix Biomes</strong>.</p>
+<h2 id="if-statements">If Statements<a class="headerlink" href="#if-statements" title="Permanent link">&para;</a></h2>
+<p>An <code>if</code> statement selects between two blocks.</p>
+<pre class="highlight"><code class="language-python">use_large_size = True
+if use_large_size:
+    size = 2.0
+else:
+    size = 1.0</code></pre>
+<p>A compile-time condition selects one branch while the script is compiled. A runtime <code>Bool</code> compiles both branches and merges their resulting values.</p>
+<pre class="highlight"><code class="language-python">use_large_size = input_bool('Large', default=False)
+if use_large_size:
+    size = 2.0
+else:
+    size = 1.0
+geometry = cube(size=size)
+output('Geometry', geometry)</code></pre>
+<p>A runtime top-level <code>if</code> requires an <code>else</code> branch. Values merged from both branches must have compatible types supported by Blender's Switch node: <code>Float</code>, <code>Int</code>, <code>Vector</code>, <code>Bool</code>, <code>Geometry</code>, <code>String</code>, or <code>Bundle</code>. Compile-time collections are not runtime branch-merge values.</p>
+<h2 id="for-statements">For Statements<a class="headerlink" href="#for-statements" title="Permanent link">&para;</a></h2>
+<p>A <code>for</code> statement over a compile-time list, tuple, or <code>range(...)</code> is unrolled while the script is compiled.</p>
+<pre class="highlight"><code class="language-python">parts = []
+for size in [0.5, 1.0, 1.5]:
+    parts.append(cube(size=size))
+geometry = join(parts)
+output('Geometry', geometry)</code></pre>
+<p>A loop target can be a single name or a list or tuple pattern that matches each compile-time item.</p>
+<pre class="highlight"><code class="language-python">positions = [(0, 0), (1, 0), (0, 1)]
+parts = []
+for x, y in positions:
+    point = points(1)
+    point = set_position(point, vector(x, y, 0))
+    parts.append(point)
+geometry = join(parts)
+output('Geometry', geometry)</code></pre>
+<p><code>repeat_range(...)</code> creates a runtime repeat loop.</p>
+<pre class="highlight"><code class="language-python">value = 0.0
+steps = input_int('Steps', default=5)
+for index in repeat_range(steps):
+    value = value + 1.0
+output('Value', value)</code></pre>
+<p>Values assigned before the loop and changed inside it become repeat state items. Repeat state is limited to existing <code>Geometry</code>, <code>Vector</code>, <code>Float</code>, <code>Int</code>, <code>Bool</code>, and <code>Bundle</code> values. The loop must update at least one existing state value; names first created inside the loop are local temporaries. Use <code>range(...)</code> for compile-time iteration and <code>repeat_range(...)</code> for runtime iteration.</p>
+<p><code>repeat_range(...)</code> loops can be nested. Each loop creates its own Repeat Zone and its own index value.</p>
+<pre class="highlight"><code class="language-python">value = 0.0
+rows = input_int('Rows', default=3)
+columns = input_int('Columns', default=4)
+for row in repeat_range(rows):
+    for column in repeat_range(columns):
+        value = value + row + column
+output('Value', value)</code></pre>
+<h2 id="geometry-builder">Geometry Builder<a class="headerlink" href="#geometry-builder" title="Permanent link">&para;</a></h2>
+<p><code>geometry_builder()</code> accumulates geometry. The current result is available through <code>.geometry</code>.</p>
+<pre class="highlight"><code class="language-python">builder = geometry_builder()
+builder.add(cube(size=1.0))
+builder.extend([cube(size=0.5), cube(size=0.25)])
+output('Geometry', builder.geometry)</code></pre>
+<p>Builder methods can be used inside compile-time and runtime loops. A builder cannot be assigned to another name, inserted into a collection, passed to a function, or exposed as an output.</p>
+<h2 id="unsupported-python-syntax">Unsupported Python Syntax<a class="headerlink" href="#unsupported-python-syntax" title="Permanent link">&para;</a></h2>
+<p>NodeForge does not support regular <code>import</code> statements, <code>lambda</code>, <code>while</code>, <code>try</code>, <code>class</code>, decorators, comprehensions, general dictionary or set expressions, <code>with</code>, <code>yield</code>, generators, assignment expressions, multiple assignment targets, or top-level <code>return</code>, <code>del</code>, <code>global</code>, and <code>nonlocal</code> statements. <code>break</code>, <code>continue</code>, <code>raise</code>, <code>assert</code>, and async statements are also unsupported. Dictionary syntax is accepted only as the compile-time <code>props</code>, <code>inputs</code>, or <code>outputs</code> declaration passed directly to <code>node(...)</code>.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../CORE_CONCEPTS/" class="btn btn-neutral float-left" title="Core Concepts"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../BUILTINS/" class="btn btn-neutral float-right" title="Built-ins">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2026 denikryt</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/denikryt/NodeForgeDocs" class="fa fa-code-fork" style="color: #fcfcfc"> denikryt/NodeForgeDocs</a>
+        </span>
+    
+    
+      <span><a href="../CORE_CONCEPTS/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../BUILTINS/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+      <script src="../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

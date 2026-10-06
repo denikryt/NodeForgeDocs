@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://denikryt.github.io/NodeForgeDocs/0.50.0/MATH_EXAMPLES/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Examples - NodeForge Documentation</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Examples";
+        var mkdocs_page_input_path = "MATH_EXAMPLES.md";
+        var mkdocs_page_url = "/NodeForgeDocs/0.50.0/MATH_EXAMPLES/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> NodeForge Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../GET_STARTED/">Get Started</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">DSL</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../CORE_CONCEPTS/">Core Concepts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SYNTAX/">Syntax</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../BUILTINS/">Built-ins</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../WRITING_FUNCTIONS/">Writing Functions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../PACKAGES/">Packages</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../GEOMETRY_NODES_COVERAGE/">Geometry Nodes Coverage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Libraries</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" >Math</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_METHODS/">Methods</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../FUNCTIONS/">Functions</a>
+                </li>
+                <li class="toctree-l2 current"><a class="reference internal current" href="#">Examples</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#dna_double_helix">dna_double_helix</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#fibonacci_spiral">fibonacci_spiral</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#helix_ladder">helix_ladder</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#kinetic_louver_wall">kinetic_louver_wall</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#mandelbrot">mandelbrot</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#noise_terrain">noise_terrain</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#parametric_truss_bridge">parametric_truss_bridge</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#rippled_tile_field">rippled_tile_field</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#sierpinski_carpet">sierpinski_carpet</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#topographic_contour_stack">topographic_contour_stack</a>
+    </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >LSystem</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS/">Reference</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS_SCRIPTING/">Scripting</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">NodeForge Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Libraries</li>
+          <li class="breadcrumb-item">Math</li>
+      <li class="breadcrumb-item active">Examples</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/denikryt/NodeForgeDocs/edit/master/docs/MATH_EXAMPLES.md">Edit on denikryt/NodeForgeDocs</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="math-examples">Math Examples<a class="headerlink" href="#math-examples" title="Permanent link">&para;</a></h1>
+<p>The <code>nodeforge.math</code> package includes complete example scripts in the <strong>Examples</strong> catalog. Install the Math package, then open <strong>Library → Examples</strong> to add an example as a Geometry Nodes group.</p>
+<p>Examples are complete scripts intended for inspection and adaptation. To view an example source, add it from the catalog, select the generated group node, and use <strong>Load Script From Selected NodeGroup</strong>.</p>
+<h2 id="dna_double_helix"><code>dna_double_helix</code><a class="headerlink" href="#dna_double_helix" title="Permanent link">&para;</a></h2>
+<p>Builds a parametric DNA-style double helix from two backbone strands and repeated base-pair rungs. The controls set the base-pair count, helix radius, rise, twist, phase, and element thicknesses.</p>
+<h2 id="fibonacci_spiral"><code>fibonacci_spiral</code><a class="headerlink" href="#fibonacci_spiral" title="Permanent link">&para;</a></h2>
+<p>Distributes instances of the input Geometry along a sunflower-style Fibonacci spiral. The point count, radial scale, instance scale, and angular turn are runtime controls.</p>
+<h2 id="helix_ladder"><code>helix_ladder</code><a class="headerlink" href="#helix_ladder" title="Permanent link">&para;</a></h2>
+<p>Builds a helical ladder or spiral-stair structure from radial rungs, outer posts, and a central post. The step count and the main shape parameters remain runtime inputs.</p>
+<h2 id="kinetic_louver_wall"><code>kinetic_louver_wall</code><a class="headerlink" href="#kinetic_louver_wall" title="Permanent link">&para;</a></h2>
+<p>Creates a rectangular field of thin facade blades. A pair of trigonometric fields controls the tilt of each blade from its position, producing a wave-like kinetic-louver pattern.</p>
+<h2 id="mandelbrot"><code>mandelbrot</code><a class="headerlink" href="#mandelbrot" title="Permanent link">&para;</a></h2>
+<p>Evaluates the Mandelbrot set over a generated grid with a runtime Repeat Zone. <strong>Resolution</strong> controls the grid density and <strong>Max Iter</strong> controls the iteration limit used to classify and color the cells.</p>
+<p>This example is packaged as <code>examples/mandelbrot/source.nf</code> with a package-local Python backend used only to create and assign its display material. The fractal iteration itself is written in the NodeForge DSL.</p>
+<h2 id="noise_terrain"><code>noise_terrain</code><a class="headerlink" href="#noise_terrain" title="Permanent link">&para;</a></h2>
+<p>Generates a mesh grid and displaces it vertically with layered, domain-warped 3D noise. Runtime controls expose grid resolution, height, noise detail, roughness, warp strength, and domain offsets.</p>
+<h2 id="parametric_truss_bridge"><code>parametric_truss_bridge</code><a class="headerlink" href="#parametric_truss_bridge" title="Permanent link">&para;</a></h2>
+<p>Builds a through-arch truss bridge with an explicit road deck, curbs, side trusses, vertical posts, arched top chords, diagonal bracing, and overhead cross-ties. The number and width of bays define the span, while the remaining controls shape the arch and structural members.</p>
+<h2 id="rippled_tile_field"><code>rippled_tile_field</code><a class="headerlink" href="#rippled_tile_field" title="Permanent link">&para;</a></h2>
+<p>Creates a centered grid of tile instances and drives their height and vertical scale with a radial sine wave. A smooth radial falloff reduces the wave toward the outside of the field.</p>
+<h2 id="sierpinski_carpet"><code>sierpinski_carpet</code><a class="headerlink" href="#sierpinski_carpet" title="Permanent link">&para;</a></h2>
+<p>Applies the eight-cell Sierpinski-carpet offset pattern repeatedly to the input Geometry. <strong>Steps</strong> is a runtime input, and <strong>Scale</strong> controls the per-iteration copy scale.</p>
+<h2 id="topographic_contour_stack"><code>topographic_contour_stack</code><a class="headerlink" href="#topographic_contour_stack" title="Permanent link">&para;</a></h2>
+<p>Builds stacked closed contour rings from runtime point grids. Each ring uses several periodic waves to vary its radius, and short tangent-aligned segments overlap to form continuous-looking contour lines.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../FUNCTIONS/" class="btn btn-neutral float-left" title="Functions"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../LSYSTEMS/" class="btn btn-neutral float-right" title="Reference">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2026 denikryt</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/denikryt/NodeForgeDocs" class="fa fa-code-fork" style="color: #fcfcfc"> denikryt/NodeForgeDocs</a>
+        </span>
+    
+    
+      <span><a href="../FUNCTIONS/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../LSYSTEMS/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+      <script src="../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

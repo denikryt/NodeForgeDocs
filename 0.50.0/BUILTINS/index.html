@@ -1,0 +1,1908 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://denikryt.github.io/NodeForgeDocs/0.50.0/BUILTINS/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Built-ins - NodeForge Documentation</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Built-ins";
+        var mkdocs_page_input_path = "BUILTINS.md";
+        var mkdocs_page_url = "/NodeForgeDocs/0.50.0/BUILTINS/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> NodeForge Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../GET_STARTED/">Get Started</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">DSL</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../CORE_CONCEPTS/">Core Concepts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SYNTAX/">Syntax</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Built-ins</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#type-names">Type Names</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#compile-time-constants">Compile-Time Constants</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#compile-time-helper-calls">Compile-Time Helper Calls</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#rangestop">range(stop)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#rangestart-stop">range(start, stop)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#rangestart-stop-step">range(start, stop, step)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#lenvalue">len(value)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#sumvalue">sum(value)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#outputs">Outputs</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#outputvalue">output(value)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#outputname-value">output(name, value)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#outputnamename-valuevalue">output(name="Name", value=value)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#active-geometry-stream-statements">Active Geometry stream statements</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#storename-value-selectiontrue-domainpoint-typenone">store(name, value, selection=True, domain="POINT", type=None)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#set_positionposition-selectiontrue">set_position(position, selection=True)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#inputs">Inputs</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#input_geometryname">input_geometry(name)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#input_floatname-default00">input_float(name, default=0.0)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#input_intname-default0">input_int(name, default=0)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#input_boolname-defaultfalse">input_bool(name, default=False)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#input_vectorname-defaultvector0-0-0">input_vector(name, default=vector(0, 0, 0))</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#input_materialname">input_material(name)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#input_objectname">input_object(name)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#input_stringname-default">input_string(name, default="")</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#input_bundlename">input_bundle(name)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#interface-panels">Interface Panels</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#panelinput_a-input_b-namename-collapsedfalse">panel([input_a, input_b, ...], name="Name", collapsed=False)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#object-values">Object Values</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#objectinfotransform_spaceoriginal-as_instancetrue">object.info(transform_space="ORIGINAL", as_instance=True)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#bundles">Bundles</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#bundleitems">bundle(**items)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#bundle_getbundle-path-typtype">bundle_get(bundle, path, typ=Type)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#bundle_setbundle-path-value">bundle_set(bundle, path, value)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#field-inputs">Field inputs</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#position">position()</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#normal">normal()</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#index">index()</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#id">id()</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#vector-construction-and-vector-math">Vector construction and vector math</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#vectorx-y-z">vector(x, y, z)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#vector-functions">Vector functions</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#geometry">Geometry</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#pointscount">points(count)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#gridwidth-height">grid(width, height)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#grid_uv">grid_uv()</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#set_positiongeometry-position-selectiontrue">set_position(geometry, position, selection=True)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#store_named_attributegeometry-name-value-selectiontrue-domainpoint-typenone">store_named_attribute(geometry, name, value, selection=True, domain="POINT", type=None)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#capture_attributegeometry-value-selectiontrue-domainpoint-typenone">capture_attribute(geometry, value, selection=True, domain="POINT", type=None)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#set_materialgeometry-material">set_material(geometry, material)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#empty_geometry">empty_geometry()</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#geometry_builder">geometry_builder()</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pointposition">point(position)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#linestart-end">line(start, end)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cubesize10">cube(size=1.0)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#joingeometry">join(geometry, ...)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#joingeometry_a-geometry_b">join([geometry_a, geometry_b, ...])</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#transformgeometry-translationnone-scalenone-rotationnone">transform(geometry, translation=None, scale=None, rotation=None)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#polylinepoints">polyline(points)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#instancing">Instancing</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#instance_on_pointsinstance-points-selectiontrue-scalenone-rotationnone-realizetrue">instance_on_points(instance, points, selection=True, scale=None, rotation=None, realize=True)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#realize_instancesgeometry">realize_instances(geometry)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#raw-blender-node-construction">Raw Blender node construction</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#nodebl_idname-props-inputs-output-typ">node(bl_idname, props={...}, inputs={...}, output=..., typ=...)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#nodebl_idname-props-inputs-outputs">node(bl_idname, props={...}, inputs={...}, outputs={...})</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#runtime-loops">Runtime loops</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#for-i-in-repeat_rangesteps">for i in repeat_range(steps): ...</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#lists-tuples-and-unrolled-loops">Lists, tuples, and unrolled loops</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../WRITING_FUNCTIONS/">Writing Functions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../PACKAGES/">Packages</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../GEOMETRY_NODES_COVERAGE/">Geometry Nodes Coverage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Libraries</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Math</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_METHODS/">Methods</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../FUNCTIONS/">Functions</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_EXAMPLES/">Examples</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >LSystem</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS/">Reference</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS_SCRIPTING/">Scripting</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">NodeForge Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">DSL</li>
+      <li class="breadcrumb-item active">Built-ins</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/denikryt/NodeForgeDocs/edit/master/docs/BUILTINS.md">Edit on denikryt/NodeForgeDocs</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="core-dsl-built-ins-reference">Core DSL Built-ins Reference<a class="headerlink" href="#core-dsl-built-ins-reference" title="Permanent link">&para;</a></h1>
+<p>Core built-ins are primitive operations registered by the NodeForge add-on and available without imports.</p>
+<h2 id="type-names">Type Names<a class="headerlink" href="#type-names" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Geometry</code></td>
+<td>Blender geometry socket.</td>
+</tr>
+<tr>
+<td><code>Float</code></td>
+<td>Numeric value or field.</td>
+</tr>
+<tr>
+<td><code>Int</code></td>
+<td>Integer value or field.</td>
+</tr>
+<tr>
+<td><code>Bool</code></td>
+<td>Boolean value or field.</td>
+</tr>
+<tr>
+<td><code>Vector</code></td>
+<td>3-component vector value or field.</td>
+</tr>
+<tr>
+<td><code>Material</code></td>
+<td>Blender material socket.</td>
+</tr>
+<tr>
+<td><code>Object</code></td>
+<td>Blender object socket with Object Info access.</td>
+</tr>
+<tr>
+<td><code>String</code></td>
+<td>Blender string socket. String literals can also be used as compile-time names and options.</td>
+</tr>
+<tr>
+<td><code>Bundle</code></td>
+<td>Blender bundle socket containing named runtime values.</td>
+</tr>
+<tr>
+<td><code>Float</code>, <code>Int</code>, <code>Bool</code>, <code>Vector</code>, <code>Geometry</code>, <code>Material</code>, <code>Object</code>, <code>String</code>, <code>Bundle</code></td>
+<td>Type tokens used by <code>node(..., typ=...)</code>, <code>node(..., outputs=...)</code>, local parameter annotations, and <code>bundle_get(..., typ=...)</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>NodeForge values are typed socket wrappers. A value can be a constant lowered to a node, a linked runtime field, or geometry. Most built-ins accept either literal values or runtime values of the declared type.</p>
+<h2 id="compile-time-constants">Compile-Time Constants<a class="headerlink" href="#compile-time-constants" title="Permanent link">&para;</a></h2>
+<p>NodeForge exposes three numeric constants in every source file.</p>
+<table>
+<thead>
+<tr>
+<th>Constant</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pi</code></td>
+<td>π, approximately <code>3.141592653589793</code></td>
+</tr>
+<tr>
+<td><code>tau</code></td>
+<td>2π, approximately <code>6.283185307179586</code></td>
+</tr>
+<tr>
+<td><code>e</code></td>
+<td>Euler’s number, approximately <code>2.718281828459045</code></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight"><code class="language-python">turn = tau
+half_turn = pi
+base = e
+output('Turn', turn)
+output('Half Turn', half_turn)
+output('Base', base)</code></pre>
+<h2 id="compile-time-helper-calls">Compile-Time Helper Calls<a class="headerlink" href="#compile-time-helper-calls" title="Permanent link">&para;</a></h2>
+<p>These helpers are evaluated during compilation. They do not create Geometry Nodes sockets and cannot operate on runtime values.</p>
+<h3 id="rangestop"><code>range(stop)</code><a class="headerlink" href="#rangestop" title="Permanent link">&para;</a></h3>
+<h3 id="rangestart-stop"><code>range(start, stop)</code><a class="headerlink" href="#rangestart-stop" title="Permanent link">&para;</a></h3>
+<h3 id="rangestart-stop-step"><code>range(start, stop, step)</code><a class="headerlink" href="#rangestart-stop-step" title="Permanent link">&para;</a></h3>
+<p>Creates a compile-time list of integers. Use it mainly for unrolled <code>for</code> loops or compile-time indexing.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>start</code></td>
+<td>compile-time <code>Int</code></td>
+<td>First integer. Defaults to <code>0</code>.</td>
+</tr>
+<tr>
+<td><code>stop</code></td>
+<td>compile-time <code>Int</code></td>
+<td>Exclusive upper bound.</td>
+</tr>
+<tr>
+<td><code>step</code></td>
+<td>compile-time <code>Int</code></td>
+<td>Step size. Defaults to <code>1</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: compile-time <code>List[Int]</code>.</p>
+<pre class="highlight"><code class="language-python">BASE_COUNT = 4
+EXTRA_COUNT = 2
+COUNT = BASE_COUNT + EXTRA_COUNT
+
+items = []
+for i in range(COUNT):
+    offset = vector(i * 1.25, 0, 0)
+    geo = cube(size=1.0)
+    moved = transform(geo, translation=offset)
+    items.append(moved)
+result = join(items)
+output('Geometry', result)</code></pre>
+<h3 id="lenvalue"><code>len(value)</code><a class="headerlink" href="#lenvalue" title="Permanent link">&para;</a></h3>
+<p>Returns the length of a compile-time list, tuple, or string.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>value</code></td>
+<td>compile-time <code>List</code>, <code>Tuple</code>, or <code>String</code></td>
+<td>Sequence whose length is known during compilation.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: compile-time <code>Int</code>.</p>
+<pre class="highlight"><code class="language-python">sizes = [0.5, 1.0, 1.5]
+count = len(sizes)
+step = 1.0 / count
+value = input_float('Value', default=step)
+output('Value', value)</code></pre>
+<h3 id="sumvalue"><code>sum(value)</code><a class="headerlink" href="#sumvalue" title="Permanent link">&para;</a></h3>
+<p>Returns the numeric sum of a compile-time list or tuple.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>value</code></td>
+<td>compile-time numeric <code>List</code> or <code>Tuple</code></td>
+<td>Sequence whose elements can be added during compilation.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: compile-time number.</p>
+<pre class="highlight"><code class="language-python">sizes = [0.5, 1.0, 1.5]
+total = sum(sizes)
+count = len(sizes)
+average = total / count
+geo = cube(size=average)
+output('Geometry', geo)</code></pre>
+<h2 id="outputs">Outputs<a class="headerlink" href="#outputs" title="Permanent link">&para;</a></h2>
+<h3 id="outputvalue"><code>output(value)</code><a class="headerlink" href="#outputvalue" title="Permanent link">&para;</a></h3>
+<h3 id="outputname-value"><code>output(name, value)</code><a class="headerlink" href="#outputname-value" title="Permanent link">&para;</a></h3>
+<h3 id="outputnamename-valuevalue"><code>output(name="Name", value=value)</code><a class="headerlink" href="#outputnamename-valuevalue" title="Permanent link">&para;</a></h3>
+<p>Creates a group output socket and connects a runtime value to it.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>Optional output socket name. When omitted, the output socket is named <code>out</code>. Duplicate output names receive suffixes such as <code>_2</code>.</td>
+</tr>
+<tr>
+<td><code>value</code></td>
+<td>runtime value</td>
+<td><code>Float</code>, <code>Int</code>, <code>Bool</code>, <code>Vector</code>, <code>Geometry</code>, <code>Material</code>, <code>Object</code>, <code>String</code>, or <code>Bundle</code> value to expose on the node group. Arrays and multi-output results cannot be output directly; index or unpack them first.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: statement only.</p>
+<pre class="highlight"><code class="language-python">geo = cube(size=2.0)
+height = input_float('Height', default=1.0)
+vec_1 = vector(1, 1, height)
+geo_2 = transform(geo, scale=vec_1)
+output('Geometry', geo_2)
+output(name='Height', value=height)</code></pre>
+<p>Automatic final outputs are part of the source language semantics. See <a href="../SYNTAX/#group-inputs-and-outputs">DSL Syntax and Semantics</a>.</p>
+<h2 id="active-geometry-stream-statements">Active Geometry stream statements<a class="headerlink" href="#active-geometry-stream-statements" title="Permanent link">&para;</a></h2>
+<p>These statement-only forms operate on an implicit Geometry input/output stream. When a script contains <code>store(...)</code> or statement-form <code>set_position(...)</code>, NodeForge creates a Geometry group input named <code>Geometry</code> and a Geometry group output named <code>Geometry</code>.</p>
+<p>Use these forms when the node group is meant to modify geometry that is passed into it. Use expression-form <code>store_named_attribute(geometry, ...)</code> and <code>set_position(geometry, ...)</code> when you want to operate on an explicit Geometry value inside the script.</p>
+<h3 id="storename-value-selectiontrue-domainpoint-typenone"><code>store(name, value, selection=True, domain="POINT", type=None)</code><a class="headerlink" href="#storename-value-selectiontrue-domainpoint-typenone" title="Permanent link">&para;</a></h3>
+<p>Stores a named attribute on the active Geometry stream.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>compile-time or runtime <code>String</code></td>
+<td>required</td>
+<td>Attribute name.</td>
+</tr>
+<tr>
+<td><code>value</code></td>
+<td><code>Float</code>, <code>Int</code>, <code>Bool</code>, or <code>Vector</code></td>
+<td>required</td>
+<td>Attribute value field. Arrays are rejected.</td>
+</tr>
+<tr>
+<td><code>selection</code></td>
+<td><code>Bool</code></td>
+<td><code>True</code></td>
+<td>Optional field mask.</td>
+</tr>
+<tr>
+<td><code>domain</code></td>
+<td>compile-time <code>String</code></td>
+<td><code>"POINT"</code></td>
+<td><code>"POINT"</code>, <code>"EDGE"</code>, <code>"FACE"</code>, <code>"CORNER"</code>, <code>"CURVE"</code>, or <code>"INSTANCE"</code>.</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td>compile-time <code>String</code> or <code>None</code></td>
+<td><code>None</code></td>
+<td>Optional Blender data type override, for example <code>"FLOAT"</code>, <code>"INT"</code>, <code>"BOOLEAN"</code>, <code>"VECTOR"</code>, or <code>"COLOR"</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: statement only.</p>
+<pre class="highlight"><code class="language-python">height = position().z
+store('height', height, domain='POINT', type='FLOAT')</code></pre>
+<p>The attribute name can come from <code>input_string(...)</code> when it must be selected at runtime.</p>
+<h3 id="set_positionposition-selectiontrue"><code>set_position(position, selection=True)</code><a class="headerlink" href="#set_positionposition-selectiontrue" title="Permanent link">&para;</a></h3>
+<p>Sets point positions on the active Geometry stream.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>position</code></td>
+<td><code>Vector</code></td>
+<td>required</td>
+<td>New position field.</td>
+</tr>
+<tr>
+<td><code>selection</code></td>
+<td><code>Bool</code></td>
+<td><code>True</code></td>
+<td>Optional field mask.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: statement only.</p>
+<pre class="highlight"><code class="language-python">pos = position()
+height = pos.x * 0.5
+offset = vector(0, 0, height)
+new_pos = pos + offset
+set_position(new_pos)</code></pre>
+<h2 id="inputs">Inputs<a class="headerlink" href="#inputs" title="Permanent link">&para;</a></h2>
+<p>Input built-ins create group input sockets. The <code>name</code> argument must be a compile-time string. Defaults must be compile-time values.</p>
+<p>Use each <code>input_*()</code> call as the complete right-hand side of a simple assignment. Every call creates a separate interface socket; <code>name</code> is its displayed label rather than the identity of the declaration. Two declarations may therefore use the same label and keep independent defaults.</p>
+<h3 id="input_geometryname"><code>input_geometry(name)</code><a class="headerlink" href="#input_geometryname" title="Permanent link">&para;</a></h3>
+<p>Creates a Geometry input socket.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>required</td>
+<td>Input socket name.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Geometry</code>.</p>
+<pre class="highlight"><code class="language-python">geo = input_geometry('Geometry')
+vec_1 = vector(1.5, 1.5, 1.5)
+geo_2 = transform(geo, scale=vec_1)
+output('Geometry', geo_2)</code></pre>
+<h3 id="input_floatname-default00"><code>input_float(name, default=0.0)</code><a class="headerlink" href="#input_floatname-default00" title="Permanent link">&para;</a></h3>
+<p>Creates a Float input socket.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>required</td>
+<td>Input socket name.</td>
+</tr>
+<tr>
+<td><code>default</code></td>
+<td>compile-time <code>Float</code></td>
+<td><code>0.0</code></td>
+<td>Socket default value.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Float</code>.</p>
+<pre class="highlight"><code class="language-python">radius = input_float('Radius', default=2.0)
+geo_1 = cube(size=radius)
+output('Geometry', geo_1)</code></pre>
+<h3 id="input_intname-default0"><code>input_int(name, default=0)</code><a class="headerlink" href="#input_intname-default0" title="Permanent link">&para;</a></h3>
+<p>Creates an Int input socket.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>required</td>
+<td>Input socket name.</td>
+</tr>
+<tr>
+<td><code>default</code></td>
+<td>compile-time <code>Int</code></td>
+<td><code>0</code></td>
+<td>Socket default value. Numeric constants are converted to integer defaults.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Int</code>.</p>
+<pre class="highlight"><code class="language-python">count = input_int('Count', default=32)
+geo = points(count)
+output('Geometry', geo)</code></pre>
+<h3 id="input_boolname-defaultfalse"><code>input_bool(name, default=False)</code><a class="headerlink" href="#input_boolname-defaultfalse" title="Permanent link">&para;</a></h3>
+<p>Creates a Bool input socket.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>required</td>
+<td>Input socket name.</td>
+</tr>
+<tr>
+<td><code>default</code></td>
+<td>compile-time <code>Bool</code></td>
+<td><code>False</code></td>
+<td>Socket default value.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Bool</code>.</p>
+<pre class="highlight"><code class="language-python">enabled = input_bool('Enabled', default=True)
+output('Enabled', enabled)</code></pre>
+<h3 id="input_vectorname-defaultvector0-0-0"><code>input_vector(name, default=vector(0, 0, 0))</code><a class="headerlink" href="#input_vectorname-defaultvector0-0-0" title="Permanent link">&para;</a></h3>
+<p>Creates a Vector input socket.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>required</td>
+<td>Input socket name.</td>
+</tr>
+<tr>
+<td><code>default</code></td>
+<td>compile-time <code>Vector</code> or 3-number tuple/list</td>
+<td><code>vector(0, 0, 0)</code></td>
+<td>Socket default value.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Vector</code>.</p>
+<pre class="highlight"><code class="language-python">vec_1 = vector(0, 0, 2)
+offset = input_vector('Offset', default=vec_1)
+geo_2 = cube()
+geo_3 = transform(geo_2, translation=offset)
+output('Geometry', geo_3)</code></pre>
+<h3 id="input_materialname"><code>input_material(name)</code><a class="headerlink" href="#input_materialname" title="Permanent link">&para;</a></h3>
+<p>Creates a Material input socket.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>required</td>
+<td>Input socket name.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Material</code>.</p>
+<pre class="highlight"><code class="language-python">material = input_material('Material')
+geo = set_material(cube(size=1.0), material)
+output('Geometry', geo)</code></pre>
+<h3 id="input_objectname"><code>input_object(name)</code><a class="headerlink" href="#input_objectname" title="Permanent link">&para;</a></h3>
+<p>Creates an Object input socket. Read the selected object's geometry and transforms through the Object properties described in <a href="#object-values">Object values</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>required</td>
+<td>Input socket name.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Object</code>.</p>
+<pre class="highlight"><code class="language-python">source = input_object('Source')
+source.info(transform_space='RELATIVE', as_instance=False)
+output('Geometry', source.geometry)</code></pre>
+<h3 id="input_stringname-default"><code>input_string(name, default="")</code><a class="headerlink" href="#input_stringname-default" title="Permanent link">&para;</a></h3>
+<p>Creates a String input socket.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>compile-time <code>String</code></td>
+<td>required</td>
+<td>Input socket name.</td>
+</tr>
+<tr>
+<td><code>default</code></td>
+<td>compile-time <code>String</code></td>
+<td><code>""</code></td>
+<td>Socket default value.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: runtime <code>String</code>.</p>
+<pre class="highlight"><code class="language-python">attribute_name = input_string('Attribute', default='weight')
+geo = store_named_attribute(cube(), attribute_name, position().z)
+output('Geometry', geo)</code></pre>
+<h3 id="input_bundlename"><code>input_bundle(name)</code><a class="headerlink" href="#input_bundlename" title="Permanent link">&para;</a></h3>
+<p>Creates a Bundle input socket.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>required</td>
+<td>Input socket name.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Bundle</code>.</p>
+<pre class="highlight"><code class="language-python">data = input_bundle('Data')
+factor = bundle_get(data, 'factor', typ=Float)
+output('Factor', factor)</code></pre>
+<h2 id="interface-panels">Interface Panels<a class="headerlink" href="#interface-panels" title="Permanent link">&para;</a></h2>
+<h3 id="panelinput_a-input_b-namename-collapsedfalse"><code>panel([input_a, input_b, ...], name="Name", collapsed=False)</code><a class="headerlink" href="#panelinput_a-input_b-namename-collapsedfalse" title="Permanent link">&para;</a></h3>
+<p>Places existing group input sockets in a native Blender interface panel. Write <code>panel(...)</code> as a standalone top-level declaration after the referenced inputs.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>inputs</code></td>
+<td>literal list or tuple of input variable names</td>
+<td>required</td>
+<td>One or more group inputs in their panel order.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>compile-time <code>String</code></td>
+<td>required</td>
+<td>Non-empty panel name. Panel names must be unique.</td>
+</tr>
+<tr>
+<td><code>collapsed</code></td>
+<td>compile-time <code>Bool</code></td>
+<td><code>False</code></td>
+<td>Whether the panel is closed by default.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: statement only.</p>
+<p>Each group input can belong to one panel. Inputs omitted from <code>panel(...)</code> remain at the root of the group interface. The DSL creates root-level panels. Computed values and function results are not interface inputs and cannot be panel members.</p>
+<pre class="highlight"><code class="language-python">radius = input_float('Radius', default=1.0)
+segments = input_int('Segments', default=32)
+panel([radius, segments], name='Shape', collapsed=True)
+
+geo = cube(size=radius)
+output('Geometry', geo)</code></pre>
+<h2 id="object-values">Object Values<a class="headerlink" href="#object-values" title="Permanent link">&para;</a></h2>
+<p>An <code>Object</code> value exposes the outputs of Blender's Object Info node as properties.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.geometry</code></td>
+<td><code>Geometry</code></td>
+<td>Geometry from the selected object.</td>
+</tr>
+<tr>
+<td><code>.location</code></td>
+<td><code>Vector</code></td>
+<td>Object location in the configured transform space.</td>
+</tr>
+<tr>
+<td><code>.rotation</code></td>
+<td><code>Vector</code></td>
+<td>Object rotation.</td>
+</tr>
+<tr>
+<td><code>.scale</code></td>
+<td><code>Vector</code></td>
+<td>Object scale.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="objectinfotransform_spaceoriginal-as_instancetrue"><code>object.info(transform_space="ORIGINAL", as_instance=True)</code><a class="headerlink" href="#objectinfotransform_spaceoriginal-as_instancetrue" title="Permanent link">&para;</a></h3>
+<p>Configures the Object Info node used by subsequent property access and returns the same <code>Object</code> value.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>transform_space</code></td>
+<td>compile-time <code>String</code></td>
+<td><code>"ORIGINAL"</code></td>
+<td><code>"ORIGINAL"</code> or <code>"RELATIVE"</code>.</td>
+</tr>
+<tr>
+<td><code>as_instance</code></td>
+<td>compile-time <code>Bool</code></td>
+<td><code>True</code></td>
+<td>Return geometry as an instance when enabled.</td>
+</tr>
+</tbody>
+</table>
+<p>You may call <code>.info()</code> more than once to set the options separately. Configure it before reading any Object property; the configuration is fixed when the first property creates the Object Info node.</p>
+<pre class="highlight"><code class="language-python">source = input_object('Source')
+source.info(transform_space='RELATIVE')
+source.info(as_instance=False)
+
+offset = source.location
+geo = transform(source.geometry, translation=-offset)
+output('Geometry', geo)</code></pre>
+<h2 id="bundles">Bundles<a class="headerlink" href="#bundles" title="Permanent link">&para;</a></h2>
+<p>Bundles carry named runtime values through one Blender socket. Bundle items support <code>Float</code>, <code>Int</code>, <code>Bool</code>, <code>Vector</code>, <code>Geometry</code>, <code>Material</code>, <code>Object</code>, <code>String</code>, and nested <code>Bundle</code> values. Bundles can cross group and reusable-function sockets and can be carried through runtime <code>if</code> and <code>repeat_range(...)</code> state.</p>
+<h3 id="bundleitems"><code>bundle(**items)</code><a class="headerlink" href="#bundleitems" title="Permanent link">&para;</a></h3>
+<p>Creates a Bundle from named keyword items. The keyword names become item names.</p>
+<p>Returns: <code>Bundle</code>.</p>
+<pre class="highlight"><code class="language-python">weight = input_float('Weight', default=0.5)
+data = bundle(
+    geometry=cube(size=1.0),
+    weight=weight,
+)
+output('Data', data)</code></pre>
+<h3 id="bundle_getbundle-path-typtype"><code>bundle_get(bundle, path, typ=Type)</code><a class="headerlink" href="#bundle_getbundle-path-typtype" title="Permanent link">&para;</a></h3>
+<p>Reads an item from a Bundle.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bundle</code></td>
+<td><code>Bundle</code></td>
+<td>Bundle to read.</td>
+</tr>
+<tr>
+<td><code>path</code></td>
+<td><code>String</code></td>
+<td>Runtime bundle item path.</td>
+</tr>
+<tr>
+<td><code>typ</code></td>
+<td>type token</td>
+<td>Expected item type and output socket type.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: the runtime type selected by <code>typ</code>.</p>
+<p><code>typ=</code> is required because an incoming Bundle does not declare the type of each item to the script. The path can be a string literal or a runtime <code>String</code>.</p>
+<pre class="highlight"><code class="language-python">data = input_bundle('Data')
+path = input_string('Path', default='weight')
+weight = bundle_get(data, path, typ=Float)
+output('Weight', weight)</code></pre>
+<h3 id="bundle_setbundle-path-value"><code>bundle_set(bundle, path, value)</code><a class="headerlink" href="#bundle_setbundle-path-value" title="Permanent link">&para;</a></h3>
+<p>Stores or replaces one item and returns the resulting Bundle.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bundle</code></td>
+<td><code>Bundle</code></td>
+<td>Input Bundle.</td>
+</tr>
+<tr>
+<td><code>path</code></td>
+<td><code>String</code></td>
+<td>Runtime bundle item path.</td>
+</tr>
+<tr>
+<td><code>value</code></td>
+<td>supported runtime value</td>
+<td>Item value to store.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Bundle</code>.</p>
+<p>The stored item type is inferred from <code>value</code>.</p>
+<pre class="highlight"><code class="language-python">data = input_bundle('Data')
+path = input_string('Path', default='weight')
+weight = input_float('Weight', default=1.0)
+updated = bundle_set(data, path, weight)
+output('Data', updated)</code></pre>
+<h2 id="field-inputs">Field inputs<a class="headerlink" href="#field-inputs" title="Permanent link">&para;</a></h2>
+<p>Field built-ins read Blender Geometry Nodes context fields. They take no arguments and do not accept keywords.</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>position()</code></td>
+<td><code>Vector</code></td>
+<td>Current element position field.</td>
+</tr>
+<tr>
+<td><code>normal()</code></td>
+<td><code>Vector</code></td>
+<td>Current element normal field.</td>
+</tr>
+<tr>
+<td><code>index()</code></td>
+<td><code>Int</code></td>
+<td>Current element index field.</td>
+</tr>
+<tr>
+<td><code>id()</code></td>
+<td><code>Int</code></td>
+<td>Current element ID field.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="position"><code>position()</code><a class="headerlink" href="#position" title="Permanent link">&para;</a></h3>
+<p>Returns the current element position field. Use it when a formula should be relative to the existing point or vertex position.</p>
+<pre class="highlight"><code class="language-python">pts = points(32)
+base_position = position()
+offset = vector(0, 0, 1)
+new_position = base_position + offset
+pts = set_position(pts, new_position)
+output('Geometry', pts)</code></pre>
+<h3 id="normal"><code>normal()</code><a class="headerlink" href="#normal" title="Permanent link">&para;</a></h3>
+<p>Returns the current element normal field. Use it for displacement or orientation formulas that depend on surface direction.</p>
+<pre class="highlight"><code class="language-python">geo = cube(size=2.0)
+surface_normal = normal()
+displacement = surface_normal * 0.25
+base_position = position()
+new_position = base_position + displacement
+geo = set_position(geo, new_position)
+output('Geometry', geo)</code></pre>
+<h3 id="index"><code>index()</code><a class="headerlink" href="#index" title="Permanent link">&para;</a></h3>
+<p>Returns the current element index field. Use it for per-element spacing, alternating patterns, and procedural ordering.</p>
+<pre class="highlight"><code class="language-python">pts = points(32)
+i = index()
+x = i * 0.1
+z = i * 0.25
+pos = vector(x, 0, z)
+pts = set_position(pts, pos)
+output('Geometry', pts)</code></pre>
+<h3 id="id"><code>id()</code><a class="headerlink" href="#id" title="Permanent link">&para;</a></h3>
+<p>Returns the current element ID field. Use it as a stable per-element random seed when available.</p>
+<pre class="highlight"><code class="language-python">pts = points(64)
+element_id = id()
+offset = (element_id % 10) * 0.1
+base_position = position()
+delta = vector(0, 0, offset)
+new_position = base_position + delta
+pts = set_position(pts, new_position)
+output('Geometry', pts)</code></pre>
+<h2 id="vector-construction-and-vector-math">Vector construction and vector math<a class="headerlink" href="#vector-construction-and-vector-math" title="Permanent link">&para;</a></h2>
+<h3 id="vectorx-y-z"><code>vector(x, y, z)</code><a class="headerlink" href="#vectorx-y-z" title="Permanent link">&para;</a></h3>
+<p>Creates a <code>Vector</code> from three numeric components. Positional arguments and <code>x=</code>, <code>y=</code>, <code>z=</code> keywords are supported.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x</code></td>
+<td><code>Float</code></td>
+<td>X component.</td>
+</tr>
+<tr>
+<td><code>y</code></td>
+<td><code>Float</code></td>
+<td>Y component.</td>
+</tr>
+<tr>
+<td><code>z</code></td>
+<td><code>Float</code></td>
+<td>Z component.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Vector</code>.</p>
+<pre class="highlight"><code class="language-python">height = input_float('Height', default=2.0)
+offset = vector(x=0.0, y=0.0, z=height)
+geo_1 = cube()
+geo_2 = transform(geo_1, translation=offset)
+output('Geometry', geo_2)</code></pre>
+<p>Vector components can be read with <code>.x</code>, <code>.y</code>, and <code>.z</code>.</p>
+<pre class="highlight"><code class="language-python">vec_1 = vector(1, 2, 3)
+v = input_vector('Vector', default=vec_1)
+vec_2 = vector(v.x, v.y, 0)
+value_3 = length(vec_2)
+output('Length XY', value_3)</code></pre>
+<h3 id="vector-functions">Vector functions<a class="headerlink" href="#vector-functions" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Signature</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>length</code></td>
+<td><code>length(v)</code></td>
+<td><code>Float</code></td>
+<td>Vector length.</td>
+</tr>
+<tr>
+<td><code>distance</code></td>
+<td><code>distance(a, b)</code></td>
+<td><code>Float</code></td>
+<td>Distance between two vectors.</td>
+</tr>
+<tr>
+<td><code>dot</code></td>
+<td><code>dot(a, b)</code></td>
+<td><code>Float</code></td>
+<td>Dot product.</td>
+</tr>
+<tr>
+<td><code>normalize</code></td>
+<td><code>normalize(v)</code></td>
+<td><code>Vector</code></td>
+<td>Normalized vector.</td>
+</tr>
+<tr>
+<td><code>cross</code></td>
+<td><code>cross(a, b)</code></td>
+<td><code>Vector</code></td>
+<td>Cross product.</td>
+</tr>
+<tr>
+<td><code>reflect</code></td>
+<td><code>reflect(a, b)</code></td>
+<td><code>Vector</code></td>
+<td>Reflection vector.</td>
+</tr>
+<tr>
+<td><code>project</code></td>
+<td><code>project(a, b)</code></td>
+<td><code>Vector</code></td>
+<td>Projection vector.</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight"><code class="language-python">vec_1 = vector(1, 1, 0)
+n = normalize(vec_1)
+vec_2 = vector(0, 0, 1)
+side = cross(n, vec_2)
+pos = n + side * 0.5
+output('Position', pos)</code></pre>
+<h2 id="geometry">Geometry<a class="headerlink" href="#geometry" title="Permanent link">&para;</a></h2>
+<h3 id="pointscount"><code>points(count)</code><a class="headerlink" href="#pointscount" title="Permanent link">&para;</a></h3>
+<p>Creates point geometry with <code>count</code> points.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>count</code></td>
+<td><code>Int</code></td>
+<td>Number of points. Compile-time constants and runtime Int values are supported.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Geometry</code>.</p>
+<pre class="highlight"><code class="language-python">count = input_int('Count', default=32)
+pts = points(count)
+value_1 = index()
+vec_2 = vector(value_1 * 0.1, 0, 0)
+pts = set_position(pts, vec_2)
+output('Geometry', pts)</code></pre>
+<h3 id="gridwidth-height"><code>grid(width, height)</code><a class="headerlink" href="#gridwidth-height" title="Permanent link">&para;</a></h3>
+<p>Creates a planar mesh grid on the XY plane and stores the generated UV field for <code>grid_uv()</code> in the current script scope.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>width</code></td>
+<td><code>Int</code></td>
+<td>Number of vertices in X.</td>
+</tr>
+<tr>
+<td><code>height</code></td>
+<td><code>Int</code></td>
+<td>Number of vertices in Y.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Geometry</code>.</p>
+<pre class="highlight"><code class="language-python">geo = grid(16, 16)
+uv = grid_uv()
+height = (uv.x + uv.y) * 0.5
+position = vector(uv.x * 2.0, uv.y * 2.0, height)
+geo = set_position(geo, position)
+output('Geometry', geo)</code></pre>
+<h3 id="grid_uv"><code>grid_uv()</code><a class="headerlink" href="#grid_uv" title="Permanent link">&para;</a></h3>
+<p>Returns the UV coordinates produced by the most recent <code>grid(width, height)</code> call in the current script scope. <code>grid_uv()</code> requires a preceding <code>grid(...)</code> call.</p>
+<p>Returns: <code>Vector</code> with <code>.x</code> and <code>.y</code> in the <code>0..1</code> range.</p>
+<pre class="highlight"><code class="language-python">geo = grid(8, 8)
+uv = grid_uv()
+height = (uv.x - 0.5) * (uv.y - 0.5)
+base_position = position()
+offset = vector(0, 0, height)
+geo = set_position(geo, base_position + offset)
+output('Geometry', geo)</code></pre>
+<h3 id="set_positiongeometry-position-selectiontrue"><code>set_position(geometry, position, selection=True)</code><a class="headerlink" href="#set_positiongeometry-position-selectiontrue" title="Permanent link">&para;</a></h3>
+<p>Sets point positions on geometry.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>geometry</code></td>
+<td><code>Geometry</code></td>
+<td>required</td>
+<td>Input geometry.</td>
+</tr>
+<tr>
+<td><code>position</code></td>
+<td><code>Vector</code></td>
+<td>required</td>
+<td>New position field.</td>
+</tr>
+<tr>
+<td><code>selection</code></td>
+<td><code>Bool</code></td>
+<td><code>True</code></td>
+<td>Optional field mask.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Geometry</code>.</p>
+<pre class="highlight"><code class="language-python">pts = points(32)
+i = index()
+mask = (i % 2) == 0
+pos = vector(i * 0.1, 0, i * 0.02)
+pts = set_position(pts, pos, selection=mask)
+output('Geometry', pts)</code></pre>
+<h3 id="store_named_attributegeometry-name-value-selectiontrue-domainpoint-typenone"><code>store_named_attribute(geometry, name, value, selection=True, domain="POINT", type=None)</code><a class="headerlink" href="#store_named_attributegeometry-name-value-selectiontrue-domainpoint-typenone" title="Permanent link">&para;</a></h3>
+<p>Stores a named attribute on geometry.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>geometry</code></td>
+<td><code>Geometry</code></td>
+<td>required</td>
+<td>Input geometry.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>compile-time or runtime <code>String</code></td>
+<td>required</td>
+<td>Attribute name.</td>
+</tr>
+<tr>
+<td><code>value</code></td>
+<td><code>Float</code>, <code>Int</code>, <code>Bool</code>, or <code>Vector</code></td>
+<td>required</td>
+<td>Attribute value field. Arrays are rejected.</td>
+</tr>
+<tr>
+<td><code>selection</code></td>
+<td><code>Bool</code></td>
+<td><code>True</code></td>
+<td>Optional field mask.</td>
+</tr>
+<tr>
+<td><code>domain</code></td>
+<td>compile-time <code>String</code></td>
+<td><code>"POINT"</code></td>
+<td><code>"POINT"</code>, <code>"EDGE"</code>, <code>"FACE"</code>, <code>"CORNER"</code>, <code>"CURVE"</code>, or <code>"INSTANCE"</code>.</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td>compile-time <code>String</code> or <code>None</code></td>
+<td><code>None</code></td>
+<td>Optional Blender data type override, for example <code>"FLOAT"</code>, <code>"INT"</code>, <code>"BOOLEAN"</code>, <code>"VECTOR"</code>, or <code>"COLOR"</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Geometry</code>.</p>
+<pre class="highlight"><code class="language-python">pts = points(64)
+i = index()
+height = i * 0.02
+pos = vector(i * 0.05, 0, height)
+pts = set_position(pts, pos)
+pts = store_named_attribute(pts, 'height', height, domain='POINT', type='FLOAT')
+output('Geometry', pts)</code></pre>
+<p>The attribute <code>name</code> can also be a runtime <code>String</code>, for example a value returned by <code>input_string(...)</code>.</p>
+<h3 id="capture_attributegeometry-value-selectiontrue-domainpoint-typenone"><code>capture_attribute(geometry, value, selection=True, domain="POINT", type=None)</code><a class="headerlink" href="#capture_attributegeometry-value-selectiontrue-domainpoint-typenone" title="Permanent link">&para;</a></h3>
+<p>Captures a field on geometry as an anonymous attribute. The function returns both the updated Geometry and the captured field value.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>geometry</code></td>
+<td><code>Geometry</code></td>
+<td>required</td>
+<td>Geometry on which to capture the field.</td>
+</tr>
+<tr>
+<td><code>value</code></td>
+<td><code>Float</code>, <code>Int</code>, <code>Bool</code>, or <code>Vector</code></td>
+<td>required</td>
+<td>Field to capture.</td>
+</tr>
+<tr>
+<td><code>selection</code></td>
+<td><code>Bool</code></td>
+<td><code>True</code></td>
+<td>Optional field mask.</td>
+</tr>
+<tr>
+<td><code>domain</code></td>
+<td>compile-time <code>String</code></td>
+<td><code>"POINT"</code></td>
+<td><code>"POINT"</code>, <code>"EDGE"</code>, <code>"FACE"</code>, <code>"CORNER"</code>, <code>"CURVE"</code>, or <code>"INSTANCE"</code>.</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td>compile-time <code>String</code> or <code>None</code></td>
+<td><code>None</code></td>
+<td>Optional result type override: <code>"FLOAT"</code>, <code>"INT"</code>, <code>"BOOLEAN"</code>, or <code>"VECTOR"</code>. The value type is used when omitted.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>(Geometry, captured value)</code>.</p>
+<pre class="highlight"><code class="language-python">geo = grid(16, 16)
+height = position().z
+geo, captured_height = capture_attribute(
+    geo,
+    height,
+    domain='POINT',
+)
+output('Geometry', geo)
+output('Height', captured_height)</code></pre>
+<p>The two results can also be stored as one result and selected with a compile-time index.</p>
+<pre class="highlight"><code class="language-python">captured = capture_attribute(cube(), normal())
+geo = captured[0]
+captured_normal = captured[1]</code></pre>
+<h3 id="set_materialgeometry-material"><code>set_material(geometry, material)</code><a class="headerlink" href="#set_materialgeometry-material" title="Permanent link">&para;</a></h3>
+<p>Assigns a material to geometry. Pass a runtime <code>Material</code> value or a compile-time material name. A named material is created when it does not exist.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>geometry</code></td>
+<td><code>Geometry</code></td>
+<td>Input geometry.</td>
+</tr>
+<tr>
+<td><code>material</code></td>
+<td><code>Material</code> or compile-time <code>String</code></td>
+<td>Material socket value or Blender material name.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Geometry</code>.</p>
+<pre class="highlight"><code class="language-python">geo = cube(size=2.0)
+geo = set_material(geo, 'NodeForge Material')
+output('Geometry', geo)</code></pre>
+<pre class="highlight"><code class="language-python">material = input_material('Material')
+geo = set_material(cube(size=2.0), material)
+output('Geometry', geo)</code></pre>
+<h3 id="empty_geometry"><code>empty_geometry()</code><a class="headerlink" href="#empty_geometry" title="Permanent link">&para;</a></h3>
+<p>Creates a valid Geometry value with zero elements. Use it as the neutral starting value for generated geometry collections, optional branches, and repeat-loop accumulators.</p>
+<p>Returns: <code>Geometry</code>.</p>
+<pre class="highlight"><code class="language-python">geo = empty_geometry()
+count = input_int('Count', default=3)
+for i in repeat_range(count):
+    part = transform(cube(0.25), translation=vector(i, 0, 0))
+    geo = join(geo, part)
+output('Geometry', geo)</code></pre>
+<h3 id="geometry_builder"><code>geometry_builder()</code><a class="headerlink" href="#geometry_builder" title="Permanent link">&para;</a></h3>
+<p>Creates a script-local Geometry accumulator for procedural construction. The builder is a compiler object, not a Geometry value. Add Geometry values with <code>add(...)</code> or <code>extend(...)</code>, then read <code>builder.geometry</code> when a Geometry snapshot is needed.</p>
+<p>Supported operations:</p>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>builder.add(geometry)</code></td>
+<td>Append one Geometry value.</td>
+</tr>
+<tr>
+<td><code>builder.extend([geometry_a, geometry_b])</code></td>
+<td>Append an array of Geometry values in order.</td>
+</tr>
+<tr>
+<td><code>builder.geometry</code></td>
+<td>Return the accumulated Geometry at that source position.</td>
+</tr>
+</tbody>
+</table>
+<p>A new builder with no additions returns the same empty Geometry value as <code>empty_geometry()</code>. Builder objects cannot be output, aliased, captured by local functions, or passed to built-ins; use <code>builder.geometry</code> whenever a normal Geometry value is required.</p>
+<pre class="highlight"><code class="language-python">builder = geometry_builder()
+for size in [0.5, 1.0, 1.5]:
+    builder.add(cube(size))
+output('Geometry', builder.geometry)</code></pre>
+<p>Inside <code>repeat_range(...)</code>, builder mutations become Repeat Zone Geometry state updates. The same builder can combine compile-time additions, runtime-loop additions, and post-loop additions.</p>
+<pre class="highlight"><code class="language-python">builder = geometry_builder()
+pos = vector(0, 0, 0)
+steps = input_int('Steps', default=4)
+for i in repeat_range(steps):
+    next_pos = pos + vector(1, 0, 0)
+    builder.add(line(pos, next_pos))
+    pos = next_pos
+output('Geometry', builder.geometry)</code></pre>
+<h3 id="pointposition"><code>point(position)</code><a class="headerlink" href="#pointposition" title="Permanent link">&para;</a></h3>
+<p>Creates one point and sets its position. <code>position</code> can be a literal vector expression or a runtime <code>Vector</code> value.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>position</code></td>
+<td><code>Vector</code></td>
+<td>Point position.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Geometry</code>.</p>
+<pre class="highlight"><code class="language-python">pos = input_vector('Position', default=(0, 0, 1))
+geo = point(pos)
+output('Geometry', geo)</code></pre>
+<h3 id="linestart-end"><code>line(start, end)</code><a class="headerlink" href="#linestart-end" title="Permanent link">&para;</a></h3>
+<p>Creates a curve line segment between two endpoints. <code>start</code> and <code>end</code> can be literal vector expressions or runtime <code>Vector</code> values.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>start</code></td>
+<td><code>Vector</code></td>
+<td>Start endpoint.</td>
+</tr>
+<tr>
+<td><code>end</code></td>
+<td><code>Vector</code></td>
+<td>End endpoint.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Geometry</code>.</p>
+<pre class="highlight"><code class="language-python">start = input_vector('Start', default=(0, 0, 0))
+end = input_vector('End', default=(1, 0, 0))
+geo = line(start, end)
+output('Geometry', geo)</code></pre>
+<h3 id="cubesize10"><code>cube(size=1.0)</code><a class="headerlink" href="#cubesize10" title="Permanent link">&para;</a></h3>
+<p>Creates a cube mesh.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>size</code></td>
+<td><code>Float</code>, <code>Int</code>, or <code>Vector</code></td>
+<td><code>1.0</code></td>
+<td>Cube side length or per-axis size. Positional and <code>size=</code> forms are supported.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Geometry</code>.</p>
+<pre class="highlight"><code class="language-python">size = input_float('Size', default=1.0)
+geo_1 = cube(size=size)
+output('Geometry', geo_1)</code></pre>
+<h3 id="joingeometry"><code>join(geometry, ...)</code><a class="headerlink" href="#joingeometry" title="Permanent link">&para;</a></h3>
+<h3 id="joingeometry_a-geometry_b"><code>join([geometry_a, geometry_b, ...])</code><a class="headerlink" href="#joingeometry_a-geometry_b" title="Permanent link">&para;</a></h3>
+<p>Joins multiple geometry values. Arguments can be separate geometry values, arrays of geometry values, or one literal list/tuple of geometry values. A supplied empty array such as <code>join([])</code> returns <code>empty_geometry()</code>. A call with no arguments is still invalid.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>geometry</code></td>
+<td><code>Geometry</code> values or an array of <code>Geometry</code> values</td>
+<td>Geometry values to join. A supplied array may be empty.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Geometry</code>.</p>
+<pre class="highlight"><code class="language-python">geo_1 = cube(size=0.4)
+vec_2 = vector(-1, 0, 0)
+geo_3 = transform(geo_1, translation=vec_2)
+geo_4 = cube(size=0.4)
+vec_5 = vector(1, 0, 0)
+geo_6 = transform(geo_4, translation=vec_5)
+geo_7 = points(8)
+parts = [geo_3, geo_6, geo_7]
+geo_8 = join(parts)
+output('Geometry', geo_8)
+
+empty_parts = []
+empty = join(empty_parts)</code></pre>
+<h3 id="transformgeometry-translationnone-scalenone-rotationnone"><code>transform(geometry, translation=None, scale=None, rotation=None)</code><a class="headerlink" href="#transformgeometry-translationnone-scalenone-rotationnone" title="Permanent link">&para;</a></h3>
+<p>Transforms geometry. <code>translation</code>, <code>scale</code>, and <code>rotation</code> can be supplied by keyword. The first two transform options can also be supplied as positional arguments after <code>geometry</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>geometry</code></td>
+<td><code>Geometry</code></td>
+<td>required</td>
+<td>Input geometry.</td>
+</tr>
+<tr>
+<td><code>translation</code></td>
+<td><code>Vector</code></td>
+<td>no transform</td>
+<td>Translation vector.</td>
+</tr>
+<tr>
+<td><code>scale</code></td>
+<td><code>Float</code>, <code>Int</code>, or <code>Vector</code></td>
+<td>no transform</td>
+<td>Scale value. Use <code>vector(x, y, z)</code> for non-uniform scale.</td>
+</tr>
+<tr>
+<td><code>rotation</code></td>
+<td><code>Vector</code></td>
+<td>no transform</td>
+<td>Euler rotation in radians.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Geometry</code>.</p>
+<pre class="highlight"><code class="language-python">geo = cube(size=1.0)
+vec_1 = vector(0, 0, 1)
+vec_2 = vector(2, 1, 0.5)
+geo = transform(geo, translation=vec_1, scale=vec_2)
+output('Geometry', geo)</code></pre>
+<h3 id="polylinepoints"><code>polyline(points)</code><a class="headerlink" href="#polylinepoints" title="Permanent link">&para;</a></h3>
+<p>Creates curve geometry from a compile-time list of vector points.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>points</code></td>
+<td>compile-time list of vectors</td>
+<td>Ordered points for the polyline.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Geometry</code>.</p>
+<pre class="highlight"><code class="language-python">vec_1 = vector(-1, 0, 0)
+vec_2 = vector(0, 1, 0)
+vec_3 = vector(1, 0, 0)
+shape = polyline([vec_1, vec_2, vec_3])
+output('Geometry', shape)</code></pre>
+<h2 id="instancing">Instancing<a class="headerlink" href="#instancing" title="Permanent link">&para;</a></h2>
+<h3 id="instance_on_pointsinstance-points-selectiontrue-scalenone-rotationnone-realizetrue"><code>instance_on_points(instance, points, selection=True, scale=None, rotation=None, realize=True)</code><a class="headerlink" href="#instance_on_pointsinstance-points-selectiontrue-scalenone-rotationnone-realizetrue" title="Permanent link">&para;</a></h3>
+<p>Instances one geometry value on point geometry.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>instance</code></td>
+<td><code>Geometry</code></td>
+<td>required</td>
+<td>Geometry to instance.</td>
+</tr>
+<tr>
+<td><code>points</code></td>
+<td><code>Geometry</code></td>
+<td>required</td>
+<td>Point geometry receiving the instances.</td>
+</tr>
+<tr>
+<td><code>selection</code></td>
+<td><code>Bool</code></td>
+<td><code>True</code></td>
+<td>Points on which to create instances.</td>
+</tr>
+<tr>
+<td><code>scale</code></td>
+<td>value accepted by the underlying instance helper</td>
+<td>Blender default</td>
+<td>Optional instance scale.</td>
+</tr>
+<tr>
+<td><code>rotation</code></td>
+<td>value accepted by the underlying instance helper</td>
+<td>Blender default</td>
+<td>Optional instance rotation.</td>
+</tr>
+<tr>
+<td><code>realize</code></td>
+<td>compile-time <code>Bool</code></td>
+<td><code>True</code></td>
+<td>When true, realizes instances before returning.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Geometry</code>.</p>
+<pre class="highlight"><code class="language-python">pts = points(12)
+value_1 = index()
+vec_2 = vector(value_1 * 0.3, 0, 0)
+pts = set_position(pts, vec_2)
+geo_3 = cube(size=0.15)
+vec_4 = vector(1, 1, 1)
+selection = index() % 2 == 0
+geo = instance_on_points(geo_3, pts, selection=selection, scale=vec_4, realize=True)
+output('Geometry', geo)</code></pre>
+<h3 id="realize_instancesgeometry"><code>realize_instances(geometry)</code><a class="headerlink" href="#realize_instancesgeometry" title="Permanent link">&para;</a></h3>
+<p>Realizes instances on geometry.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>geometry</code></td>
+<td><code>Geometry</code></td>
+<td>Geometry containing instances.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: <code>Geometry</code>.</p>
+<pre class="highlight"><code class="language-python">pts = points(6)
+geo_1 = cube(size=0.2)
+instanced = instance_on_points(geo_1, pts, realize=False)
+geo_2 = realize_instances(instanced)
+output('Geometry', geo_2)</code></pre>
+<h2 id="raw-blender-node-construction">Raw Blender node construction<a class="headerlink" href="#raw-blender-node-construction" title="Permanent link">&para;</a></h2>
+<h3 id="nodebl_idname-props-inputs-output-typ"><code>node(bl_idname, props={...}, inputs={...}, output=..., typ=...)</code><a class="headerlink" href="#nodebl_idname-props-inputs-output-typ" title="Permanent link">&para;</a></h3>
+<h3 id="nodebl_idname-props-inputs-outputs"><code>node(bl_idname, props={...}, inputs={...}, outputs={...})</code><a class="headerlink" href="#nodebl_idname-props-inputs-outputs" title="Permanent link">&para;</a></h3>
+<p>Creates a Blender node directly. Use this for Blender node types that are not exposed through a dedicated NodeForge built-in. The dictionary expressions shown here are a special compile-time syntax accepted only in arguments to <code>node(...)</code>; general DSL dictionaries remain unsupported.</p>
+<p><code>bl_idname</code>, <code>props</code> keys and values, input socket names, output socket names, and type tokens are compile-time declarations. Runtime values are allowed inside <code>inputs={...}</code> and are linked to the corresponding Blender input socket.</p>
+<p>Single-output mode requires both <code>output=</code> and <code>typ=</code>. Multi-output mode uses <code>outputs={"Socket": TypeToken, ...}</code> and returns a result object whose outputs can be accessed with attribute syntax or item syntax.</p>
+<p>Supported type tokens: <code>Float</code>, <code>Int</code>, <code>Bool</code>, <code>Vector</code>, <code>Geometry</code>, <code>Material</code>, <code>Object</code>, <code>String</code>, and <code>Bundle</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bl_idname</code></td>
+<td><code>String</code></td>
+<td>required</td>
+<td>Blender node type identifier, for example <code>"ShaderNodeMath"</code>.</td>
+</tr>
+<tr>
+<td><code>props</code></td>
+<td>literal dict</td>
+<td><code>{}</code></td>
+<td>Blender node properties to assign before linking inputs. Custom properties are not supported.</td>
+</tr>
+<tr>
+<td><code>inputs</code></td>
+<td>literal dict</td>
+<td><code>{}</code></td>
+<td>Maps enabled input socket names to literal defaults, runtime values, or a literal list for multi-input fanout.</td>
+</tr>
+<tr>
+<td><code>output</code></td>
+<td><code>String</code></td>
+<td>required in single-output mode</td>
+<td>Enabled output socket name to return.</td>
+</tr>
+<tr>
+<td><code>typ</code></td>
+<td>type token</td>
+<td>required in single-output mode</td>
+<td>NodeForge type of <code>output</code>.</td>
+</tr>
+<tr>
+<td><code>outputs</code></td>
+<td>literal dict of <code>String: type token</code></td>
+<td>required in multi-output mode</td>
+<td>Enabled output sockets to expose.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: a <code>Value</code> in single-output mode; a multi-output result in <code>outputs=</code> mode.</p>
+<pre class="highlight"><code class="language-python">value = input_float('Value', default=0.25)
+rounded = node('ShaderNodeMath', props={'operation': 'ROUND'}, inputs={'Value': value}, output='Value', typ=Float)
+output('Rounded', rounded)</code></pre>
+<pre class="highlight"><code class="language-python">value_1 = position()
+separate = node('ShaderNodeSeparateXYZ', inputs={'Vector': value_1}, outputs={'X': Float, 'Y': Float, 'Z': Float})
+height = separate.Z
+output('Height', height)</code></pre>
+<h2 id="runtime-loops">Runtime loops<a class="headerlink" href="#runtime-loops" title="Permanent link">&para;</a></h2>
+<p>Runtime loops compile to Blender Repeat Zones. Use <code>repeat_range(...)</code> when the iteration count or loop state must be represented in the generated Geometry Nodes graph. Use compile-time <code>range(...)</code> for fixed authoring loops that should be unrolled during compilation.</p>
+<h3 id="for-i-in-repeat_rangesteps"><code>for i in repeat_range(steps): ...</code><a class="headerlink" href="#for-i-in-repeat_rangesteps" title="Permanent link">&para;</a></h3>
+<p>Updates existing Geometry, Vector, Float, Int, Bool, and Bundle variables inside one Repeat Zone. The body supports assignments, <code>geometry_builder</code> method statements, nested <code>if</code> blocks, and nested <code>repeat_range(...)</code> loops. It must update at least one existing variable or builder state. Assigned names that did not exist before the loop are iteration-local temporaries rather than Repeat Zone state items.</p>
+<p>State item order follows first assignment in the loop body, including nested branches. Conditional branches preserve omitted state values and merge changed state through Switch nodes. The loop index name cannot also be state, and state names cannot collide with Repeat Zone system socket names such as <code>Iterations</code> or <code>Iteration</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>steps</code></td>
+<td><code>Int</code></td>
+<td>Repeat count. May be an integer literal, compile-time integer, or runtime <code>Int</code> value.</td>
+</tr>
+<tr>
+<td>state variables</td>
+<td><code>Geometry</code>, <code>Vector</code>, <code>Float</code>, <code>Int</code>, <code>Bool</code>, or <code>Bundle</code></td>
+<td>Existing variables assigned inside the loop.</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight"><code class="language-python">n = input_int('N', default=8)
+geo = cube(0.1)
+pos = vector(0, 0, 0)
+angle = input_float('Angle', default=45)
+for i in repeat_range(n):
+    next_pos = pos + vector(1, 0, 0)
+    part = transform(cube(0.05), translation=next_pos)
+    geo = join(geo, part)
+    pos = next_pos
+    angle = -angle
+output('Geometry', geo)
+output('Position', pos)
+output('Angle', angle)</code></pre>
+<p><code>range(...)</code> does not create Repeat Zones. A non-constant <code>range(...)</code> count raises <code>CompileError</code>; use <code>repeat_range(...)</code> for runtime repetition.</p>
+<h2 id="lists-tuples-and-unrolled-loops">Lists, tuples, and unrolled loops<a class="headerlink" href="#lists-tuples-and-unrolled-loops" title="Permanent link">&para;</a></h2>
+<p>Script lists and tuples are compile-time collections of compiled values. They are useful for building a fixed list of geometry parts and then passing the list to <code>join(...)</code>.</p>
+<pre class="highlight"><code class="language-python">parts = []
+vec_1 = vector(-1, 0, 0)
+vec_2 = vector(0, 0, 0)
+vec_3 = vector(1, 0, 0)
+for offset in [vec_1, vec_2, vec_3]:
+    geo_4 = cube(size=0.25)
+    geo_5 = transform(geo_4, translation=offset)
+    parts.append(geo_5)
+geo_6 = join(parts)
+output('Geometry', geo_6)</code></pre>
+<p>Lists and tuples cannot be output directly and cannot be used as runtime socket values.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../SYNTAX/" class="btn btn-neutral float-left" title="Syntax"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../WRITING_FUNCTIONS/" class="btn btn-neutral float-right" title="Writing Functions">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2026 denikryt</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/denikryt/NodeForgeDocs" class="fa fa-code-fork" style="color: #fcfcfc"> denikryt/NodeForgeDocs</a>
+        </span>
+    
+    
+      <span><a href="../SYNTAX/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../WRITING_FUNCTIONS/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+      <script src="../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
