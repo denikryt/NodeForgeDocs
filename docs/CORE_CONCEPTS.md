@@ -73,7 +73,7 @@ output('Geometry', join(parts))
 
 Here `count`, `index`, and the list structure are compile-time data. The compiler unrolls `range(3)` and creates three cube-and-transform paths. `spacing` remains a runtime socket value, so each generated offset path stays connected to the adjustable **Spacing** input.
 
-A compile-time `if` selects one source branch during compilation. Compile-time arithmetic can also be resolved before nodes are created when the receiving operation permits it.
+Compile-time arithmetic can be resolved before nodes are created when the receiving operation permits it. Ordinary statement `if` is deliberately different: it always represents runtime control flow, even when its condition is a literal or another compile-time-known `Bool`.
 
 ## Runtime
 
@@ -102,7 +102,7 @@ The two loop forms serve different authoring needs:
 | `for ... in range(...)` | The compiler unrolls the body and generates one graph fragment per iteration. The range arguments must be known at compile time. |
 | `for ... in repeat_range(...)` | The compiler creates a Repeat Zone and materializes the body once inside it. The iteration count may be a runtime `Int`. |
 
-A runtime `Bool` used by an `if` statement creates both compatible branches and merges their results with Switch nodes. A compile-time condition selects one branch before materialization.
+Every ordinary `if` statement is runtime control flow. NodeForge validates both branches and materializes compatible branch results through Switch nodes, even for a condition such as `True` or `False`. A top-level `if` therefore requires an `else` branch and both branches must assign at least one compatible common runtime value.
 
 ## Group inputs are runtime parameters
 
@@ -126,7 +126,7 @@ The compiler creates ordinary Blender nodes, sockets, links, interface panels, a
 
 Every generated NodeForge group stores the source that created it. Select a generated group node and use **Load Script From Selected NodeGroup** to copy the embedded source into a Blender Text datablock.
 
-After editing the source, use **Update Selected NodeGroup** to rebuild the selected group in place. NodeForge compiles a replacement first and then updates the existing group datablock. For the selected group-node instance, it restores compatible incoming and outgoing links by socket name and preserves input values that differ from the previous script defaults.
+After editing the source, use **Update Selected NodeGroup** to rebuild the selected group in place. NodeForge compiles a replacement first and then updates the existing group datablock. Explicit `input_*()` declarations carry compiler-owned declaration identities, so compatible incoming links and user-overridden input values follow the declaration rather than its displayed socket label. Renaming a label, reordering declarations, or adding another input with the same label does not by itself retarget preserved state. Outgoing links are restored when the rebuilt public output remains compatible.
 
 This workflow keeps the generated group connected to the surrounding graph while its implementation evolves:
 

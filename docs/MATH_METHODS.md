@@ -2,17 +2,19 @@
 
 These callables are provided by the `nodeforge.math` package, not by the Core DSL. Install that package explicitly before using them.
 
-The Math library adds scalar and procedural methods to the DSL. These methods are called directly in expressions.
+The Math library adds scalar and procedural callables to the DSL. Import its package namespace and use qualified calls.
 
 ```python
+from packages import math
+
 angle = input_float('Angle', default=0.0)
-value = sin(angle)
+value = math.sin(angle)
 output('Value', value)
 ```
 
 ## Scalar Math Callables
 
-These names are available directly when the Math library is installed. They accept runtime values and create the corresponding Geometry Nodes operations. The scalar callables accept positional arguments or the parameter names shown below as keywords. When all arguments are compile-time numbers, the compiler can evaluate supported calls during compilation.
+These names are members of the imported `math` package namespace. They accept runtime values and create the corresponding Geometry Nodes operations. The scalar callables accept positional arguments or the parameter names shown below as keywords. When all arguments are compile-time numbers, the compiler can evaluate supported calls during compilation.
 
 ### Unary Callables
 
@@ -56,10 +58,12 @@ These names are available directly when the Math library is installed. They acce
 | `map_range(value, from_min, from_max, to_min, to_max)` | Maps a value between ranges. |
 
 ```python
+from packages import math
+
 value = input_float('Value', default=0.25)
-angle = radians(value * 360.0)
-wave = sin(angle)
-result = clamp(wave, -0.5, 0.5)
+angle = math.radians(value * 360.0)
+wave = math.sin(angle)
+result = math.clamp(wave, -0.5, 0.5)
 output('Value', result)
 ```
 
@@ -95,8 +99,10 @@ Creates a Random Value field. With no bounds it returns a `Float` in the default
 | `id` | `Int` | Per-element identifier. |
 
 ```python
+from packages import math
+
 pts = points(100)
-pos = random_value(vector(-2, -2, 0), vector(2, 2, 1), seed=12, id=index())
+pos = math.random_value(vector(-2, -2, 0), vector(2, 2, 1), seed=12, id=index())
 pts = set_position(pts, pos)
 output('Geometry', pts)
 ```

@@ -23,6 +23,7 @@ nav:
       - Built-ins: BUILTINS.md
       - Writing Functions: WRITING_FUNCTIONS.md
       - Packages: PACKAGES.md
+      - Extension API: EXTENSION_API.md
       - Geometry Nodes Coverage: GEOMETRY_NODES_COVERAGE.md
   - Libraries:
       - Math:

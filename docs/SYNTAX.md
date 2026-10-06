@@ -52,7 +52,7 @@ NodeForge supports runtime socket values and compile-time values.
 | --- | --- |
 | `Geometry` | Geometry socket value. |
 | `Float` | Floating-point scalar or field. |
-| `Int` | Integer scalar or field. Some operations accept it as a numeric field or return a `Float`; the called operation defines the result type. |
+| `Int` | Signed 32-bit integer scalar or field. Integer-preserving arithmetic remains `Int`; mixed `Int`/`Float` arithmetic becomes `Float`. |
 | `Bool` | Boolean scalar or field. |
 | `Vector` | Three-component vector or field. |
 | `Material` | Blender material socket value. |
@@ -107,7 +107,7 @@ offset = vector(0, 0, 1)
 geometry = transform(base, translation=offset)
 ```
 
-Only simple function names can be called. Supported method calls are documented in the sections that introduce them.
+Calls can target a simple callable name or an imported package member such as `math.sin(...)`. Supported method calls are documented in the sections that introduce them. Package namespaces are call qualifiers, not runtime values.
 
 ## Operators and Expressions
 
@@ -119,6 +119,7 @@ Expressions combine values and produce a result.
 | `a - b` | Subtraction. |
 | `a * b` | Multiplication. |
 | `a / b` | Division. |
+| `a // b` | Floor division. |
 | `a ** b` | Power. |
 | `a % b` | Modulo. |
 | `-a`, `+a` | Unary sign. |
@@ -136,6 +137,8 @@ result = area if is_large else 0.0
 ```
 
 Operations are type-checked. The operands must support the selected operation.
+
+Numeric semantics follow NodeForge's runtime types. `Int + Int`, `Int - Int`, `Int * Int`, `Int // Int`, and `Int % Int` preserve signed 32-bit `Int`. `/` and `**` produce `Float`, and an arithmetic expression mixing `Int` with `Float` produces `Float`. Floating-point constants and operations use Blender-compatible binary32 behavior. Vector arithmetic accepts numeric scalar operands where documented by the operation.
 
 ## Compile-Time and Runtime Values
 
@@ -359,7 +362,7 @@ first = remap_curve(value_a, __unique__=True)
 second = remap_curve(value_b, __unique__=True)
 ```
 
-`__unique__` must be a compile-time `Bool`. It is supported by script-local `def` calls and editable `.nf` functions imported from `functions` or `examples`. Omitting it or passing `__unique__=False` uses the shared group. Local catalog calls, core built-ins, systems, backend helpers, and `node(...)` use their normal call behavior.
+`__unique__` must be a compile-time `Bool`. It is supported by reusable source-function calls, including script-local `def` calls and source-backed package functions. Omitting it or passing `__unique__=False` uses the shared function group. Core built-ins, Python extension callables, and `node(...)` do not use this modifier.
 
 The copy is shallow, so nested reusable dependencies remain shared unless their calls also use `__unique__=True`. A unique group's manual Blender-node state is preserved when an update leaves that function unchanged. Changing the function source or a reusable dependency used by it rebuilds the group from source.
 
@@ -367,26 +370,54 @@ See [Writing Functions](WRITING_FUNCTIONS.md) for creating and saving a local re
 
 ## Imports
 
-Imports are allowed only at top level. Reusable scripts can be imported from `functions`, `examples`, or `local`.
+Imports are allowed only at top level. NodeForge has three source import namespaces: `packages`, `examples`, and `local`.
+
+### Packages
+
+Import an installed package namespace, then call members through that namespace.
 
 ```python
-from functions import circle_points
+from packages import math
+
+angle = input_float('Angle', default=0.0)
+value = math.sin(angle)
+output('Value', value)
+```
+
+Packages can be aliased.
+
+```python
+from packages import math as m
+
+value = m.sin(input_float('Angle'))
+output('Value', value)
+```
+
+Qualified `package.member(...)` calls identify the exact package owner. Different installed packages may export the same member name, and a package member may use the same name as a Core DSL callable.
+
+An unqualified package member can resolve when exactly one imported package provides that callable and no source value owns the same name. Prefer qualified calls in reusable scripts because they remain unambiguous when more packages or local bindings are added.
+
+`from packages import *` is unsupported. The former `from functions import ...` source namespace has been removed; import the owning package instead.
+
+### Examples and Local
+
+Examples and Local scripts retain their explicit catalogs.
+
+```python
+from examples import demo_scene
 from local import move_geometry
 ```
 
-An alias changes the name used in the current script.
+Aliases and star imports are supported for these two catalogs.
 
 ```python
-from functions import circle_points as make_circle
+from local import move_geometry as move
+from examples import *
 ```
 
-A star import adds every public name from the selected catalog.
+Names beginning with `_` are private and excluded from catalog imports. Plain `import`, relative imports, block-local imports, and imports from arbitrary Python modules are unsupported.
 
-```python
-from functions import *
-```
-
-Names beginning with `_` are private and excluded from imports. Public callable names must be unique across active package catalogs; conflicting names make the package inventory invalid. Plain imports, relative imports, block-local imports, and imports from arbitrary Python modules are unsupported.
+See [Creating Packages](PACKAGES.md) for package authoring and [Python Extension API v2](EXTENSION_API.md) for Python-backed package callables.
 
 ## Local Functions
 
@@ -422,20 +453,11 @@ The generated function call node uses a readable title derived from the function
 
 ## If Statements
 
-An `if` statement selects between two blocks.
-
-```python
-use_large_size = True
-if use_large_size:
-    size = 2.0
-else:
-    size = 1.0
-```
-
-A compile-time condition selects one branch while the script is compiled. A runtime `Bool` compiles both branches and merges their resulting values.
+An ordinary `if` statement always represents runtime control flow. This rule applies even when the condition is a literal or another compile-time-known `Bool`. NodeForge does not use ordinary `if` as a compile-time branch-selection construct.
 
 ```python
 use_large_size = input_bool('Large', default=False)
+size = 1.0
 if use_large_size:
     size = 2.0
 else:
@@ -444,7 +466,21 @@ geometry = cube(size=size)
 output('Geometry', geometry)
 ```
 
-A runtime top-level `if` requires an `else` branch. Values merged from both branches must have compatible types supported by Blender's Switch node: `Float`, `Int`, `Vector`, `Bool`, `Geometry`, `String`, or `Bundle`. Compile-time collections are not runtime branch-merge values.
+Both branches are semantically validated and materialized. Compatible values assigned by both branches are merged through Blender Switch nodes. Consequently, code in a branch is not ignored merely because the condition is written as `True` or `False`.
+
+A top-level `if` requires an `else` branch and both branches must assign at least one common runtime variable. Merged branch values must have the same type and must be one of `Float`, `Int`, `Vector`, `Bool`, `Geometry`, `String`, or `Bundle`. Compile-time collections are not runtime branch-merge values.
+
+```python
+value = input_float('Value')
+result = 0.0
+if True:
+    result = value * 2.0
+else:
+    result = value * 3.0
+output('Result', result)
+```
+
+The literal condition above still produces ordinary runtime-if semantics; both branches must be valid. Use compile-time `for` loops and compile-time options to control graph structure.
 
 ## For Statements
 
@@ -481,7 +517,7 @@ for index in repeat_range(steps):
 output('Value', value)
 ```
 
-Values assigned before the loop and changed inside it become repeat state items. Repeat state is limited to existing `Geometry`, `Vector`, `Float`, `Int`, `Bool`, and `Bundle` values. The loop must update at least one existing state value; names first created inside the loop are local temporaries. Use `range(...)` for compile-time iteration and `repeat_range(...)` for runtime iteration.
+Values assigned before the loop and changed inside it become repeat state items. Repeat state is limited to existing `Geometry`, `Vector`, `Float`, `Int`, `Bool`, and `Bundle` values. Each carried state keeps its exact type for the entire Repeat Zone: for example, an `Int` state cannot become `Float` in the loop body or in a nested runtime branch. The loop must update at least one existing state value; names first created inside the loop are local temporaries. Use `range(...)` for compile-time iteration and `repeat_range(...)` for runtime iteration.
 
 `repeat_range(...)` loops can be nested. Each loop creates its own Repeat Zone and its own index value.
 

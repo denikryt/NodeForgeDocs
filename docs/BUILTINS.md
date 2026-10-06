@@ -7,8 +7,8 @@ Core built-ins are primitive operations registered by the NodeForge add-on and a
 | Type | Meaning |
 | --- | --- |
 | `Geometry` | Blender geometry socket. |
-| `Float` | Numeric value or field. |
-| `Int` | Integer value or field. |
+| `Float` | Blender-compatible binary32 floating-point value or field. |
+| `Int` | Signed 32-bit integer value or field. |
 | `Bool` | Boolean value or field. |
 | `Vector` | 3-component vector value or field. |
 | `Material` | Blender material socket. |
@@ -97,7 +97,7 @@ Returns the numeric sum of a compile-time list or tuple.
 | --- | --- | --- |
 | `value` | compile-time numeric `List` or `Tuple` | Sequence whose elements can be added during compilation. |
 
-Returns: compile-time number.
+Returns: compile-time `Int` when every element is `Int` (and for an empty sequence); otherwise compile-time `Float`. Reduction is left-to-right, using the same signed-32 `Int` and binary32 `Float` arithmetic as source expressions. `Bool` elements are rejected.
 
 ```python
 sizes = [0.5, 1.0, 1.5]
@@ -715,6 +715,35 @@ geo = captured[0]
 captured_normal = captured[1]
 ```
 
+### `sample_index(geometry, value, index, domain="POINT", clamp=False)`
+
+Samples a field from a specific element index of another geometry. The result has the same runtime type as `value`.
+
+| Parameter | Type | Default | Description |
+| --- | --- | --- | --- |
+| `geometry` | `Geometry` | required | Geometry whose selected domain is sampled. |
+| `value` | `Float`, `Int`, `Bool`, or `Vector` | required | Field to evaluate on the sampled geometry. |
+| `index` | compile-time `Int` or runtime `Int` | required | Element index. Compile-time indices use the same signed 32-bit `Int` domain as runtime integer values. |
+| `domain` | compile-time `String` | `"POINT"` | `"POINT"`, `"EDGE"`, `"FACE"`, `"CORNER"`, `"CURVE"`, or `"INSTANCE"`. Matching is case-insensitive and normalized to the canonical token. |
+| `clamp` | compile-time `Bool` | `False` | Sets the Sample Index node's Clamp option. |
+
+Returns: the same type as `value`.
+
+```python
+geo = grid(8, 8)
+source_height = position().z
+sampled_height = sample_index(
+    geo,
+    source_height,
+    input_int('Index', default=0),
+    domain='POINT',
+    clamp=True,
+)
+output('Height', sampled_height)
+```
+
+`domain` and `clamp` configure the generated node and must therefore be known at compile time. `index` may remain a runtime `Int`.
+
 ### `set_material(geometry, material)`
 
 Assigns a material to geometry. Pass a runtime `Material` value or a compile-time material name. A named material is created when it does not exist.
@@ -957,37 +986,90 @@ output('Geometry', geo_2)
 ### `node(bl_idname, props={...}, inputs={...}, output=..., typ=...)`
 ### `node(bl_idname, props={...}, inputs={...}, outputs={...})`
 
-Creates a Blender node directly. Use this for Blender node types that are not exposed through a dedicated NodeForge built-in. The dictionary expressions shown here are a special compile-time syntax accepted only in arguments to `node(...)`; general DSL dictionaries remain unsupported.
+Creates a Blender node directly. Use this for Blender node types that are not exposed through a dedicated NodeForge built-in. The dictionary expressions shown here are special compile-time syntax accepted only in arguments to `node(...)`; general DSL dictionaries remain unsupported.
 
-`bl_idname`, `props` keys and values, input socket names, output socket names, and type tokens are compile-time declarations. Runtime values are allowed inside `inputs={...}` and are linked to the corresponding Blender input socket.
+`bl_idname`, node properties, socket selectors, output aliases, and type tokens are compile-time declarations. Runtime values are allowed inside `inputs={...}` and are linked to the selected Blender input sockets. `props=` is applied before socket selectors are resolved, so selectors see the node configuration produced by those properties.
 
-Single-output mode requires both `output=` and `typ=`. Multi-output mode uses `outputs={"Socket": TypeToken, ...}` and returns a result object whose outputs can be accessed with attribute syntax or item syntax.
-
-Supported type tokens: `Float`, `Int`, `Bool`, `Vector`, `Geometry`, `Material`, `Object`, `String`, and `Bundle`.
+Supported type tokens are `Float`, `Int`, `Bool`, `Vector`, `Geometry`, `Material`, `Object`, `String`, and `Bundle`.
 
 | Parameter | Type | Default | Description |
 | --- | --- | --- | --- |
-| `bl_idname` | `String` | required | Blender node type identifier, for example `"ShaderNodeMath"`. |
-| `props` | literal dict | `{}` | Blender node properties to assign before linking inputs. Custom properties are not supported. |
-| `inputs` | literal dict | `{}` | Maps enabled input socket names to literal defaults, runtime values, or a literal list for multi-input fanout. |
-| `output` | `String` | required in single-output mode | Enabled output socket name to return. |
+| `bl_idname` | compile-time `String` | required | Blender node type identifier, for example `"ShaderNodeMath"`. |
+| `props` | literal dict | `{}` | Blender node properties assigned before socket resolution. Custom properties are not supported. |
+| `inputs` | literal dict | `{}` | Maps input socket selectors to literal defaults, runtime values, or a literal list for multi-input fanout. |
+| `output` | socket selector | required in single-output mode | Output socket returned by the call. |
 | `typ` | type token | required in single-output mode | NodeForge type of `output`. |
-| `outputs` | literal dict of `String: type token` | required in multi-output mode | Enabled output sockets to expose. |
+| `outputs` | literal dict | required in multi-output mode | Maps NodeForge result aliases to type tokens or explicit `(selector, TypeToken)` pairs. |
 
-Returns: a `Value` in single-output mode; a multi-output result in `outputs=` mode.
+Returns: one runtime value in single-output mode; a named multi-output result in `outputs=` mode.
+
+### Socket selectors
+
+A raw-node socket selector has one of three forms:
+
+| Selector | Meaning |
+| --- | --- |
+| `"Name"` | Exact Blender `socket.name`. The name must identify exactly one addressable socket. |
+| `0`, `1`, ... | Zero-based ordinal among addressable sockets after `props=` is applied. Use this when Blender exposes duplicate display names. |
+| `ID("identifier")` | Exact Blender `socket.identifier`. Use this when stable identifier-level addressing is required. |
+
+Addressable sockets are sockets in the requested direction excluding virtual and unavailable sockets. Positional selectors count only this filtered list; they are not raw indices into `node.inputs` or `node.outputs`.
+
+`ID(...)` has special meaning only in a socket-selector position inside `node(...)`. It does not reserve the name `ID` elsewhere in the DSL. A plain string never means `socket.identifier`.
 
 ```python
-value = input_float('Value', default=0.25)
-rounded = node('ShaderNodeMath', props={'operation': 'ROUND'}, inputs={'Value': value}, output='Value', typ=Float)
-output('Rounded', rounded)
+value = node(
+    'ShaderNodeMath',
+    props={'operation': 'ADD'},
+    inputs={0: 1.0, 1: 2.0},
+    output='Value',
+    typ=Float,
+)
+output('Value', value)
 ```
 
+For nodes with known Blender identifiers, the same sockets can be selected explicitly:
+
 ```python
-value_1 = position()
-separate = node('ShaderNodeSeparateXYZ', inputs={'Vector': value_1}, outputs={'X': Float, 'Y': Float, 'Z': Float})
-height = separate.Z
-output('Height', height)
+value = node(
+    'ShaderNodeMath',
+    props={'operation': 'ADD'},
+    inputs={ID('Value'): 1.0, ID('Value_001'): 2.0},
+    output=ID('Value'),
+    typ=Float,
+)
+output('Value', value)
 ```
+
+### Multiple outputs
+
+The shorthand `outputs={'X': Float}` uses the alias `X` as both the NodeForge result name and the Blender socket-name selector. Access the result as `.X` or `['X']`.
+
+```python
+separate = node(
+    'ShaderNodeSeparateXYZ',
+    inputs={'Vector': position()},
+    outputs={'X': Float, 'Y': Float, 'Z': Float},
+)
+output('Height', separate.Z)
+```
+
+When the public result alias should differ from the Blender socket selector, use `(selector, TypeToken)`:
+
+```python
+parts = node(
+    'ShaderNodeSeparateXYZ',
+    inputs={'Vector': position()},
+    outputs={
+        'left': (0, Float),
+        'middle': (ID('Y'), Float),
+    },
+)
+output('Left', parts.left)
+output('Middle', parts.middle)
+```
+
+Raw-node declarations are validated before defaults, links, or result bindings are applied. Newly generated raw-node metadata stores Blender socket identifiers so later updates can fail closed if the physical node schema no longer matches the declaration.
 
 ## Runtime loops
 
@@ -995,7 +1077,7 @@ Runtime loops compile to Blender Repeat Zones. Use `repeat_range(...)` when the 
 
 ### `for i in repeat_range(steps): ...`
 
-Updates existing Geometry, Vector, Float, Int, Bool, and Bundle variables inside one Repeat Zone. The body supports assignments, `geometry_builder` method statements, nested `if` blocks, and nested `repeat_range(...)` loops. It must update at least one existing variable or builder state. Assigned names that did not exist before the loop are iteration-local temporaries rather than Repeat Zone state items.
+Updates existing Geometry, Vector, Float, Int, Bool, and Bundle variables inside one Repeat Zone. A carried value must keep exactly the same type on every assignment throughout the loop. The body supports assignments, `geometry_builder` method statements, nested `if` blocks, and nested `repeat_range(...)` loops. It must update at least one existing variable or builder state. Assigned names that did not exist before the loop are iteration-local temporaries rather than Repeat Zone state items.
 
 State item order follows first assignment in the loop body, including nested branches. Conditional branches preserve omitted state values and merge changed state through Switch nodes. The loop index name cannot also be state, and state names cannot collide with Repeat Zone system socket names such as `Iterations` or `Iteration`.
 

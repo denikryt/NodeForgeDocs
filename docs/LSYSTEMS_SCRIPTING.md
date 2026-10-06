@@ -1,6 +1,6 @@
 # Writing L-System Scripts
 
-Install the `nodeforge.lsystem` package through **Library → Packages** and approve its Python permission before using the examples on this page.
+Install the `nodeforge.lsystem` package through **Library → Packages** and enable **Allow executable Python** before importing it. The examples use `from packages import lsystem as ls`; package qualification is required for `ls.points(...)` because Core DSL also has a `points(...)` callable.
 
 An L-system script has two stages:
 
@@ -14,15 +14,17 @@ Use [L-System Reference](LSYSTEMS.md) for constructor signatures and the complet
 This script draws a branching curve with runtime controls for angle and segment length.
 
 ```python
+from packages import lsystem as ls
+
 angle = input_float("Angle", default=25.0)
 step = input_float("Step", default=0.1)
 
-geo = ls_system(
-    ls_axiom("F"),
-    ls_rule("F", "F[+F]F[-F]F"),
-    ls_iterations(2),
-    ls_angle(angle),
-    ls_step(step),
+geo = ls.system(
+    ls.axiom("F"),
+    ls.rule("F", "F[+F]F[-F]F"),
+    ls.iterations(2),
+    ls.angle(angle),
+    ls.step(step),
 )
 
 output("Geometry", geo)
@@ -39,14 +41,14 @@ Rules are parallel. Each iteration reads one complete generation and produces th
 
 ## Axiom and Grammar Symbols
 
-`ls_axiom(...)` defines the initial stream. A visible curve can start directly with `F`:
+`ls.axiom(...)` defines the initial stream. A visible curve can start directly with `F`:
 
 ```python
-geo = ls_system(
-    ls_axiom("F+F+F"),
-    ls_iterations(0),
-    ls_angle(120),
-    ls_step(1),
+geo = ls.system(
+    ls.axiom("F+F+F"),
+    ls.iterations(0),
+    ls.angle(120),
+    ls.step(1),
 )
 
 output("Geometry", geo)
@@ -55,12 +57,12 @@ output("Geometry", geo)
 Grammar symbols such as `A`, `B`, or `X` can control growth without drawing anything themselves. They become visible only when rewrite rules eventually produce drawing commands or markers.
 
 ```python
-geo = ls_system(
-    ls_axiom("X"),
-    ls_rule("X", "F+X"),
-    ls_iterations(5),
-    ls_angle(60),
-    ls_step(0.15),
+geo = ls.system(
+    ls.axiom("X"),
+    ls.rule("X", "F+X"),
+    ls.iterations(5),
+    ls.angle(60),
+    ls.step(0.15),
 )
 
 output("Geometry", geo)
@@ -71,12 +73,12 @@ Symbols without a rule stay unchanged from one generation to the next. If they r
 A rule may also delete a symbol with an empty replacement. This is useful for temporary grammar symbols.
 
 ```python
-geo = ls_system(
-    ls_axiom("FAF"),
-    ls_rule("A", ""),
-    ls_iterations(1),
-    ls_angle(90),
-    ls_step(0.5),
+geo = ls.system(
+    ls.axiom("FAF"),
+    ls.rule("A", ""),
+    ls.iterations(1),
+    ls.angle(90),
+    ls.step(0.5),
 )
 
 output("Geometry", geo)
@@ -87,11 +89,11 @@ output("Geometry", geo)
 `[` saves the current position and orientation. `]` restores the saved state.
 
 ```python
-geo = ls_system(
-    ls_axiom("F[+F]F[-F]F"),
-    ls_iterations(0),
-    ls_angle(35),
-    ls_step(0.4),
+geo = ls.system(
+    ls.axiom("F[+F]F[-F]F"),
+    ls.iterations(0),
+    ls.angle(35),
+    ls.step(0.4),
 )
 
 output("Geometry", geo)
@@ -124,19 +126,19 @@ The six rotation commands are:
 | `/` | positive roll around local Heading |
 | `\` | negative roll around local Heading |
 
-Every unparameterized rotation uses `ls_angle(...)`. Add one argument to give a command its own angle.
+Every unparameterized rotation uses `ls.angle(...)`. Add one argument to give a command its own angle.
 
 ```python
 pitch = input_float("Pitch", default=35.0)
 roll = input_float("Roll", default=60.0)
 
-geo = ls_system(
-    ls_axiom("F/(roll)[&(pitch)F]F"),
-    ls_iterations(0),
-    ls_angle(25),
-    ls_step(1),
-    ls_param("pitch", pitch),
-    ls_param("roll", roll),
+geo = ls.system(
+    ls.axiom("F/(roll)[&(pitch)F]F"),
+    ls.iterations(0),
+    ls.angle(25),
+    ls.step(1),
+    ls.param("pitch", pitch),
+    ls.param("roll", roll),
 )
 
 output("Geometry", geo)
@@ -147,18 +149,18 @@ Roll changes the local Left and Up axes. It does not move the turtle by itself, 
 For example, this script exposes two curves that use the same two rotations in different orders:
 
 ```python
-first = ls_system(
-    ls_axiom("+(90)^(90)F"),
-    ls_iterations(0),
-    ls_angle(25),
-    ls_step(1),
+first = ls.system(
+    ls.axiom("+(90)^(90)F"),
+    ls.iterations(0),
+    ls.angle(25),
+    ls.step(1),
 )
 
-second = ls_system(
-    ls_axiom("^(90)+(90)F"),
-    ls_iterations(0),
-    ls_angle(25),
-    ls_step(1),
+second = ls.system(
+    ls.axiom("^(90)+(90)F"),
+    ls.iterations(0),
+    ls.angle(25),
+    ls.step(1),
 )
 second = transform(second, translation=vector(2, 0, 0))
 
@@ -187,38 +189,38 @@ The rotation commands accept one angle in degrees:
 \(90)
 ```
 
-A module argument can also reference a value declared with `ls_param(...)`. The declared value may be a runtime input.
+A module argument can also reference a value declared with `ls.param(...)`. The declared value may be a runtime input.
 
 ```python
 long_step = input_float("Long Step", default=1.5)
 short_step = input_float("Short Step", default=0.5)
 turn = input_float("Turn", default=70.0)
 
-geo = ls_system(
-    ls_axiom("F(long_step)+(turn)F(short_step)-(turn)F(long_step)"),
-    ls_iterations(0),
-    ls_angle(25),
-    ls_step(1),
-    ls_param("long_step", long_step),
-    ls_param("short_step", short_step),
-    ls_param("turn", turn),
+geo = ls.system(
+    ls.axiom("F(long_step)+(turn)F(short_step)-(turn)F(long_step)"),
+    ls.iterations(0),
+    ls.angle(25),
+    ls.step(1),
+    ls.param("long_step", long_step),
+    ls.param("short_step", short_step),
+    ls.param("turn", turn),
 )
 
 output("Geometry", geo)
 ```
 
-Arguments inside L-system strings are data references, not NodeForge expressions. Use a numeric literal or a single `ls_param(...)` name. Compute a value in the NodeForge script first, then bind the result with `ls_param(...)` when a more complex expression is needed.
+Arguments inside L-system strings are data references, not NodeForge expressions. Use a numeric literal or a single `ls.param(...)` name. Compute a value in the NodeForge script first, then bind the result with `ls.param(...)` when a more complex expression is needed.
 
 ```python
 base = input_float("Base Length", default=0.4)
 length = base * 2.0
 
-geo = ls_system(
-    ls_axiom("F(length)+(90)F(length)"),
-    ls_iterations(0),
-    ls_angle(25),
-    ls_step(1),
-    ls_param("length", length),
+geo = ls.system(
+    ls.axiom("F(length)+(90)F(length)"),
+    ls.iterations(0),
+    ls.angle(25),
+    ls.step(1),
+    ls.param("length", length),
 )
 
 output("Geometry", geo)
@@ -226,17 +228,17 @@ output("Geometry", geo)
 
 ## Runtime Growth
 
-Pass a runtime `Int` to `ls_iterations(...)` when the number of rewrite generations should be adjustable from the node-group interface.
+Pass a runtime `Int` to `ls.iterations(...)` when the number of rewrite generations should be adjustable from the node-group interface.
 
 ```python
 iterations = input_int("Iterations", default=4)
 
-geo = ls_system(
-    ls_axiom("A"),
-    ls_rule("A", "FA"),
-    ls_iterations(iterations),
-    ls_angle(25),
-    ls_step(0.25),
+geo = ls.system(
+    ls.axiom("A"),
+    ls.rule("A", "FA"),
+    ls.iterations(iterations),
+    ls.angle(25),
+    ls.step(0.25),
 )
 
 output("Geometry", geo)
@@ -251,12 +253,12 @@ For runtime iterations, keep every branch local to one declared stream: the axio
 ```python
 iterations = input_int("Iterations", default=3)
 
-geo = ls_system(
-    ls_axiom("A"),
-    ls_rule("A", "F[+A][-A]"),
-    ls_iterations(iterations),
-    ls_angle(30),
-    ls_step(0.2),
+geo = ls.system(
+    ls.axiom("A"),
+    ls.rule("A", "F[+A][-A]"),
+    ls.iterations(iterations),
+    ls.angle(30),
+    ls.step(0.2),
 )
 
 output("Geometry", geo)
@@ -266,38 +268,38 @@ A replacement that opens a branch while another replacement closes it is not val
 
 ## Marker Points
 
-Markers place points in the turtle stream without drawing or moving the turtle. Declare the marker with `ls_marker(...)`, use its name in the axiom or a rule, and extract it with `ls_points(...)`.
+Markers place points in the turtle stream without drawing or moving the turtle. Declare the marker with `ls.marker(...)`, use its name in the axiom or a rule, and extract it with `ls.points(...)`.
 
 ```python
-plant = ls_system(
-    ls_axiom("F[+FLeaf][-FLeaf]FLeaf"),
-    ls_iterations(0),
-    ls_angle(35),
-    ls_step(0.5),
-    ls_marker("Leaf"),
+plant = ls.system(
+    ls.axiom("F[+FLeaf][-FLeaf]FLeaf"),
+    ls.iterations(0),
+    ls.angle(35),
+    ls.step(0.5),
+    ls.marker("Leaf"),
 )
 
-leaf_points = ls_points(plant, marker="Leaf")
+leaf_points = ls.points(plant, marker="Leaf")
 leaves = instance_on_points(cube(0.12), leaf_points)
 
 output("Geometry", join(plant, leaves))
 ```
 
-A marker can carry numeric parameters. Each parameter becomes a point attribute with the name declared in `ls_marker(...)`.
+A marker can carry numeric parameters. Each parameter becomes a point attribute with the name declared in `ls.marker(...)`.
 
 ```python
 size = input_float("Leaf Size", default=0.25)
 
-plant = ls_system(
-    ls_axiom("FLeaf(size)+(45)FLeaf(size)"),
-    ls_iterations(0),
-    ls_angle(25),
-    ls_step(0.7),
-    ls_param("size", size),
-    ls_marker("Leaf", "size"),
+plant = ls.system(
+    ls.axiom("FLeaf(size)+(45)FLeaf(size)"),
+    ls.iterations(0),
+    ls.angle(25),
+    ls.step(0.7),
+    ls.param("size", size),
+    ls.marker("Leaf", "size"),
 )
 
-leaf_points = ls_points(plant, marker="Leaf")
+leaf_points = ls.points(plant, marker="Leaf")
 leaves = instance_on_points(cube(0.12), leaf_points)
 
 output("Geometry", join(plant, leaves))
@@ -320,19 +322,19 @@ branch_angle = input_float("Branch Angle", default=35.0)
 node_rotation = input_float("Node Rotation", default=137.507764)
 step = input_float("Step", default=0.2)
 
-plant = ls_system(
-    ls_axiom("A"),
-    ls_rule("A", "F[&(branch_angle)B]/(node_rotation)A"),
-    ls_rule("B", "FLeaf"),
-    ls_iterations(growth_iterations),
-    ls_angle(25),
-    ls_step(step),
-    ls_param("branch_angle", branch_angle),
-    ls_param("node_rotation", node_rotation),
-    ls_marker("Leaf"),
+plant = ls.system(
+    ls.axiom("A"),
+    ls.rule("A", "F[&(branch_angle)B]/(node_rotation)A"),
+    ls.rule("B", "FLeaf"),
+    ls.iterations(growth_iterations),
+    ls.angle(25),
+    ls.step(step),
+    ls.param("branch_angle", branch_angle),
+    ls.param("node_rotation", node_rotation),
+    ls.marker("Leaf"),
 )
 
-leaf_points = ls_points(plant, marker="Leaf")
+leaf_points = ls.points(plant, marker="Leaf")
 leaves = instance_on_points(cube(0.08), leaf_points)
 
 output("Geometry", join(plant, leaves))
@@ -349,36 +351,36 @@ left = "[-F]"
 right = "[+F]"
 rule = f"F{left}F{right}F"
 
-geo = ls_system(
-    ls_axiom("F"),
-    ls_rule("F", rule),
-    ls_iterations(3),
-    ls_angle(25),
-    ls_step(0.1),
+geo = ls.system(
+    ls.axiom("F"),
+    ls.rule("F", rule),
+    ls.iterations(3),
+    ls.angle(25),
+    ls.step(0.1),
 )
 
 output("Geometry", geo)
 ```
 
-F-string interpolation changes the compile-time grammar. Runtime numeric controls belong in `ls_param(...)` instead.
+F-string interpolation changes the compile-time grammar. Runtime numeric controls belong in `ls.param(...)` instead.
 
 ## Transforming and Joining Results
 
-`ls_system(...)` returns ordinary geometry. Apply NodeForge geometry operations after the L-system is built.
+`ls.system(...)` returns ordinary geometry. Apply NodeForge geometry operations after the L-system is built.
 
 ```python
-left = ls_system(
-    ls_axiom("F[+F][-F]F"),
-    ls_iterations(2),
-    ls_angle(30),
-    ls_step(0.15),
+left = ls.system(
+    ls.axiom("F[+F][-F]F"),
+    ls.iterations(2),
+    ls.angle(30),
+    ls.step(0.15),
 )
 
-right = ls_system(
-    ls_axiom("F[+F][-F]F"),
-    ls_iterations(3),
-    ls_angle(22),
-    ls_step(0.12),
+right = ls.system(
+    ls.axiom("F[+F][-F]F"),
+    ls.iterations(3),
+    ls.angle(22),
+    ls.step(0.12),
 )
 right = transform(right, translation=vector(1.5, 0, 0))
 
@@ -392,12 +394,12 @@ Use `translation=` for positional transforms.
 ### Koch Curve
 
 ```python
-geo = ls_system(
-    ls_axiom("F"),
-    ls_rule("F", "F+F--F+F"),
-    ls_iterations(4),
-    ls_angle(60),
-    ls_step(0.08),
+geo = ls.system(
+    ls.axiom("F"),
+    ls.rule("F", "F+F--F+F"),
+    ls.iterations(4),
+    ls.angle(60),
+    ls.step(0.08),
 )
 
 output("Geometry", geo)
@@ -409,15 +411,15 @@ output("Geometry", geo)
 angle = input_float("Angle", default=25.0)
 step = input_float("Step", default=0.04)
 
-geo = ls_system(
-    ls_axiom("X"),
-    ls_rule("X", "F+[[X]-X]-F[-FX]+X"),
-    ls_rule("F", "FF"),
-    ls_iterations(5),
-    ls_angle(angle),
-    ls_step(step),
+geo = ls.system(
+    ls.axiom("X"),
+    ls.rule("X", "F+[[X]-X]-F[-FX]+X"),
+    ls.rule("F", "FF"),
+    ls.iterations(5),
+    ls.angle(angle),
+    ls.step(step),
 )
-geo = transform(geo, rotation=vector(0, 0, radians(90)))
+geo = transform(geo, rotation=vector(0, 0, pi / 2))
 
 output("Geometry", geo)
 ```
@@ -428,13 +430,13 @@ output("Geometry", geo)
 pitch = input_float("Pitch", default=35.0)
 roll = input_float("Roll", default=120.0)
 
-geo = ls_system(
-    ls_axiom("F[&(pitch)F]/(roll)[&(pitch)F]/(roll)[&(pitch)F]"),
-    ls_iterations(0),
-    ls_angle(25),
-    ls_step(0.8),
-    ls_param("pitch", pitch),
-    ls_param("roll", roll),
+geo = ls.system(
+    ls.axiom("F[&(pitch)F]/(roll)[&(pitch)F]/(roll)[&(pitch)F]"),
+    ls.iterations(0),
+    ls.angle(25),
+    ls.step(0.8),
+    ls.param("pitch", pitch),
+    ls.param("roll", roll),
 )
 
 output("Geometry", geo)
@@ -448,7 +450,7 @@ Use these rules when writing axioms and replacements:
 - Use ASCII letters, digits, and `_` for ordinary grammar symbols.
 - Use only declared marker names for multi-character modules.
 - Give parameterized built-ins exactly one numeric literal or declared parameter name.
-- Declare every named module argument with `ls_param(...)`.
+- Declare every named module argument with `ls.param(...)`.
 - Match every `[` with a later `]` in the interpreted stream.
 - For runtime iterations, balance brackets separately in the axiom and in every replacement.
 

@@ -1,8 +1,8 @@
 # Math Functions
 
-These reusable DSL functions are provided by the installed `nodeforge.math` package and are imported from `functions`.
+These reusable DSL functions are provided by the installed `nodeforge.math` package. Import the package namespace with `from packages import math`, then call the functions as `math.<name>(...)`.
 
-The `functions` catalog of the Math library contains reusable functions written in the DSL. Import a function before calling it. See [Imports](SYNTAX.md#imports) for import syntax and name-resolution rules.
+Qualified calls keep the package owner explicit and avoid collisions with Core DSL names or members exported by other packages. See [Imports](SYNTAX.md#imports) for package name-resolution rules.
 
 ## Math Helpers
 
@@ -19,9 +19,9 @@ Computes the unbounded interpolation factor of `x` between `a` and `b`.
 Returns: `Float`.
 
 ```python
-from functions import inverse_lerp
+from packages import math
 value_1 = input_float('Value', default=4.0)
-t = inverse_lerp(2.0, 6.0, value_1)
+t = math.inverse_lerp(2.0, 6.0, value_1)
 output('Factor', t)
 ```
 
@@ -40,11 +40,11 @@ Maps `x` from one numeric range to another. The result is not clamped.
 Returns: `Float`.
 
 ```python
-from functions import remap
+from packages import math
 count = input_int('Count', default=32)
 pts = points(count)
 value_1 = index()
-z = remap(value_1, in_min=0.0, in_max=count - 1.0, out_min=-1.0, out_max=1.0)
+z = math.remap(value_1, in_min=0.0, in_max=count - 1.0, out_min=-1.0, out_max=1.0)
 value_2 = index()
 vec_3 = vector(value_2 * 0.1, 0, z)
 pts = set_position(pts, vec_3)
@@ -62,9 +62,9 @@ Clamps `x` to the `0..1` range.
 Returns: `Float`.
 
 ```python
-from functions import saturate
+from packages import math
 value = input_float('Value', default=1.25)
-value_1 = saturate(value)
+value_1 = math.saturate(value)
 output('Clamped', value_1)
 ```
 
@@ -80,10 +80,10 @@ Returns `1.0` when `x >= edge`; otherwise returns `0.0`.
 Returns: `Float`.
 
 ```python
-from functions import step
+from packages import math
 value_1 = position()
-value_2 = noise(value_1, scale=3.0)
-mask_value = step(0.5, value_2)
+value_2 = math.noise(value_1, scale=3.0)
+mask_value = math.step(0.5, value_2)
 output('Mask', mask_value)
 ```
 
@@ -100,10 +100,10 @@ Returns a clamped Hermite interpolation from `0` to `1` between `edge0` and `edg
 Returns: `Float`.
 
 ```python
-from functions import smoothstep
+from packages import math
 pts = points(64)
 value_1 = index()
-t = smoothstep(0.0, 63.0, value_1)
+t = math.smoothstep(0.0, 63.0, value_1)
 value_2 = index()
 vec_3 = vector(value_2 * 0.05, 0, t)
 pts = set_position(pts, vec_3)
@@ -123,9 +123,9 @@ Returns a clamped smoother interpolation from `0` to `1` between `edge0` and `ed
 Returns: `Float`.
 
 ```python
-from functions import smootherstep
+from packages import math
 x = input_float('X', default=0.35)
-value_1 = smootherstep(0.0, 1.0, x)
+value_1 = math.smootherstep(0.0, 1.0, x)
 output('Value', value_1)
 ```
 
@@ -141,10 +141,10 @@ Wraps `x` into a repeating triangular wave between `0` and `length`.
 Returns: `Float`.
 
 ```python
-from functions import pingpong
+from packages import math
 pts = points(80)
 value_1 = index()
-z = pingpong(value_1 * 0.1, 1.0)
+z = math.pingpong(value_1 * 0.1, 1.0)
 value_2 = index()
 vec_3 = vector(value_2 * 0.05, 0, z)
 pts = set_position(pts, vec_3)
@@ -164,9 +164,9 @@ Wraps `x` into the half-open range `[min, max)` using modulo arithmetic.
 Returns: `Float`.
 
 ```python
-from functions import wrap
+from packages import math
 value_1 = input_float('Angle', default=7.0)
-angle = wrap(value_1, min=0.0, max=tau)
+angle = math.wrap(value_1, min=0.0, max=tau)
 output('Angle', angle)
 ```
 
@@ -181,9 +181,9 @@ Returns `-1.0` for negative values, `0.0` for zero, and `1.0` for positive value
 Returns: `Float`.
 
 ```python
-from functions import sign
+from packages import math
 x = input_float('X', default=-2.0)
-value_1 = sign(x)
+value_1 = math.sign(x)
 output('Direction', value_1)
 ```
 
@@ -201,10 +201,10 @@ Rotates the XY components of `v` around the Z axis. The original Z component is 
 Returns: `Vector`.
 
 ```python
-from functions import rotate2d
+from packages import math
 vec_1 = vector(1, 0, 0)
-value_2 = radians(45)
-v = rotate2d(vec_1, value_2)
+value_2 = math.radians(45)
+v = math.rotate2d(vec_1, value_2)
 output('Vector', v)
 ```
 
@@ -220,9 +220,9 @@ Creates an XY vector from polar coordinates. Z is `0.0`.
 Returns: `Vector`.
 
 ```python
-from functions import polar
-value_1 = radians(30)
-pos = polar(radius=2.0, angle=value_1)
+from packages import math
+value_1 = math.radians(30)
+pos = math.polar(radius=2.0, angle=value_1)
 output('Vector', pos)
 ```
 
@@ -238,11 +238,11 @@ Computes the angle between two vectors. Inputs are normalized internally and the
 Returns: `Float`.
 
 ```python
-from functions import angle_between
+from packages import math
 vec_1 = vector(1, 0, 0)
 value_2 = position()
 vec_3 = normalize(value_2)
-angle = angle_between(vec_1, vec_3)
+angle = math.angle_between(vec_1, vec_3)
 output('Angle', angle)
 ```
 
@@ -259,11 +259,11 @@ Rotates `v` around `axis` using Rodrigues' rotation formula. `axis` is normalize
 Returns: `Vector`.
 
 ```python
-from functions import rotate_around_axis
+from packages import math
 vec_1 = vector(1, 0, 0)
 vec_2 = vector(0, 1, 0)
-value_3 = radians(90)
-v = rotate_around_axis(vec_1, axis=vec_2, angle=value_3)
+value_3 = math.radians(90)
+v = math.rotate_around_axis(vec_1, axis=vec_2, angle=value_3)
 output('Vector', v)
 ```
 
@@ -285,11 +285,11 @@ Places existing points in a 3D lattice.
 Returns: `Geometry`.
 
 ```python
-from functions import layout_grid
+from packages import math
 pts = points(12)
 vec_1 = vector(4, 3, 1)
 vec_2 = vector(0.5, 0.5, 0.0)
-pts = layout_grid(pts, count=vec_1, spacing=vec_2, centered=False)
+pts = math.layout_grid(pts, count=vec_1, spacing=vec_2, centered=False)
 output('Geometry', pts)
 ```
 
@@ -306,10 +306,10 @@ Creates points and places them with `layout_grid(...)`. The point count is `max(
 Returns: `Geometry`.
 
 ```python
-from functions import grid_points
+from packages import math
 vec_1 = vector(5, 4, 1)
 vec_2 = vector(0.5, 0.5, 0.0)
-grid = grid_points(count=vec_1, spacing=vec_2, centered=False)
+grid = math.grid_points(count=vec_1, spacing=vec_2, centered=False)
 output('Geometry', grid)
 ```
 
@@ -329,9 +329,9 @@ Places existing points on an XY circle or arc.
 Returns: `Geometry`.
 
 ```python
-from functions import layout_circle
+from packages import math
 pts = points(24)
-pts = layout_circle(pts, count=24, radius=2.0, start_angle=0.0, end_angle=tau)
+pts = math.layout_circle(pts, count=24, radius=2.0, start_angle=0.0, end_angle=tau)
 output('Geometry', pts)
 ```
 
@@ -350,8 +350,8 @@ Creates point geometry and places the points with the same circle/arc formula us
 Returns: `Geometry`.
 
 ```python
-from functions import circle_points
-arc = circle_points(count=16, radius=2.0, start_angle=0.0, end_angle=pi, include_endpoint=True)
+from packages import math
+arc = math.circle_points(count=16, radius=2.0, start_angle=0.0, end_angle=pi, include_endpoint=True)
 output('Geometry', arc)
 ```
 
@@ -372,9 +372,9 @@ Places existing points along a radial spiral in the XY plane, with optional Z he
 Returns: `Geometry`.
 
 ```python
-from functions import layout_spiral
+from packages import math
 pts = points(96)
-pts = layout_spiral(pts, count=96, radius=3.0, turns=4.0, height=1.5)
+pts = math.layout_spiral(pts, count=96, radius=3.0, turns=4.0, height=1.5)
 output('Geometry', pts)
 ```
 
@@ -394,8 +394,8 @@ Creates point geometry and places the points with `layout_spiral(...)`.
 Returns: `Geometry`.
 
 ```python
-from functions import spiral_points
-spiral = spiral_points(count=128, radius=3.0, turns=5.0, height=2.0, start_radius=0.25)
+from packages import math
+spiral = math.spiral_points(count=128, radius=3.0, turns=5.0, height=2.0, start_radius=0.25)
 output('Geometry', spiral)
 ```
 
@@ -413,11 +413,11 @@ Places existing points at random positions between vector bounds. The point inde
 Returns: `Geometry`.
 
 ```python
-from functions import layout_random
+from packages import math
 pts = points(50)
 vec_1 = vector(-2, -2, 0)
 vec_2 = vector(2, 2, 1)
-pts = layout_random(pts, min=vec_1, max=vec_2, seed=7)
+pts = math.layout_random(pts, min=vec_1, max=vec_2, seed=7)
 output('Geometry', pts)
 ```
 
@@ -435,10 +435,10 @@ Creates point geometry and places the points with `layout_random(...)`.
 Returns: `Geometry`.
 
 ```python
-from functions import random_points
+from packages import math
 vec_1 = vector(-3, -3, 0)
 vec_2 = vector(3, 3, 2)
-pts = random_points(count=100, min=vec_1, max=vec_2, seed=42)
+pts = math.random_points(count=100, min=vec_1, max=vec_2, seed=42)
 output('Geometry', pts)
 ```
 
@@ -456,10 +456,10 @@ Duplicates input geometry into the eight cells around the center of a 3x3 grid. 
 Returns: `Geometry`.
 
 ```python
-from functions import copy_by_offsets
+from packages import math
 geo = cube(size=1.0)
 vec_1 = vector(1 / 3, 1 / 3, 1 / 3)
-geo = copy_by_offsets(geo, scale=vec_1)
+geo = math.copy_by_offsets(geo, scale=vec_1)
 output('Geometry', geo)
 ```
 
@@ -470,10 +470,10 @@ output('Geometry', geo)
 Repeatedly applies `copy_by_offsets` to create a Sierpinski-carpet-style arrangement. `steps` is a runtime `Int`; non-positive values perform no repeat iterations.
 
 ```python
-from functions import sierpinski_carpet
+from packages import math
 
 source = cube(size=1.0)
-geometry = sierpinski_carpet(source, steps=2)
+geometry = math.sierpinski_carpet(source, steps=2)
 output('Geometry', geometry)
 ```
 
@@ -490,9 +490,9 @@ Computes the Fibonacci sequence with a runtime Repeat Zone. `F(0)=0`, `F(1)=1`, 
 Returns: `Int` or numeric value compatible with the Repeat Zone state.
 
 ```python
-from functions import fibonacci
+from packages import math
 n = input_int('N', default=10)
-value = fibonacci(n)
+value = math.fibonacci(n)
 output('Value', value)
 ```
 

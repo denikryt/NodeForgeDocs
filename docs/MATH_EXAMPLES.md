@@ -24,12 +24,6 @@ Builds a helical ladder or spiral-stair structure from radial rungs, outer posts
 Creates a rectangular field of thin facade blades. A pair of trigonometric fields controls the tilt of each blade from its position, producing a wave-like kinetic-louver pattern.
 
 
-## `mandelbrot`
-
-Evaluates the Mandelbrot set over a generated grid with a runtime Repeat Zone. **Resolution** controls the grid density and **Max Iter** controls the iteration limit used to classify and color the cells.
-
-
-This example is packaged as `examples/mandelbrot/source.nf` with a package-local Python backend used only to create and assign its display material. The fractal iteration itself is written in the NodeForge DSL.
 
 ## `noise_terrain`
 

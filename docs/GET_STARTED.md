@@ -247,9 +247,11 @@ Read these in order:
 2. [DSL Syntax and Semantics](SYNTAX.md) — learn the supported language rules.
 3. [Core DSL Built-ins Reference](BUILTINS.md) — learn the primitive functions available everywhere.
 4. [Writing Functions](WRITING_FUNCTIONS.md) — create reusable functions with the Core DSL.
-5. [Math Methods](MATH_METHODS.md) — use the methods added by the Math library.
-6. [Math Functions](FUNCTIONS.md) — use reusable DSL functions from the Math library.
-7. [Math Examples](MATH_EXAMPLES.md) — explore complete scripts included with the Math package.
-8. [LSystem](LSYSTEMS.md) — create geometry with L-system rules.
+5. [Creating Packages](PACKAGES.md) — distribute source functions, examples, and extensions as a third-party library.
+6. [Python Extension API v2](EXTENSION_API.md) — add typed Python-backed package callables when the Core DSL is not enough.
+7. [Math Methods](MATH_METHODS.md) — use the methods added by the Math library.
+8. [Math Functions](FUNCTIONS.md) — use reusable DSL functions from the Math library.
+9. [Math Examples](MATH_EXAMPLES.md) — explore complete scripts included with the Math package.
+10. [LSystem](LSYSTEMS.md) — create geometry with L-system rules.
 
 To study an installed example, add it from **Library → Examples**, load its source with **Load Script From Selected NodeGroup**, and edit the source in a Text datablock.

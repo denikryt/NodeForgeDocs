@@ -1,5 +1,7 @@
 # NodeForge Documentation
 
+This manual documents the current NodeForge language and user-facing APIs.
+
 NodeForge is a Python-like domain-specific language (DSL) that compiles source scripts into native Blender Geometry Nodes groups. Each script describes one group: its interface, the operations inside it, and the links that carry data between those operations.
 
 ## What NodeForge is
@@ -27,7 +29,8 @@ Read [Core Concepts](CORE_CONCEPTS.md) for the complete compilation and update m
 - [Geometry Nodes Coverage](GEOMETRY_NODES_COVERAGE.md)
 - [Core DSL Built-ins](BUILTINS.md)
 - [Writing Functions](WRITING_FUNCTIONS.md)
-- [Packages](PACKAGES.md)
+- [Creating Packages](PACKAGES.md)
+- [Python Extension API v2](EXTENSION_API.md)
 
 ## Libraries
 

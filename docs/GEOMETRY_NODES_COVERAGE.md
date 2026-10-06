@@ -1,6 +1,6 @@
 # NodeForge Geometry Nodes Coverage
 
-This document shows the Blender Geometry Nodes areas and domains covered by NodeForge v0.51.4.
+This document shows the Blender Geometry Nodes areas and domains currently covered by NodeForge.
 
 | Geometry Nodes area | NodeForge | Note |
 | --- | --- | --- |
@@ -33,7 +33,7 @@ This document shows the Blender Geometry Nodes areas and domains covered by Node
 | Output nodes: Warning | No | No wrapper |
 | Fields: position / normal / index / id | Partial | `position()`, `normal()`, `index()`, `id()` |
 | Fields: radius / selection / active element | Partial | Selection via bool fields only |
-| Fields: evaluate / capture / domain conversion | Partial | `capture_attribute(...)` for supported field types and domains |
+| Fields: evaluate / capture / domain conversion | Partial | `sample_index(...)` and `capture_attribute(...)` for supported field types and domains |
 | Attributes: store | Partial | `store(...)`, `store_named_attribute(...)` |
 | Attributes: read | No | No wrapper |
 | Attributes: statistics / domain size | No | No wrapper |
@@ -62,7 +62,7 @@ This document shows the Blender Geometry Nodes areas and domains covered by Node
 | Geometry transform | Yes | `transform(...)` |
 | Geometry set position | Yes | `set_position(...)` |
 | Geometry read nodes | Partial | Position/normal/index/id only |
-| Geometry sample nodes | No | No sample/proximity/raycast wrappers |
+| Geometry sample nodes | Partial | `sample_index(...)`; no sample-nearest, surface, proximity, or raycast wrappers |
 | Geometry write nodes | Partial | Set position and store attribute only |
 | Geometry material nodes | Partial | `set_material(...)` only |
 | Geometry operations | Partial | Join/transform only |
@@ -115,7 +115,7 @@ This document shows the Blender Geometry Nodes areas and domains covered by Node
 | Viewer node | No | No wrapper |
 | Warning node | No | No wrapper |
 | Local functions | Yes | Typed parameters and single or flat multi-value returns |
-| Reusable library imports | Yes | `from functions/examples/local import ...` |
+| Reusable library imports | Yes | `from packages import ...`, `from examples import ...`, `from local import ...` |
 | Compile-time `for` loops | Yes | Unrolled graph generation |
 | Runtime repeat loops | Partial | Nested repeat-style loops; supported state types only |
 | Runtime `if` / switch logic | Partial | Compatible Float, Int, Vector, Bool, Geometry, String, and Bundle branch values |

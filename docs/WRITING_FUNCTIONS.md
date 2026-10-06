@@ -14,9 +14,9 @@ result = transform(geometry, translation=translation)
 output('Geometry', result)
 ```
 
-The input socket names define the parameters exposed by the function. Call arguments can be positional or use unique input labels as keywords.
+The input socket labels define the public parameter names shown in Blender. Call arguments can always be positional. A unique label can also be used as a keyword: NodeForge normalizes it with Unicode case folding and ignores punctuation, spaces, and underscores for keyword matching. For example, `Scale XY` can be called as `scale_xy=...`, and a Unicode label such as `Привет Мир` remains keyword-addressable.
 
-Each `input_*()` call creates a separate parameter. If two inputs have the same displayed label, call the function positionally because that label is ambiguous as a keyword.
+Each `input_*()` call creates a separate parameter. The label is display text, not declaration identity. If two inputs normalize to the same keyword (including duplicate labels), that keyword is ambiguous and the function must be called positionally for those inputs. A label containing no letters or digits has no keyword alias and is positional-only.
 
 ## Return Multiple Values
 
