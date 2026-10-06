@@ -1,6 +1,8 @@
 # DSL Syntax and Semantics
 
-NodeForge uses a Python-like domain-specific language for building Blender Geometry Nodes groups.
+NodeForge uses a Python-like domain-specific language for building Blender Geometry Nodes groups. Source expressions describe graph operations and data flow; they are compiled into nodes and links according to the types of their values.
+
+Read [Core Concepts](CORE_CONCEPTS.md) for the relationship between source code, group sockets, compile-time structure, and runtime Geometry Nodes values.
 
 ## Names and Assignments
 
@@ -153,6 +155,8 @@ scaled_height = height * 2.0
 ```
 
 The operation receiving a value determines whether it must be available at compile time or can remain a runtime value.
+
+Compile-time `range(...)` loops generate repeated graph structure, while runtime `repeat_range(...)` loops create native Blender Repeat Zones. See [Compile time and runtime](CORE_CONCEPTS.md#compile-time) for examples of both forms.
 
 Compile-time helper calls are documented in [Core DSL Built-ins](BUILTINS.md#compile-time-helper-calls).
 

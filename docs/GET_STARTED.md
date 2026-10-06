@@ -1,6 +1,6 @@
 # Get Started with NodeForge
 
-NodeForge compiles a Python-like script into a native Blender Geometry Nodes group. This page takes you from installing the add-on to compiling and updating your first generated node group.
+NodeForge compiles a Python-like DSL script into a native Blender Geometry Nodes group. The script defines the group's interface and internal data flow. This page takes you from installing the add-on to compiling and updating your first generated group; see [Core Concepts](CORE_CONCEPTS.md) for the complete language model.
 
 ## Install NodeForge
 
@@ -39,6 +39,8 @@ The object now displays the cube produced by the script.
 3. Click **Update Selected NodeGroup** in the NodeForge sidebar.
 
 NodeForge recompiles the selected text into the same node group. The group name, compatible input values, and compatible links are preserved.
+
+The rebuilt group also stores the edited source. Use **Load Script From Selected NodeGroup** to recover that source into a Text datablock and continue editing it later.
 
 ## Main actions
 
@@ -241,12 +243,13 @@ For the import and call rules, see [Imports](SYNTAX.md#imports) and [Reusable Fu
 
 Read these in order:
 
-1. [DSL Syntax and Semantics](SYNTAX.md) — learn the language rules and what is not Python.
-2. [Core DSL Built-ins Reference](BUILTINS.md) — learn the primitive functions available everywhere.
-3. [Writing Functions](WRITING_FUNCTIONS.md) — create reusable functions with the Core DSL.
-4. [Math Methods](MATH_METHODS.md) — use the methods added by the Math library.
-5. [Math Functions](FUNCTIONS.md) — use reusable DSL functions from the Math library.
-6. [Math Examples](MATH_EXAMPLES.md) — explore complete scripts included with the Math package.
-7. [LSystem](LSYSTEMS.md) — create geometry with L-system rules.
+1. [Core Concepts](CORE_CONCEPTS.md) — understand how source becomes a node-group interface, nodes, links, and runtime state.
+2. [DSL Syntax and Semantics](SYNTAX.md) — learn the supported language rules.
+3. [Core DSL Built-ins Reference](BUILTINS.md) — learn the primitive functions available everywhere.
+4. [Writing Functions](WRITING_FUNCTIONS.md) — create reusable functions with the Core DSL.
+5. [Math Methods](MATH_METHODS.md) — use the methods added by the Math library.
+6. [Math Functions](FUNCTIONS.md) — use reusable DSL functions from the Math library.
+7. [Math Examples](MATH_EXAMPLES.md) — explore complete scripts included with the Math package.
+8. [LSystem](LSYSTEMS.md) — create geometry with L-system rules.
 
 To study an installed example, add it from **Library → Examples**, load its source with **Load Script From Selected NodeGroup**, and edit the source in a Text datablock.

@@ -18,6 +18,7 @@ nav:
   - Home: index.md
   - Get Started: GET_STARTED.md
   - DSL:
+      - Core Concepts: CORE_CONCEPTS.md
       - Syntax: SYNTAX.md
       - Built-ins: BUILTINS.md
       - Writing Functions: WRITING_FUNCTIONS.md
