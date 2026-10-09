@@ -22,8 +22,8 @@ nav:
       - Syntax: SYNTAX.md
       - Built-ins: BUILTINS.md
       - Writing Functions: WRITING_FUNCTIONS.md
-      - Packages: PACKAGES.md
-      - Extension API: EXTENSION_API.md
+      - Package Guide: PACKAGES.md
+      - Extension API Reference: EXTENSION_API.md
       - Geometry Nodes Coverage: GEOMETRY_NODES_COVERAGE.md
   - Libraries:
       - Math:
@@ -31,8 +31,8 @@ nav:
           - Functions: FUNCTIONS.md
           - Examples: MATH_EXAMPLES.md
       - LSystem:
+          - Guide: LSYSTEMS_SCRIPTING.md
           - Reference: LSYSTEMS.md
-          - Scripting: LSYSTEMS_SCRIPTING.md
 
 markdown_extensions:
   - admonition

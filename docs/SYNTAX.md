@@ -269,7 +269,7 @@ Group sockets can be declared explicitly or inferred from name usage.
 
 ### Explicit Inputs
 
-An `input_*` call declares an input socket. It must be the complete right-hand side of a simple assignment.
+An `input_*` call declares an input socket and must stand alone on the right side of a direct name assignment.
 
 ```python
 width = input_float('Width', default=2.0)
@@ -447,7 +447,7 @@ output('Height', height)
 output('Positive', positive)
 ```
 
-Annotations support `Float`, `Int`, `Bool`, `Vector`, `Geometry`, `Material`, `Object`, `String`, and `Bundle`. An annotation constrains the generated function input socket; unannotated parameters use call-site type inference. A tuple return must be flat and non-empty. A local function must contain a return statement. Nested function declarations are unsupported.
+Any [runtime type](#runtime-types) may be used as a parameter annotation. An annotation constrains the generated function input socket; unannotated parameters use call-site type inference. A tuple return must be flat and non-empty. A local function must contain a return statement. Nested function declarations are unsupported.
 
 The generated function call node uses a readable title derived from the function name. For example, `mix_biomes()` appears as **Mix Biomes**.
 

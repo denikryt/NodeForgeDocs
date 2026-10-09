@@ -1,17 +1,18 @@
-# Writing L-System Scripts
+# L-System Guide
 
-Install the `nodeforge.lsystem` package through **Library → Packages** and enable **Allow executable Python** before importing it. The examples use `from packages import lsystem as ls`; package qualification is required for `ls.points(...)` because Core DSL also has a `points(...)` callable.
+Use this page to learn the `nodeforge.lsystem` library by building scripts. Exact constructor contracts, turtle commands, grammar restrictions, and limits are collected in the [L-System Reference](LSYSTEMS.md).
 
-An L-system script has two stages:
+Install the package through **Library → Packages** as described in the [Package Guide](PACKAGES.md#install-update-or-remove-a-package), then import it with an alias:
 
-1. The grammar starts from an axiom and applies rewrite rules for the selected number of iterations.
-2. A 3D turtle reads the resulting modules and creates curves and marker points.
+```python
+from packages import lsystem as ls
+```
 
-Use [L-System Reference](LSYSTEMS.md) for constructor signatures and the complete command table.
+Package qualification is useful here because Core DSL also has a `points(...)` callable.
 
-## Minimal L-System
+## Build a first L-system
 
-This script draws a branching curve with runtime controls for angle and segment length.
+An L-system has two stages: rewrite an initial string for some number of generations, then interpret the final modules with a turtle.
 
 ```python
 from packages import lsystem as ls
@@ -30,31 +31,13 @@ geo = ls.system(
 output("Geometry", geo)
 ```
 
-The grammar is evaluated in this order:
+Starting from `F`, the rule replaces every `F` with `F[+F]F[-F]F`. Rewriting is parallel: a replacement produced in one generation is not rewritten again until the next generation. After two generations, the turtle interprets the resulting `F`, `+`, `-`, `[` and `]` modules as geometry.
 
-1. Start with the axiom `F`.
-2. Replace every `F` with `F[+F]F[-F]F`.
-3. Repeat the rewrite for the requested iteration count.
-4. Interpret `F`, `+`, `-`, `[`, and `]` as turtle commands.
+`ls.system(...)` returns ordinary `Geometry`, so the result can be transformed, joined, assigned materials, or passed to other NodeForge functions.
 
-Rules are parallel. Each iteration reads one complete generation and produces the next generation; replacements created during that iteration are not rewritten again until the next iteration.
+## Separate grammar symbols from drawing commands
 
-## Axiom and Grammar Symbols
-
-`ls.axiom(...)` defines the initial stream. A visible curve can start directly with `F`:
-
-```python
-geo = ls.system(
-    ls.axiom("F+F+F"),
-    ls.iterations(0),
-    ls.angle(120),
-    ls.step(1),
-)
-
-output("Geometry", geo)
-```
-
-Grammar symbols such as `A`, `B`, or `X` can control growth without drawing anything themselves. They become visible only when rewrite rules eventually produce drawing commands or markers.
+Letters such as `A`, `B`, or `X` are useful as growth symbols. They control rewriting without drawing unless they eventually produce turtle commands or declared markers.
 
 ```python
 geo = ls.system(
@@ -68,9 +51,9 @@ geo = ls.system(
 output("Geometry", geo)
 ```
 
-Symbols without a rule stay unchanged from one generation to the next. If they reach the final stream and are not turtle commands or declared markers, the turtle ignores them.
+Symbols without a matching rule survive into the next generation. If an ordinary grammar symbol reaches the final stream, the turtle ignores it.
 
-A rule may also delete a symbol with an empty replacement. This is useful for temporary grammar symbols.
+A rule can delete its predecessor by using an empty replacement:
 
 ```python
 geo = ls.system(
@@ -84,9 +67,11 @@ geo = ls.system(
 output("Geometry", geo)
 ```
 
-## Branches
+For the accepted grammar alphabet and validation rules, see [Rewrite and grammar rules](LSYSTEMS.md#rewrite-and-grammar-rules).
 
-`[` saves the current position and orientation. `]` restores the saved state.
+## Create branches
+
+`[` saves the turtle state and `]` restores it. This lets a side branch change position and orientation without changing the continuation of its parent.
 
 ```python
 geo = ls.system(
@@ -103,50 +88,17 @@ Read the stream as:
 
 ```text
 F     draw the trunk forward
-[+F]  save state, turn left, draw a side branch, restore state
+[+F]  save state, turn, draw a branch, restore state
 F     continue the trunk
-[-F]  save state, turn right, draw a side branch, restore state
+[-F]  create a branch on the other side
 F     continue the trunk
 ```
 
-The saved state includes the full 3D orientation, not only position. A roll or pitch made inside a branch therefore does not change the parent branch after `]`.
+The saved state includes the full 3D frame, not only the position.
 
-## 3D Turtle Orientation
+## Work in 3D
 
-The turtle begins at the origin, facing `+X`, with local Left along `+Y` and local Up along `+Z`.
-
-The six rotation commands are:
-
-| Command | Rotation |
-| --- | --- |
-| `+` | yaw left around local Up |
-| `-` | yaw right around local Up |
-| `^` | pitch up around local Left |
-| `&` | pitch down around local Left |
-| `/` | positive roll around local Heading |
-| `\` | negative roll around local Heading |
-
-Every unparameterized rotation uses `ls.angle(...)`. Add one argument to give a command its own angle.
-
-```python
-pitch = input_float("Pitch", default=35.0)
-roll = input_float("Roll", default=60.0)
-
-geo = ls.system(
-    ls.axiom("F/(roll)[&(pitch)F]F"),
-    ls.iterations(0),
-    ls.angle(25),
-    ls.step(1),
-    ls.param("pitch", pitch),
-    ls.param("roll", roll),
-)
-
-output("Geometry", geo)
-```
-
-Roll changes the local Left and Up axes. It does not move the turtle by itself, but it changes the plane used by later pitch or yaw operations. Rotation order therefore matters.
-
-For example, this script exposes two curves that use the same two rotations in different orders:
+The turtle starts facing `+X`. Yaw uses `+` and `-`, pitch uses `^` and `&`, and roll uses `/` and `\`. Because these rotations update a local coordinate frame, their order changes the result.
 
 ```python
 first = ls.system(
@@ -167,29 +119,11 @@ second = transform(second, translation=vector(2, 0, 0))
 output("Geometry", join(first, second))
 ```
 
-## Parameterized Commands
+The two curves use the same rotations in a different order and therefore end in different orientations. The complete coordinate-frame definition and command table are in [Turtle coordinate frame](LSYSTEMS.md#turtle-coordinate-frame) and [Turtle commands](LSYSTEMS.md#turtle-commands).
 
-Use command arguments when different modules need different distances or angles.
+## Parameterize individual modules
 
-The movement commands accept one distance:
-
-```text
-F(0.5)
-f(2.0)
-```
-
-The rotation commands accept one angle in degrees:
-
-```text
-+(30)
--(45)
-^(20)
-&(20)
-/(90)
-\(90)
-```
-
-A module argument can also reference a value declared with `ls.param(...)`. The declared value may be a runtime input.
+`ls.angle(...)` and `ls.step(...)` provide defaults, but a command can carry its own numeric argument. Bind runtime values into the grammar with `ls.param(...)`.
 
 ```python
 long_step = input_float("Long Step", default=1.5)
@@ -209,7 +143,7 @@ geo = ls.system(
 output("Geometry", geo)
 ```
 
-Arguments inside L-system strings are data references, not NodeForge expressions. Use a numeric literal or a single `ls.param(...)` name. Compute a value in the NodeForge script first, then bind the result with `ls.param(...)` when a more complex expression is needed.
+Arguments inside the L-system string are references, not NodeForge expressions. Compute a more complex value in the surrounding script first, then bind it:
 
 ```python
 base = input_float("Base Length", default=0.4)
@@ -222,33 +156,11 @@ geo = ls.system(
     ls.step(1),
     ls.param("length", length),
 )
-
-output("Geometry", geo)
 ```
 
-## Runtime Growth
+## Make growth runtime-adjustable
 
-Pass a runtime `Int` to `ls.iterations(...)` when the number of rewrite generations should be adjustable from the node-group interface.
-
-```python
-iterations = input_int("Iterations", default=4)
-
-geo = ls.system(
-    ls.axiom("A"),
-    ls.rule("A", "FA"),
-    ls.iterations(iterations),
-    ls.angle(25),
-    ls.step(0.25),
-)
-
-output("Geometry", geo)
-```
-
-Changing **Iterations** changes topology without recompiling the script. A runtime value of `0` uses the axiom directly. Runtime values below `0` are treated as `0`.
-
-Runtime rewriting still uses compile-time grammar declarations. The axiom, rules, marker declarations, and parameter names do not become runtime strings.
-
-For runtime iterations, keep every branch local to one declared stream: the axiom and every rule replacement must each have balanced brackets. This form is valid:
+A runtime `Int` passed to `ls.iterations(...)` lets the node-group interface control how many rewrite generations are evaluated.
 
 ```python
 iterations = input_int("Iterations", default=3)
@@ -264,11 +176,15 @@ geo = ls.system(
 output("Geometry", geo)
 ```
 
-A replacement that opens a branch while another replacement closes it is not valid in runtime iteration mode. Rules that rewrite `[` or `]` are also reserved from this mode.
+Changing **Iterations** changes topology without recompiling the NodeForge script. Keep branches self-contained when using runtime rewriting; the exact structural restrictions are listed under [`ls.iterations(...)`](LSYSTEMS.md#constructors).
 
-## Marker Points
+Runtime values are also useful for angle, step, and named parameters. See [Runtime values](LSYSTEMS.md#runtime-values) for the full matrix.
 
-Markers place points in the turtle stream without drawing or moving the turtle. Declare the marker with `ls.marker(...)`, use its name in the axiom or a rule, and extract it with `ls.points(...)`.
+## Emit marker points
+
+Markers let the grammar place points for leaves, buds, joints, or other downstream geometry without drawing a segment.
+
+Declare the marker, put its name in the grammar, then extract its points with `ls.points(...)`:
 
 ```python
 plant = ls.system(
@@ -285,7 +201,7 @@ leaves = instance_on_points(cube(0.12), leaf_points)
 output("Geometry", join(plant, leaves))
 ```
 
-A marker can carry numeric parameters. Each parameter becomes a point attribute with the name declared in `ls.marker(...)`.
+A marker may carry named numeric attributes:
 
 ```python
 size = input_float("Leaf Size", default=0.25)
@@ -300,21 +216,33 @@ plant = ls.system(
 )
 
 leaf_points = ls.points(plant, marker="Leaf")
-leaves = instance_on_points(cube(0.12), leaf_points)
-
-output("Geometry", join(plant, leaves))
 ```
 
-Marker points also carry two orientation vectors:
+Marker points also carry the turtle tangent and up vectors, which can be used to orient instanced geometry. Attribute names and marker contracts are documented under [`ls.marker(...)`](LSYSTEMS.md#constructors).
 
-- `nf_lsys_marker_tangent` is the turtle Heading at the marker.
-- `nf_lsys_marker_up` is the turtle Up vector at the marker.
+## Assemble compile-time grammar fragments
 
-These vectors follow yaw, pitch, roll, and branch restoration, so marker orientation remains meaningful in spatial L-systems.
+Use f-strings when the grammar itself should be composed from compile-time string pieces:
 
-## Spatial Plant with Runtime Growth
+```python
+left = "[-F]"
+right = "[+F]"
+rule = f"F{left}F{right}F"
 
-This example combines runtime iterations, pitch, roll, a runtime step length, and leaf markers. It is a compact starting point for procedural 3D plants.
+geo = ls.system(
+    ls.axiom("F"),
+    ls.rule("F", rule),
+    ls.iterations(3),
+    ls.angle(25),
+    ls.step(0.1),
+)
+```
+
+F-string interpolation changes the grammar at compile time. Runtime numeric controls should stay in `ls.param(...)` instead.
+
+## Complete plant example
+
+This combines runtime growth, pitch, roll, step length, and leaf markers:
 
 ```python
 growth_iterations = input_int("Growth Iterations", default=5)
@@ -340,58 +268,11 @@ leaves = instance_on_points(cube(0.08), leaf_points)
 output("Geometry", join(plant, leaves))
 ```
 
-The roll angle separates successive branches around the trunk. The pitch angle moves each branch away from the current heading. Because both values are runtime parameters, their shape can be adjusted without recompiling.
+The roll distributes successive branches around the trunk while pitch moves each branch away from the current heading. Because those controls are runtime values, the shape can be adjusted from the node-group interface.
 
-## Compile-Time String Composition
+## More patterns
 
-Use f-strings when the grammar itself is assembled from compile-time string fragments.
-
-```python
-left = "[-F]"
-right = "[+F]"
-rule = f"F{left}F{right}F"
-
-geo = ls.system(
-    ls.axiom("F"),
-    ls.rule("F", rule),
-    ls.iterations(3),
-    ls.angle(25),
-    ls.step(0.1),
-)
-
-output("Geometry", geo)
-```
-
-F-string interpolation changes the compile-time grammar. Runtime numeric controls belong in `ls.param(...)` instead.
-
-## Transforming and Joining Results
-
-`ls.system(...)` returns ordinary geometry. Apply NodeForge geometry operations after the L-system is built.
-
-```python
-left = ls.system(
-    ls.axiom("F[+F][-F]F"),
-    ls.iterations(2),
-    ls.angle(30),
-    ls.step(0.15),
-)
-
-right = ls.system(
-    ls.axiom("F[+F][-F]F"),
-    ls.iterations(3),
-    ls.angle(22),
-    ls.step(0.12),
-)
-right = transform(right, translation=vector(1.5, 0, 0))
-
-output("Geometry", join(left, right))
-```
-
-Use `translation=` for positional transforms.
-
-## Common Patterns
-
-### Koch Curve
+### Koch curve
 
 ```python
 geo = ls.system(
@@ -405,7 +286,7 @@ geo = ls.system(
 output("Geometry", geo)
 ```
 
-### Classic Fractal Plant
+### Classic fractal plant
 
 ```python
 angle = input_float("Angle", default=25.0)
@@ -424,7 +305,7 @@ geo = transform(geo, rotation=vector(0, 0, pi / 2))
 output("Geometry", geo)
 ```
 
-### 3D Branch Whorl
+### 3D branch whorl
 
 ```python
 pitch = input_float("Pitch", default=35.0)
@@ -442,22 +323,6 @@ geo = ls.system(
 output("Geometry", geo)
 ```
 
-## Grammar Requirements
+## Keep iteration counts practical
 
-Use these rules when writing axioms and replacements:
-
-- Keep whitespace out of L-system strings.
-- Use ASCII letters, digits, and `_` for ordinary grammar symbols.
-- Use only declared marker names for multi-character modules.
-- Give parameterized built-ins exactly one numeric literal or declared parameter name.
-- Declare every named module argument with `ls.param(...)`.
-- Match every `[` with a later `]` in the interpreted stream.
-- For runtime iterations, balance brackets separately in the axiom and in every replacement.
-
-The compiler reports invalid streams as `CompileError` before producing the node group whenever the invalid structure is known at compile time.
-
-## Performance
-
-L-system growth can be exponential. A rule that produces two recursive symbols may approximately double the active grammar each iteration; rules that produce three or more recursive symbols grow faster.
-
-Compile-time iteration mode stops expansion above `200000` modules. Runtime iteration mode performs the expansion during Geometry Nodes evaluation, so choose practical input ranges for **Iterations** instead of exposing an unrestricted large value.
+Rewrite systems can grow exponentially. Prefer bounded user inputs and test the largest intended iteration count before publishing a script. The hard compile-time guards and the distinction between compile-time and runtime expansion are listed under [Limits](LSYSTEMS.md#limits).

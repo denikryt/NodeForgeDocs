@@ -1,268 +1,214 @@
 # L-System Reference
 
-The `nodeforge.lsystem` package adds L-system constructors to NodeForge. Install the package through **Library → Packages**, enable **Allow executable Python** before importing it, and import its namespace before using these constructors.
+The `nodeforge.lsystem` package exposes L-system constructors through the package namespace:
 
 ```python
 from packages import lsystem as ls
 ```
 
-The reference examples below use the alias `ls`. An L-system starts from an axiom, applies rewrite rules for a number of iterations, then interprets the resulting modules with a 3D turtle. `ls.system(...)` returns normal `Geometry`, so the result can be transformed, joined, assigned materials, and connected to `output(...)` like other NodeForge geometry.
+This page is the API and grammar reference. For a worked introduction with complete examples, use the [L-System Guide](LSYSTEMS_SCRIPTING.md).
 
-For a step-by-step guide, see [Writing L-System Scripts](LSYSTEMS_SCRIPTING.md).
+## `ls.system(part, ...)`
 
-## Constructors
+Builds an L-system and returns `Geometry`.
 
-### `ls.system(part, ...)`
-
-Builds an L-system from constructor parts and returns `Geometry`.
-
-| Part | Required | Multiplicity | Description |
+| Part | Required | Multiplicity | Purpose |
 | --- | --- | --- | --- |
 | `ls.axiom(...)` | yes | one | Initial module stream. |
 | `ls.iterations(...)` | yes | one | Static or runtime rewrite count. |
-| `ls.angle(...)` | yes | one | Default turtle rotation angle in degrees. |
+| `ls.angle(...)` | yes | one | Default turtle rotation angle. |
 | `ls.step(...)` | yes | one | Default forward distance. |
 | `ls.rule(...)` | no | many | One-symbol rewrite rules. |
 | `ls.param(...)` | no | many | Named numeric values used by parameterized modules. |
-| `ls.marker(...)` | no | many | Marker modules that emit points with orientation and parameter data. |
+| `ls.marker(...)` | no | many | Modules that emit marker points. |
 
-All parts are positional. Their order inside `ls.system(...)` does not affect declaration resolution: rules and the axiom can reference parameters and markers declared later in the same call.
+All parts are positional. Their order inside `ls.system(...)` does not affect declaration resolution, so a rule or axiom may reference parameters and markers declared later in the call.
 
-Duplicate singleton parts, duplicate rule predecessors, duplicate parameter names, and duplicate marker names raise `CompileError`.
+Duplicate singleton parts, rule predecessors, parameter names, or marker names raise `CompileError`.
 
 ```python
-from packages import lsystem as ls
-
-iterations = input_int("Iterations", default=4)
-angle = input_float("Angle", default=25.0)
-step = input_float("Step", default=0.08)
-
 plant = ls.system(
     ls.axiom("X"),
     ls.rule("X", "F[+X][-X]FX"),
     ls.rule("F", "FF"),
-    ls.iterations(iterations),
-    ls.angle(angle),
-    ls.step(step),
+    ls.iterations(4),
+    ls.angle(25),
+    ls.step(0.08),
 )
-
-output("Geometry", plant)
 ```
+
+## Constructors
 
 ### `ls.axiom(value)`
 
-Defines the module stream used before the first rewrite iteration.
+Defines the module stream before the first rewrite iteration.
 
-| Parameter | Type | Description |
-| --- | --- | --- |
-| `value` | compile-time `String` | Initial L-system stream. |
+| Parameter | Type |
+| --- | --- |
+| `value` | compile-time `String` |
 
-The string may contain turtle commands, one-character grammar symbols, declared marker modules, and parameterized modules.
+The string may contain turtle commands, one-character grammar symbols, declared markers, and parameterized modules.
 
 ```python
-geo = ls.system(
-    ls.axiom("F+F+F+F"),
+plant = ls.system(
+    ls.axiom("F[+F]F"),
     ls.iterations(0),
-    ls.angle(90),
+    ls.angle(25),
     ls.step(1),
 )
-
-output("Geometry", geo)
 ```
 
 ### `ls.rule(symbol, replacement)`
 
 Defines one parallel rewrite rule.
 
-| Parameter | Type | Description |
+| Parameter | Type | Constraint |
 | --- | --- | --- |
 | `symbol` | compile-time `String` | Exactly one turtle command or one ASCII letter, digit, or `_`. |
-| `replacement` | compile-time `String` | Module stream that replaces `symbol`. May be empty. |
+| `replacement` | compile-time `String` | Module stream; may be empty. |
 
-During one iteration, every module is rewritten from the same input generation. Symbols without a rule pass through unchanged. An empty replacement deletes the predecessor.
+Each iteration rewrites every module from the same input generation. Symbols without a rule pass through unchanged; an empty replacement deletes its predecessor.
 
-Rule strings may be assembled from compile-time string fragments with f-strings. Every interpolated value must itself be a compile-time string.
+Rule strings may be assembled with f-strings when every interpolated value is a compile-time string.
 
 ```python
-left_branch = "[-F]"
-right_branch = "[+F]"
-rule = f"F{left_branch}F{right_branch}F"
-
-geo = ls.system(
+plant = ls.system(
     ls.axiom("F"),
-    ls.rule("F", rule),
-    ls.iterations(3),
+    ls.rule("F", "F[+F]F[-F]F"),
+    ls.iterations(2),
     ls.angle(25),
-    ls.step(0.08),
+    ls.step(0.2),
 )
-
-output("Geometry", geo)
 ```
 
 ### `ls.iterations(value)`
 
-Sets the number of rewrite iterations.
+Sets the number of rewrite generations.
 
-| Parameter | Type | Description |
-| --- | --- | --- |
-| `value` | compile-time `Integer` or runtime `Int` | Rewrite iteration count. |
+| Accepted value | Behavior |
+| --- | --- |
+| compile-time `Integer` | Must be non-negative; expansion happens during compilation. |
+| runtime `Int` | Expansion happens inside Geometry Nodes and may change topology without recompilation. |
 
-A compile-time integer must be non-negative. The complete L-string is expanded while the node group is compiled.
+Runtime values below `0` are treated as `0`.
 
-A runtime `Int`, such as `input_int(...)`, performs rewriting inside Geometry Nodes. Changing the value can therefore change the number of segments, branches, and markers without recompiling the script. Runtime values below zero are treated as `0`.
+Runtime iteration mode requires the axiom and every rule replacement to balance `[` and `]` independently. Rules may not rewrite `[` or `]` in this mode.
 
 ```python
-iterations = input_int("Iterations", default=3)
-
-geo = ls.system(
-    ls.axiom("A"),
-    ls.rule("A", "F[+A][-A]"),
+iterations = input_int("Iterations", default=4)
+plant = ls.system(
+    ls.axiom("F"),
     ls.iterations(iterations),
-    ls.angle(30),
+    ls.angle(25),
     ls.step(0.2),
 )
-
-output("Geometry", geo)
 ```
 
-When ls.iterations() uses a runtime Int, every branch must be self-contained within the axiom or within a single rule replacement. Each axiom and replacement must therefore have matching [ and ]. The [ and ] symbols themselves cannot have rewrite rules. This guarantees that the branch stack remains valid for any runtime iteration count.
+`ls.angle(...)` and `ls.step(...)` both accept either a compile-time number or a runtime numeric `Value`.
 
 ### `ls.angle(value)`
 
-Sets the default turtle rotation angle in degrees.
-
-| Parameter | Type | Description |
-| --- | --- | --- |
-| `value` | compile-time number or runtime numeric `Value` | Default angle used by unparameterized `+`, `-`, `^`, `&`, `/`, and `\`. |
-
-An explicit command argument such as `&(35)` or `/(roll)` overrides `ls.angle(...)` for that command.
+Sets the default rotation angle, in degrees, for unparameterized `+`, `-`, `^`, `&`, `/`, and `\` commands. An explicit argument such as `+(30)` or `/(roll)` takes precedence for that module.
 
 ```python
-angle = input_float("Angle", default=30.0)
-
-geo = ls.system(
-    ls.axiom("F[+F][-F][^F][&F]"),
+angle = input_float("Angle", default=25.0)
+plant = ls.system(
+    ls.axiom("F+F"),
     ls.iterations(0),
     ls.angle(angle),
     ls.step(1),
 )
-
-output("Geometry", geo)
 ```
 
 ### `ls.step(value)`
 
-Sets the default forward distance.
-
-| Parameter | Type | Description |
-| --- | --- | --- |
-| `value` | compile-time number or runtime numeric `Value` | Default distance used by unparameterized `F` and `f`. |
-
-An explicit command argument such as `F(0.5)` or `F(length)` overrides `ls.step(...)` for that command.
+Sets the default forward distance for unparameterized `F` and `f`. `F(0.5)` or `F(length)` supplies a per-module distance instead.
 
 ```python
-step = input_float("Step", default=0.25)
-
-geo = ls.system(
-    ls.axiom("F+F+F+F"),
+step = input_float("Step", default=0.2)
+plant = ls.system(
+    ls.axiom("FF"),
     ls.iterations(0),
-    ls.angle(90),
+    ls.angle(25),
     ls.step(step),
 )
-
-output("Geometry", geo)
 ```
 
 ### `ls.param(name, value)`
 
-Declares a named numeric value for parameterized turtle commands and marker modules.
+Binds a numeric value to a name used inside parameterized commands or markers.
 
-| Parameter | Type | Description |
+| Parameter | Type | Constraint |
 | --- | --- | --- |
 | `name` | compile-time `String` | Identifier matching `[A-Za-z_][A-Za-z0-9_]*`. |
-| `value` | compile-time number or runtime numeric `Value` | Numeric value bound to the name. |
+| `value` | compile-time number or runtime numeric `Value` | Numeric value exposed to the grammar. |
 
-Module arguments may contain either a numeric literal or one declared parameter name. They are not NodeForge expressions.
+A module argument is either a numeric literal or one declared parameter name. NodeForge expressions are not parsed inside the L-system string; compute an expression in the surrounding script and bind its result with `ls.param(...)`.
 
 ```python
-length = input_float("Length", default=1.0)
-turn = input_float("Turn", default=45.0)
-
-geo = ls.system(
-    ls.axiom("F(length)+(turn)F(length)"),
+length = input_float("Length", default=0.5)
+plant = ls.system(
+    ls.axiom("F(length)F"),
     ls.iterations(0),
-    ls.angle(90),
-    ls.step(0.25),
+    ls.angle(25),
+    ls.step(0.2),
     ls.param("length", length),
-    ls.param("turn", turn),
 )
-
-output("Geometry", geo)
 ```
 
 ### `ls.marker(name, *parameter_names)`
 
-Declares a marker module. A marker emits a point at the current turtle position without moving or rotating the turtle.
+Declares a marker module. Reaching that module emits a point at the current turtle position without moving or rotating the turtle.
 
-| Parameter | Type | Description |
+| Parameter | Type | Constraint |
 | --- | --- | --- |
-| `name` | compile-time `String` | Marker identifier. It cannot be a built-in turtle command. |
-| `parameter_names` | compile-time `String` values | Optional point-attribute names matched to marker arguments. |
+| `name` | compile-time `String` | Identifier that is not a built-in turtle command. |
+| `parameter_names` | compile-time `String` values | Unique attribute names for marker arguments. |
 
-Marker names and parameter names use identifier syntax. Parameter names must be unique inside one marker and cannot start with the reserved `nf_lsys_` prefix.
-
-Marker points carry the turtle orientation in the `nf_lsys_marker_tangent` and `nf_lsys_marker_up` point attributes. Each declared marker parameter is also stored as a point attribute with the declared name.
+Marker parameter names cannot use the reserved `nf_lsys_` prefix.
 
 ```python
 size = input_float("Leaf Size", default=0.25)
-
 plant = ls.system(
-    ls.axiom("FLeaf(size)+(45)FLeaf(size)"),
+    ls.axiom("FLeaf(size)"),
     ls.iterations(0),
     ls.angle(25),
-    ls.step(1),
+    ls.step(0.5),
     ls.param("size", size),
     ls.marker("Leaf", "size"),
 )
-
-leaf_points = ls.points(plant, marker="Leaf")
-leaves = instance_on_points(cube(0.15), leaf_points)
-
-output("Geometry", join(plant, leaves))
 ```
+
+Every marker point stores:
+
+- `nf_lsys_marker_tangent` — turtle Heading;
+- `nf_lsys_marker_up` — turtle Up;
+- one point attribute for each declared marker parameter.
 
 ### `ls.points(geometry, marker="Name")`
 
-Extracts the points emitted by one declared marker.
+Extracts points belonging to one declared marker.
 
-| Parameter | Type | Description |
+| Parameter | Type | Constraint |
 | --- | --- | --- |
-| `geometry` | `Geometry` | Geometry containing L-system marker attributes. |
+| `geometry` | `Geometry` | Geometry carrying L-system marker attributes. |
 | `marker` | compile-time `String` | Required keyword selecting the marker name. |
 
-Returns: `Geometry` containing only points for the requested marker.
-
-Marker identity is stored in numeric point attributes, so marker filtering continues to work after normal geometry operations such as assignment, `transform(...)`, and `join(...)` when Blender preserves those attributes.
+Returns `Geometry` containing only the selected marker points. Marker identity is stored in numeric point attributes, so filtering continues to work after operations such as assignment, `transform(...)`, and `join(...)` when Blender preserves those attributes.
 
 ```python
-plant = ls.system(
-    ls.axiom("FLeaf+(60)FBud"),
-    ls.iterations(0),
-    ls.angle(25),
-    ls.step(1),
-    ls.marker("Leaf"),
-    ls.marker("Bud"),
-)
-
 leaf_points = ls.points(plant, marker="Leaf")
-bud_points = ls.points(plant, marker="Bud")
-leaves = instance_on_points(cube(0.18), leaf_points)
-buds = instance_on_points(cube(0.10), bud_points)
-
-output("Geometry", join(plant, leaves, buds))
 ```
 
-## Turtle Coordinate Frame
+## Rewrite and grammar rules
+
+An L-system starts from the axiom, applies all matching rewrite rules in parallel for each iteration, and then sends the final module stream to the turtle interpreter.
+
+Ordinary grammar symbols are one ASCII letter, digit, or `_`. They may participate in rewriting but are ignored during turtle drawing if they remain in the final stream. Declared markers may use multi-character identifiers.
+
+Whitespace, unsupported punctuation, Unicode grammar symbols, undeclared parameter names, malformed argument lists, unmatched `]`, and unclosed `[` raise `CompileError` when the invalid structure is known during compilation.
+
+## Turtle coordinate frame
 
 The turtle starts at the world origin with this local frame:
 
@@ -272,20 +218,18 @@ The turtle starts at the world origin with this local frame:
 | Left | `+Y` | Local pitch axis. |
 | Up | `+Z` | Local yaw axis. |
 
-Yaw, pitch, and roll update this local frame. Rotations are therefore order-dependent: `+(90)^(90)` and `^(90)+(90)` produce different orientations.
+Yaw, pitch, and roll update the local frame, so rotation order matters. `[` stores position and all three orientation axes; `]` restores the saved state.
 
-`[` saves the complete turtle state, including position and all three orientation axes. `]` restores that state.
+## Turtle commands
 
-## Turtle Commands
-
-All rotation arguments are measured in degrees.
+Rotation arguments are measured in degrees.
 
 | Module | Meaning |
 | --- | --- |
-| `F` | Move forward by `ls.step(...)` and draw a segment. |
-| `F(length)` | Move forward by `length` and draw a segment. |
-| `f` | Move forward by `ls.step(...)` without drawing. |
-| `f(length)` | Move forward by `length` without drawing. |
+| `F` | Move by `ls.step(...)` and draw a segment. |
+| `F(length)` | Move by `length` and draw a segment. |
+| `f` | Move by `ls.step(...)` without drawing. |
+| `f(length)` | Move by `length` without drawing. |
 | `+` | Yaw left around local Up by `ls.angle(...)`. |
 | `+(angle)` | Yaw left by `angle`. |
 | `-` | Yaw right around local Up by `ls.angle(...)`. |
@@ -294,63 +238,35 @@ All rotation arguments are measured in degrees.
 | `^(angle)` | Pitch up by `angle`. |
 | `&` | Pitch down around local Left by `ls.angle(...)`. |
 | `&(angle)` | Pitch down by `angle`. |
-| `/` | Roll around local Heading by the positive rotation angle. |
+| `/` | Roll around local Heading by the positive default angle. |
 | `/(angle)` | Roll around local Heading by positive `angle`. |
-| `\` | Roll around local Heading by the negative rotation angle. |
+| `\` | Roll around local Heading by the negative default angle. |
 | `\(angle)` | Roll around local Heading by negative `angle`. |
-| `[` | Save position and orientation, then begin a branch. |
-| `]` | Restore the most recently saved position and orientation. |
+| `[` | Save the complete turtle state and begin a branch. |
+| `]` | Restore the most recently saved state. |
 
-A parameterized command accepts exactly one numeric literal or one name declared with `ls.param(...)`.
+A parameterized command accepts exactly one numeric literal or one `ls.param(...)` name.
 
-Other ASCII letters, digits, and `_` are one-character grammar symbols. They participate in rewriting and are ignored by turtle drawing if they remain in the final stream. Declared multi-character marker names are recognized as marker modules; other grammar symbols remain one character each.
+## Runtime values
 
-Whitespace, unsupported punctuation, Unicode grammar symbols, undeclared parameter names, malformed argument lists, unmatched `]`, and unclosed `[` raise `CompileError`.
-
-## Runtime Controls
-
-The following values can be changed through node-group inputs without recompiling when supplied as runtime values:
+These constructor arguments may remain runtime values:
 
 | Constructor | Runtime type | Effect |
 | --- | --- | --- |
-| `ls.iterations(...)` | `Int` | Rewrites the L-string at evaluation time and can change topology. |
-| `ls.angle(...)` | numeric | Changes unparameterized yaw, pitch, and roll angles. |
-| `ls.step(...)` | numeric | Changes unparameterized forward distances. |
-| `ls.param(...)` | numeric | Changes any command or marker argument that references the parameter. |
+| `ls.iterations(...)` | `Int` | Changes rewrite count and topology. |
+| `ls.angle(...)` | numeric | Changes default rotations. |
+| `ls.step(...)` | numeric | Changes default forward distance. |
+| `ls.param(...)` | numeric | Changes commands or markers that reference the parameter. |
 
-The axiom, rule strings, parameter names, marker declarations, and rule set remain compile-time declarations.
-
-```python
-iterations = input_int("Iterations", default=4)
-pitch = input_float("Pitch", default=35.0)
-roll = input_float("Roll", default=137.5)
-step = input_float("Step", default=0.2)
-
-plant = ls.system(
-    ls.axiom("A"),
-    ls.rule("A", "F[&(pitch)B]/(roll)A"),
-    ls.rule("B", "FLeaf"),
-    ls.iterations(iterations),
-    ls.angle(25),
-    ls.step(step),
-    ls.param("pitch", pitch),
-    ls.param("roll", roll),
-    ls.marker("Leaf"),
-)
-
-output("Geometry", plant)
-output("Leaf Points", ls.points(plant, marker="Leaf"))
-```
+The axiom, rule strings, parameter names, marker declarations, and rule set are compile-time declarations.
 
 ## Limits
 
-L-system size commonly grows exponentially with the iteration count. Use the smallest iteration range needed for the model.
-
-| Limit | Applies to | Behavior |
+| Limit | Applies to | Result when exceeded |
 | --- | --- | --- |
-| `200000` expanded modules | Compile-time `ls.iterations(...)` | Compilation raises `CompileError` when expansion exceeds the limit. |
-| Branch depth `32` | Compile-time-expanded planar branched systems using runtime angle or step values | Compilation raises `CompileError` when branch nesting exceeds the backend limit. |
+| `200000` expanded modules | compile-time `ls.iterations(...)` | `CompileError` |
+| branch depth `32` | compile-time-expanded planar branched systems using runtime angle or step values | `CompileError` |
 
-Runtime `Int` iterations are expanded during Geometry Nodes evaluation rather than by the compile-time `200000`-module guard. Large runtime values can therefore create very large evaluated geometry and should be constrained at the input level.
+Runtime `Int` iterations are evaluated inside Geometry Nodes and are not covered by the compile-time `200000`-module guard. Constrain user-facing runtime iteration inputs to practical ranges.
 
-A compiled system must have a possible drawable segment or marker for the selected static/runtime backend. Systems that resolve to no drawable content in a compile-time-expanded path raise `CompileError`.
+A compiled system must have a possible drawable segment or marker for the selected backend. A compile-time-expanded path that resolves to no drawable content raises `CompileError`.

@@ -1,6 +1,6 @@
 # Core Concepts
 
-NodeForge is a domain-specific language (DSL) for authoring Blender Geometry Nodes groups. A source file describes one group: its interface, the operations inside it, and the data flow between those operations. The compiler turns that description into a native `GeometryNodeTree`.
+NodeForge is a domain-specific language (DSL) for authoring Blender Geometry Nodes groups. The compiler reads one source file and produces a native `GeometryNodeTree` with the declared interface and data flow.
 
 ## One script describes one node group
 
@@ -102,7 +102,7 @@ The two loop forms serve different authoring needs:
 | `for ... in range(...)` | The compiler unrolls the body and generates one graph fragment per iteration. The range arguments must be known at compile time. |
 | `for ... in repeat_range(...)` | The compiler creates a Repeat Zone and materializes the body once inside it. The iteration count may be a runtime `Int`. |
 
-Every ordinary `if` statement is runtime control flow. NodeForge validates both branches and materializes compatible branch results through Switch nodes, even for a condition such as `True` or `False`. A top-level `if` therefore requires an `else` branch and both branches must assign at least one compatible common runtime value.
+Every ordinary `if` statement is runtime control flow. Both branches are validated and compatible results are materialized through Switch nodes, even when the condition is written as `True` or `False`. See [If Statements](SYNTAX.md#if-statements) for the branch and merge requirements.
 
 ## Group inputs are runtime parameters
 
@@ -117,6 +117,54 @@ enabled = input_bool('Enabled', default=True)
 Every instance of the generated group can have its own input values or incoming links. These parameters participate in the surrounding Geometry Nodes graph and update through normal Blender evaluation.
 
 An `output(...)` declaration creates a group output and connects the selected runtime value to it. The script therefore defines both the public interface and the internal implementation of the group.
+
+## Imports
+
+A `.nf` file is both a compilable NodeForge script and a reusable source function. Its top-level statements form the body of the generated node group. When the file is imported from another script, its `input_*` declarations become function parameters and its outputs become returned values.
+
+For example, a Local file named `move_geometry.nf` can define:
+
+```python
+geometry = input_geometry('Geometry')
+offset = input_vector('Offset', default=vector(0, 0, 1))
+
+result = transform(geometry, translation=offset)
+output('Geometry', result)
+```
+
+Another script can import and call it by its file name:
+
+```python
+from local import move_geometry
+
+geometry = input_geometry('Geometry')
+result = move_geometry(geometry, vector(0, 0, 2))
+
+output('Geometry', result)
+```
+
+Here, `move_geometry.nf` acts as the reusable function `move_geometry(...)`. The `Geometry` and `Offset` inputs define its arguments, and the `Geometry` output defines its returned value. Importing the file makes the callable available; its node group is used when the callable is invoked.
+
+This gives NodeForge files a slightly different role from regular Python modules: a source file represents one reusable graph body as well as a script that can be compiled directly.
+
+Installed packages are imported through the `packages` namespace:
+
+```python
+from packages import math
+
+value = input_float('Value', default=1.0)
+result = math.sin(value)
+
+output('Value', result)
+```
+
+Package aliases can be used when a shorter or more specific name is useful:
+
+```python
+from packages import lsystem as ls
+```
+
+Local reusable `.nf` files are imported with `from local import ...`, while installed libraries are imported with `from packages import ...`.
 
 ## Generated groups remain native Blender data
 

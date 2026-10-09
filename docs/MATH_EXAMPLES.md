@@ -2,7 +2,7 @@
 
 The `nodeforge.math` package includes complete example scripts in the **Examples** catalog. Install the Math package, then open **Library → Examples** to add an example as a Geometry Nodes group.
 
-Examples are complete scripts intended for inspection and adaptation. To view an example source, add it from the catalog, select the generated group node, and use **Load Script From Selected NodeGroup**.
+Examples are complete scripts intended for inspection and adaptation. Add one from the catalog, then follow the source-loading workflow in [Use the Library panel](GET_STARTED.md#use-the-library-panel) when you want to inspect or modify it.
 
 ## `dna_double_helix`
 

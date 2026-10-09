@@ -1,12 +1,12 @@
-# Creating Packages
+# Package Guide
 
-A NodeForge package is an installable library that can provide reusable DSL functions, examples, and Python extensions. Packages are installed explicitly through **Library → Packages** and are validated before they become active.
+A NodeForge package is an installable distribution unit for reusable DSL functions, examples, and optional Python-backed extensions. This page covers package structure, manifests, imports, packaging, and installation. The Python callable ABI is documented separately in the [Extension API Reference](EXTENSION_API.md).
 
-Use a package when reusable content should be distributed as one versioned unit. For scripts used only on one machine or project, the [Local catalog](GET_STARTED.md#save-your-own-script-to-local) is usually simpler.
+For scripts used only on one machine or project, the [Local catalog](GET_STARTED.md#save-your-own-script-to-local) is usually simpler than creating a package.
 
 ## Package layout
 
-Every package has a `nodeforge_package.json` manifest at its root and one or more content directories declared by that manifest.
+Every package contains `nodeforge_package.json` at its root and one or more content roots declared by that manifest.
 
 A source-only package can be as small as:
 
@@ -17,7 +17,15 @@ vendor.shapes/
     └── ring.nf
 ```
 
-A package that uses all supported content roots can look like this:
+Packages may declare these content roots:
+
+| Root | Purpose |
+| --- | --- |
+| `functions` | Reusable callables imported through the package namespace. |
+| `examples` | Complete scripts exposed through **Library → Examples**. |
+| `systems` | Python-backed extension owners that may export multiple callables. |
+
+A larger package might use all three:
 
 ```text
 vendor.toolkit/
@@ -38,7 +46,7 @@ vendor.toolkit/
         └── backend.py
 ```
 
-Only declare content roots that the package actually contains.
+Only declare roots that the package actually contains.
 
 ## Manifest
 
@@ -66,27 +74,27 @@ Only declare content roots that the package actually contains.
 
 | Field | Requirement |
 | --- | --- |
-| `schema_version` | Must be integer `1`. |
-| `id` | Canonical package identity. Use a dotted lowercase identifier such as `vendor.shapes`. |
-| `import_name` | Optional DSL package name. Defaults to the last component of `id`; for `vendor.shapes` the default is `shapes`. |
-| `name` | Display name shown to the user. |
+| `schema_version` | Integer `1`. |
+| `id` | Stable package identity. Use a dotted lowercase identifier such as `vendor.shapes`. |
+| `import_name` | Optional DSL namespace. Defaults to the last component of `id`. |
+| `name` | Display name. |
 | `version` | Dotted numeric package version such as `1.2.0`. |
-| `author` | Optional package author text. Defaults to an empty string when omitted. |
-| `description` | Optional short description. Defaults to an empty string when omitted. |
-| `nodeforge_min_version` | Minimum compatible NodeForge version as a dotted numeric string. |
-| `nodeforge_max_version` | Optional maximum compatible NodeForge version. Omit it or use `null` for no upper bound. |
+| `author` | Optional author text. |
+| `description` | Optional short description. |
+| `nodeforge_min_version` | Minimum compatible NodeForge version. |
+| `nodeforge_max_version` | Optional maximum compatible NodeForge version; omit it or use `null` for no upper bound. |
 | `contents` | Non-empty object declaring any of `functions`, `examples`, and `systems`. |
-| `permissions.python` | Defaults to `false`. Must be `true` when declared package content contains Python or declares `systems`. |
+| `permissions.python` | Must be `true` when declared content contains Python or declares `systems`; otherwise defaults to `false`. |
 
-`id` is the stable package identity used for installation and ownership. `import_name` is the spelling used by NodeForge source code. It must be a public Python-style identifier, cannot begin with `_`, and cannot be a Python keyword. Active packages cannot share the same `import_name`.
+`id` identifies the installed package. `import_name` is the name used in NodeForge source and must be a public Python-style identifier: it cannot begin with `_` or be a Python keyword. Two active packages cannot use the same `import_name`.
 
-Content paths are package-relative POSIX paths. They cannot be absolute and cannot contain empty, `.` or `..` path segments.
+Content paths are package-relative POSIX paths. Absolute paths and empty, `.` or `..` path segments are invalid.
 
-Version fields are compared numerically by component. For example, `0.65` and `0.65.0` compare as the same version.
+Version fields are compared numerically by component, so `0.65` and `0.65.0` compare as the same version.
 
-## Package namespaces
+## Importing package callables
 
-Installed package callables are imported through the `packages` namespace.
+Import an installed package through the `packages` namespace:
 
 ```python
 from packages import shapes
@@ -101,33 +109,24 @@ Aliases are supported:
 from packages import shapes as s
 
 geo = s.ring(2.0, 0.25)
-output('Geometry', geo)
 ```
 
-Use qualified calls such as `shapes.ring(...)` in reusable code. Different packages may export the same member name, and a package member may use the same spelling as a Core DSL callable. Qualification identifies the exact owner.
+Prefer qualified calls such as `shapes.ring(...)` in reusable code. They remain unambiguous when different packages export the same member name or when a package member shares a name with a Core DSL callable.
 
-An unqualified member can also resolve when exactly one imported package provides that name and no source binding owns the spelling:
+For unqualified lookup, aliasing, and catalog-import precedence, see [Imports](SYNTAX.md#imports).
+
+`from packages import *` is not supported. Package namespaces are qualifiers rather than DSL runtime values, so assigning a namespace is also invalid:
 
 ```python
 from packages import shapes
-
-geo = ring(2.0, 0.25)
+value = shapes  # invalid
 ```
 
-The qualified form is more robust when another package or local variable is added later.
-
-`from packages import *` is not supported. Package names are namespace qualifiers, not runtime values, so this is also invalid:
-
-```python
-from packages import shapes
-value = shapes  # invalid: a package namespace is not a DSL value
-```
-
-The former package-source form `from functions import ...` is not supported. `from examples import ...` and `from local import ...` remain separate catalogs.
+The former package-source form `from functions import ...` is not supported. `from examples import ...` and `from local import ...` are separate catalogs.
 
 ## Source-backed functions
 
-The `functions` root contains reusable NodeForge DSL functions. An entry can be either a top-level `.nf` or `.nodeforge` source file:
+The `functions` root can contain a top-level `.nf` or `.nodeforge` file:
 
 ```text
 functions/
@@ -142,9 +141,7 @@ functions/
     └── source.nf
 ```
 
-The entry name becomes the public package member. For example, `functions/ring.nf` is called as `shapes.ring(...)` after `from packages import shapes`.
-
-A source-backed function uses the same interface rules as any reusable NodeForge script. Explicit `input_*()` declarations become parameters and `output(...)` declarations become results.
+The entry name becomes the public package member. A source-backed function follows the same callable rules as other reusable NodeForge scripts: explicit `input_*()` declarations define parameters and `output(...)` declarations define results.
 
 ```python
 # functions/scale_cube.nf
@@ -161,44 +158,32 @@ geo = shapes.scale_cube(1.5, factor=3.0)
 output('Geometry', geo)
 ```
 
-Input labels are display text, not parameter identity. Each `input_*()` call declares a distinct input even when two inputs have the same label. Keyword matching uses the normalized label described in [Writing Functions](WRITING_FUNCTIONS.md#write-the-function); if two labels normalize to the same keyword, use positional arguments for those inputs.
+Input labels are display text, not declaration identity. Keyword matching uses the normalized labels described in [Writing Functions](WRITING_FUNCTIONS.md#write-the-function); if two labels normalize to the same keyword, call those inputs positionally.
 
-Editable source-backed calls support the normal reusable-function behavior described in [Reusable Functions](SYNTAX.md#reusable-functions), including `__unique__=True` where supported.
+For general reusable-function behavior, including `__unique__=True` where supported, see [Reusable Functions](SYNTAX.md#reusable-functions).
 
 ## Examples
 
-The `examples` root contains complete scripts shown in **Library → Examples**. Examples remain in the explicit `examples` catalog rather than the package callable namespace.
-
-A source example can be a top-level `.nf` or `.nodeforge` file:
+The `examples` root contains complete scripts shown in **Library → Examples**. Store a source example directly as `.nf`/`.nodeforge`, or place `source.nf` inside a named example directory.
 
 ```text
 examples/
 └── demo_scene.nf
 ```
 
-or a directory with `source.nf`:
-
-```text
-examples/
-└── demo_scene/
-    └── source.nf
-```
-
-It can be added from the Library UI or imported explicitly:
+Examples stay in the `examples` catalog rather than becoming package members. They can be added from the Library UI or imported explicitly:
 
 ```python
 from examples import demo_scene
 ```
 
-Python-backed examples use Extension API v2: the owner directory contains `interface.py` and an implementation module such as `backend.py`. A single owner cannot contain both `source.nf` and `interface.py`; source/Python hybrid owners are rejected.
+Python-backed examples are also supported; their declaration and implementation rules are part of the [Extension API Reference](EXTENSION_API.md).
 
-## Python extensions
+## Python-backed extensions
 
-Python extensions use the declarative Extension API v2. They are appropriate when a package needs behavior that cannot be expressed with the Core DSL alone, such as a custom Blender-node realization or package-defined semantic values.
+Use Python only when the required behavior cannot be expressed cleanly as source-backed NodeForge code. Typical cases are custom Blender-node realization or package-defined semantic values.
 
-There are two common layouts.
-
-A native-only entry under `functions` exports exactly one callable whose name matches the entry directory:
+Python-backed content uses Extension API v2. A native function under `functions` is represented by an owner directory such as:
 
 ```text
 functions/
@@ -207,26 +192,17 @@ functions/
     └── backend.py
 ```
 
-A `systems` owner may declare multiple public callables:
+A `systems` owner can export several related callables:
 
 ```text
 systems/
 └── procedural/
     ├── interface.py
-    ├── semantic.py      # optional
+    ├── semantic.py
     └── backend.py
 ```
 
-All public callables from both layouts are exported through the owning package namespace. They therefore use the same source syntax as source-backed functions:
-
-```python
-from packages import toolkit
-
-value = toolkit.native_value(...)
-geo = toolkit.build_procedural(...)
-```
-
-Any package containing Python must set:
+A package containing Python must declare:
 
 ```json
 {
@@ -236,21 +212,19 @@ Any package containing Python must set:
 }
 ```
 
-The user must approve that permission when installing the package.
+The user approves that permission during installation. For `interface.py`, evaluation modes, backend contexts, semantic values, overloads, generated resources, and owner validation rules, continue with the [Extension API Reference](EXTENSION_API.md).
 
-For the complete declaration, backend, semantic-value, overload, and generated-resource contracts, see [Python Extension API v2](EXTENSION_API.md).
+## Public names
 
-## Public-name rules
+Top-level files and owner directories under `functions` and `examples` use their filename or directory name as the public entry name. System directory names are also public identifiers.
 
-Top-level files and owner directories under `functions` and `examples` use their filename or directory name as the public entry name. System directory names are also public identifiers. Public names must be valid Python-style identifiers, cannot begin with `_`, and cannot be Python keywords.
+Public names must be valid Python-style identifiers, cannot begin with `_`, and cannot be Python keywords. Files and directories beginning with `__` are not public entries.
 
-Within one package, a source/native function and a system-exported callable cannot publish the same member name. Different packages may publish the same member because package qualification keeps ownership explicit.
+Within one package, exported members must be unique. Different packages may publish the same member name because the package namespace identifies the owner.
 
-Files and directories beginning with `__` are not public entries.
+## Build the installation ZIP
 
-## Packaging for installation
-
-The Blender UI installs package ZIP archives. Create an archive with exactly one `nodeforge_package.json`, either directly at the archive root or inside one top-level directory. For example:
+The Blender UI installs package ZIP archives. The archive must contain exactly one `nodeforge_package.json`, either at the archive root or inside one top-level directory.
 
 ```text
 shapes.zip
@@ -260,38 +234,33 @@ shapes.zip
         └── ring.nf
 ```
 
-Archives with ambiguous roots, path traversal, symbolic links, duplicate paths, Python cache artifacts, or invalid manifest content are rejected.
+Archives with ambiguous roots, path traversal, symbolic links, duplicate paths, Python cache artifacts, or an invalid manifest are rejected.
 
-## Installing and replacing a package
+## Install, update, or remove a package
 
-1. Open **Library → Packages**.
-2. If the package requires Python, enable **Allow executable Python**. Enable it only for a package whose Python code you trust.
-3. Click **Import** and select the package ZIP.
-4. When replacing an installed package with the same `id`, enable **Replace existing package** in the import options.
-5. Confirm the import.
-
-NodeForge copies the validated package into its managed package storage; the installed package is not a live link to the ZIP or authoring directory. To publish source changes to an existing installation, create a new ZIP and import it with **Replace existing package** enabled.
-
-NodeForge validates the replacement candidate before publishing it as active state, so a failed replacement leaves the previous installation active. A new root compilation resolves one package environment snapshot and uses that snapshot consistently for nested calls.
-
-## Removing a package
+To install a package:
 
 1. Open **Library → Packages**.
-2. Select the installed package.
-3. Click **Uninstall**.
+2. Enable **Allow executable Python** only if the package requests Python permission and you trust its code.
+3. Click **Import** and select the ZIP.
+4. Confirm the import.
 
-Removal deletes the package from active package state. Existing generated Geometry Nodes groups remain Blender data, but new compilation can no longer resolve callables from the removed package.
+To update an installed package with the same `id`, import the new ZIP with **Replace existing package** enabled. NodeForge validates the replacement before making it active; a failed replacement leaves the previous installation in place.
 
-## Package compatibility checklist
+NodeForge copies an installed package into managed storage. It is not a live link to the ZIP or authoring directory, so source changes require a new import.
 
-Before distributing a package, verify that:
+To remove a package, select it in **Library → Packages** and click **Uninstall**. Existing generated Geometry Nodes groups remain Blender data, but future compilations can no longer resolve members from the removed package.
 
-- `nodeforge_package.json` declares the exact content roots that exist;
-- `nodeforge_min_version` matches the newest NodeForge feature the package relies on;
-- `import_name` is stable and does not conflict with another package you expect users to install;
-- source-backed functions compile from a clean Blender file;
-- every Python owner uses `interface.py` with `EXTENSION_API = 2`;
-- no owner mixes `source.nf` with `interface.py`;
-- `permissions.python` is `true` whenever any declared content contains `.py` files;
-- examples are usable from **Library → Examples**;
-- package calls use qualified `package.member(...)` syntax in published examples.
+## Before distributing
+
+Check that the package:
+
+- declares only content roots that actually exist;
+- sets `nodeforge_min_version` to the newest NodeForge feature it requires;
+- uses a stable, conflict-free `import_name`;
+- compiles its source-backed functions from a clean Blender file;
+- enables `permissions.python` whenever declared content contains Python;
+- exposes usable examples through **Library → Examples**;
+- uses qualified `package.member(...)` calls in published examples.
+
+For Python-backed content, use the validation rules in the [Extension API Reference](EXTENSION_API.md) rather than duplicating them here.

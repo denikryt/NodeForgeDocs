@@ -1,30 +1,61 @@
-# Python Extension API v2
+# Extension API Reference
 
-Extension API v2 is the supported Python interface for package-defined NodeForge callables. It separates the public source-language contract from frontend semantic processing and Blender-side realization.
+Extension API v2 is the supported Python interface for package-defined NodeForge callables. It is for package authors who need behavior that cannot be implemented as a source-backed `.nf` function.
 
-Use Python extensions only for behavior that cannot be expressed cleanly as a source-backed `.nf` function. For ordinary reusable DSL code, start with [source-backed package functions](PACKAGES.md#source-backed-functions).
+This page documents the Python declaration and execution contracts. Package manifests, namespaces, ZIP layout, and installation are covered in the [Package Guide](PACKAGES.md).
 
-## Owner layout
+## Owner model
 
-A Python extension owner is a directory containing `interface.py` and, when physical Blender realization is required, one or more implementation modules.
+A Python-backed owner is a directory whose public contract is declared in `interface.py`.
 
 ```text
 systems/
 └── scale_tools/
     ├── interface.py
-    ├── semantic.py      # optional
-    └── backend.py
+    ├── semantic.py      # optional frontend processing
+    └── backend.py       # physical Blender realization
 ```
 
-`interface.py` is the canonical declaration module. It defines the public callables and type contracts. `semantic.py` is optional frontend logic. `backend.py` is only a conventional name; an implementation reference may point to another owner-local module.
+`interface.py` is the declaration module. `semantic.py` is optional. A backend module may use any owner-local filename referenced by the declaration; `backend.py` is only a convention.
 
-Do not import owner-local modules from `interface.py`. Keep relative imports such as `from .helpers import ...` in `semantic.py`, `backend.py`, or modules imported by those files. `interface.py` may import the Python standard library, the public `NodeForge` API, and other dependencies allowed by the package.
+An owner is either source-backed or Python-backed. Do not place both `source.nf` and `interface.py` in the same owner directory.
 
-A single owner cannot contain both `source.nf` and `interface.py`.
+Keep owner-local imports out of `interface.py`. Relative imports such as `from .helpers import ...` belong in `semantic.py`, backend modules, or modules imported by those files. The declaration module may import the Python standard library, the public `NodeForge` API, and dependencies permitted by the package.
+
+## `interface.py`
+
+Every v2 owner defines:
+
+```python
+EXTENSION_API = 2
+EXTENSIONS = {...}
+```
+
+`EXTENSIONS` is the complete public callable inventory for that owner. Each key names a function declared directly in `interface.py`.
+
+A callable with a physical backend maps to an owner-relative implementation reference:
+
+```python
+EXTENSIONS = {
+    'scale_value': '.backend:scale_value',
+}
+```
+
+The leading dot is required. The target must be a function in an owner-local module other than `interface.py` or `semantic.py`.
+
+A semantic-only callable maps to `None`:
+
+```python
+EXTENSIONS = {
+    'make_part': None,
+}
+```
+
+A native owner under `functions/<name>/` or `examples/<name>/` exports exactly one key matching `<name>`. An owner under `systems/<owner>/` may export multiple callables.
+
+Legacy v1 layouts such as `system.py`, `CONSTRUCTORS`, and native `BACKEND_BUILTINS` are not supported.
 
 ## Minimal backend-only extension
-
-The smallest useful extension has a declaration and a physical implementation.
 
 ```python
 # systems/scale_tools/interface.py
@@ -32,7 +63,6 @@ from typing import Annotated
 from NodeForge import EvaluationMode, Float
 
 EXTENSION_API = 2
-
 EXTENSIONS = {
     'scale_value': '.backend:scale_value',
 }
@@ -66,52 +96,11 @@ def scale_value(context: ExtensionBackendContext, value, *, factor=2.0):
     return context.value(node.outputs[0], NFType.FLOAT)
 ```
 
-If the package manifest has `"import_name": "tools"`, source code calls it as:
+Once exported by the package, the callable is used through the package namespace described in [Importing package callables](PACKAGES.md#importing-package-callables).
 
-```python
-from packages import tools
+## Direct value contracts
 
-value = input_float('Value', default=1.0)
-result = tools.scale_value(value, factor=3.0)
-output('Result', result)
-```
-
-## `interface.py` protocol
-
-Every v2 owner must define:
-
-```python
-EXTENSION_API = 2
-EXTENSIONS = {...}
-```
-
-`EXTENSIONS` is the complete public callable inventory for that owner. Each key names a function declared directly in `interface.py`.
-
-A physical implementation reference uses this form:
-
-```python
-EXTENSIONS = {
-    'name': '.module:function',
-}
-```
-
-The leading dot is required. The reference is owner-relative and must point to a function in a module other than `interface.py` or `semantic.py`.
-
-Use `None` when a callable is semantic-only and has no physical implementation:
-
-```python
-EXTENSIONS = {
-    'make_part': None,
-}
-```
-
-A native-only `functions/<name>/interface.py` or `examples/<name>/interface.py` owner must declare exactly one `EXTENSIONS` key, and that key must equal the owner directory name. A `systems/<owner>/interface.py` owner may declare multiple public callables.
-
-Legacy Extension API v1 layouts such as `system.py`, `CONSTRUCTORS`, or native `BACKEND_BUILTINS` are not supported.
-
-## Direct parameter types
-
-Direct NodeForge values use annotation markers exported from `NodeForge`:
+The direct NodeForge type markers exported from `NodeForge` are:
 
 ```text
 Float
@@ -126,103 +115,54 @@ Bundle
 Rotation
 ```
 
-For a direct parameter, wrap one marker or a finite union of markers in `typing.Annotated` with exactly one `EvaluationMode`:
+A direct parameter uses `typing.Annotated` with one marker, or a finite union of markers, plus exactly one `EvaluationMode`:
 
 ```python
 from typing import Annotated
-from NodeForge import EvaluationMode, Float
+from NodeForge import EvaluationMode, Float, Int
 
 
 def amount(
-    value: Annotated[Float, EvaluationMode.RUNTIME_ONLY],
+    value: Annotated[Float | Int, EvaluationMode.RUNTIME_ONLY],
 ) -> Float:
     ...
 ```
 
-The marker classes are annotation tokens; they are not values to instantiate at runtime. A union such as `Float | Int` accepts either declared NodeForge type; the selected runtime value keeps its actual `NFType`.
+The marker classes are annotation tokens rather than runtime values to instantiate. A union accepts any listed NodeForge type and preserves the actual `NFType` of the selected argument.
 
-## Evaluation modes
+### Evaluation modes
 
-`EvaluationMode` defines which representation the extension accepts for a direct parameter.
-
-| Mode | Meaning |
+| Mode | Accepted representation |
 | --- | --- |
-| `EvaluationMode.COMPILE_TIME_ONLY` | The argument must be available during compilation. The extension receives detached compile-time data. |
-| `EvaluationMode.RUNTIME_ONLY` | The argument must be a runtime NodeForge value. The backend receives an `ExtensionBackendValue`. |
-| `EvaluationMode.COMPILE_TIME_OR_RUNTIME` | A compile-time argument stays detached; otherwise the normal runtime representation is used. |
+| `EvaluationMode.COMPILE_TIME_ONLY` | Detached compile-time data only. |
+| `EvaluationMode.RUNTIME_ONLY` | Runtime NodeForge value only; the backend receives an `ExtensionBackendValue`. |
+| `EvaluationMode.COMPILE_TIME_OR_RUNTIME` | Detached data when known at compile time, otherwise the runtime representation. |
 
-A `RUNTIME_ONLY` parameter cannot have a default. Compile-time and mixed parameters may use detached `Bool`, signed-32 `Int`, `Float`, `String`, or 3-component `Vector` defaults. Vector defaults may be written as a Python list or tuple in `interface.py`; NodeForge canonicalizes them before use.
+`RUNTIME_ONLY` parameters cannot have defaults. Compile-time and mixed parameters may default to detached `Bool`, signed-32 `Int`, `Float`, `String`, or 3-component `Vector` values. Vector defaults may be written as Python lists or tuples and are canonicalized by NodeForge.
 
-Use compile-time mode for configuration that changes the shape or properties of the generated graph, and runtime mode for data that should remain connected as a Geometry Nodes socket or field.
+Use compile-time data for configuration that changes graph shape or node properties. Use runtime values for data that should remain connected as Geometry Nodes sockets or fields.
 
-## Result types
+### Direct results
 
-A backend-only callable can return one direct NodeForge type:
+A backend-only callable may return one exact direct type:
 
 ```python
 def length(value: Annotated[Vector, EvaluationMode.RUNTIME_ONLY]) -> Float:
     ...
 ```
 
-or a fixed tuple of direct result types:
+or a fixed tuple:
 
 ```python
 def split(value: Annotated[Float, EvaluationMode.RUNTIME_ONLY]) -> tuple[Float, Int]:
     ...
 ```
 
-Variadic result tuples such as `tuple[Float, ...]` and union results such as `Float | Int` are not direct executable result contracts.
+Variadic tuples such as `tuple[Float, ...]` and union results such as `Float | Int` are not executable direct-result contracts.
 
-For package-defined semantic records and semantic lists, see [Semantic values](#semantic-values).
+### Overloads
 
-## Backend arguments and results
-
-A physical implementation is called as:
-
-```python
-implementation(context, *bound_args, **bound_kwargs)
-```
-
-`context` is an `ExtensionBackendContext`. Runtime arguments are `ExtensionBackendValue` instances. Compile-time arguments are detached Python data selected by the parameter's evaluation mode.
-
-The public backend API is:
-
-```python
-from NodeForge.extension_api import ExtensionBackendContext, ExtensionBackendValue, NFType
-```
-
-### `ExtensionBackendValue`
-
-A runtime argument exposes:
-
-- `value.socket` — the Blender output socket carrying the runtime value;
-- `value.typ` — its canonical `NFType`.
-
-Do not construct compiler values or reach into NodeForge compiler internals. Link the provided socket to nodes created in `context.group`.
-
-### `context.group`
-
-The current candidate Geometry Nodes group. Create and link Blender nodes in this group.
-
-### `context.location`
-
-The `(x, y)` placement anchor for the extension call. Use it as the starting location for generated nodes.
-
-### `context.value(socket, typ)`
-
-Wraps and validates a current-group output socket as the declared NodeForge runtime type.
-
-```python
-return context.value(node.outputs['Value'], NFType.FLOAT)
-```
-
-The socket must be a valid output socket from the current group and must match the declared `NFType`.
-
-A backend may also return an existing compatible `ExtensionBackendValue` when no additional node is needed.
-
-## Overloads
-
-Finite direct-value overloads use `typing.overload`. Alternatives are tried in source order.
+Use `typing.overload` for a finite set of direct-value signatures. Alternatives are tried in source order.
 
 ```python
 from typing import Annotated, overload
@@ -253,14 +193,13 @@ def select_value(*args, **kwargs):
     ...
 ```
 
-Overloads are for direct executable contracts. Package-defined semantic record/list contracts are not overload alternatives.
+Semantic record and list contracts described below are not overload alternatives.
 
 ## Semantic values
 
-A package can define frontend-only structured values as frozen dataclasses declared directly in `interface.py`. These values are useful when a group of runtime references and compile-time options should travel together without becoming a Geometry Nodes socket type.
+Frozen dataclasses declared directly in `interface.py` can define frontend-only structured values. They are useful when runtime references and compile-time options need to travel together without becoming a Geometry Nodes socket type.
 
 ```python
-# interface.py
 from dataclasses import dataclass
 from typing import Annotated
 from NodeForge import EvaluationMode, Float
@@ -289,16 +228,16 @@ def consume_part(part: Part) -> Float:
     ...
 ```
 
-A public record name may appear in a public parameter or result contract. A leading underscore creates an owner-private semantic record, which is useful for internal normalized state passed from `semantic.py` to a backend.
+A public record can appear in public parameters or results. A record whose class name begins with `_` is owner-private and can be used for normalized state passed from semantic processing to a backend.
 
-Semantic records use same-owner nominal identity. Define them directly under their own class name in `interface.py`; do not replace them with lookalike classes imported from another module.
+Record identity is nominal and owner-local. Define the dataclass under its own name in `interface.py`; an imported lookalike class is not equivalent.
 
-### Record field forms
+### Record fields
 
 Record fields and private semantic state support this recursive schema:
 
 ```text
-one NodeForge marker, or a finite union such as Float | Int
+one NodeForge marker, or a finite marker union such as Float | Int
 exact Python bool | int | float | str
 another registered record
 list[T]
@@ -308,11 +247,11 @@ dict[str, T]
 T | None
 ```
 
-NodeForge copies Python containers into detached compiler-owned state. Package mutation after a semantic call cannot mutate the compiler's stored semantic value.
+Python containers are copied into compiler-owned detached state, so later package-side mutation cannot change an already stored semantic value.
 
 ### `RuntimeRef`
 
-When `semantic.py` receives a direct runtime argument, it sees a compiler-issued `RuntimeRef` rather than a Blender socket.
+When `semantic.py` receives a direct runtime argument, the value is represented by a compiler-issued `RuntimeRef` rather than a Blender socket.
 
 ```python
 from NodeForge import RuntimeRef
@@ -323,15 +262,21 @@ def make_part(value) -> Part:
     return Part(value)
 ```
 
-`RuntimeRef.typ` reports the actual canonical `NFType`. A `RuntimeRef` belongs only to the active semantic invocation; do not cache or fabricate it.
+`RuntimeRef.typ` reports the canonical `NFType`. A reference belongs to the active semantic invocation and must not be fabricated or cached for later invocations.
+
+### Semantic lists
+
+A semantic callable may return or consume a declared `list[Record]`. Such lists can be stored in source variables and expanded into another extension call with caller-side `*` when the receiving contract accepts those elements.
+
+Semantic lists are compiler semantic values, not mutable compile-time arrays; they do not expose structural mutation methods such as `append(...)`.
 
 ## `semantic.py`
 
-A callable gets frontend semantic behavior when `semantic.py` defines an ordinary same-name function with a return annotation.
+If `semantic.py` defines an ordinary same-name function with a return annotation, that function provides frontend semantic behavior for the declared callable.
 
 ### Semantic-only callable
 
-For a semantic-only callable, use `None` in `EXTENSIONS` and return the public semantic result from `semantic.py`.
+Use `None` in `EXTENSIONS` and return the declared semantic result:
 
 ```python
 # semantic.py
@@ -342,7 +287,7 @@ def make_part(value) -> Part:
     return Part(value)
 ```
 
-The result can be assigned and consumed later:
+The result may be assigned and passed to another extension call:
 
 ```python
 from packages import tools
@@ -353,11 +298,11 @@ result = tools.consume_part(part)
 output('Result', result)
 ```
 
-Semantic records and semantic lists persist in source bindings together with the runtime dependencies they contain. They are frontend semantic values, not ordinary Geometry Nodes socket values: they cannot be exposed directly with `output(...)` and are not Repeat Zone carried state.
+Semantic records and lists may contain runtime dependencies, but they are not ordinary Geometry Nodes socket values. They cannot be passed directly to `output(...)` or used as Repeat Zone carried state.
 
 ### Semantic-then-backend callable
 
-A callable may use `semantic.py` to normalize its public arguments into owner-private state before physical realization.
+Semantic processing may normalize public arguments into private owner state before physical realization.
 
 ```python
 # interface.py
@@ -399,22 +344,53 @@ from NodeForge.extension_api import NFType
 
 def consume_part(context, state):
     runtime_value = state.part.value
-    # Runtime leaves inside semantic state are reconstructed as
-    # ExtensionBackendValue objects here.
     return context.value(runtime_value.socket, NFType.FLOAT)
 ```
 
-The backend receives the current-session record classes. Runtime leaves inside the semantic state are reconstructed as `ExtensionBackendValue` objects; static fields remain detached Python data.
+The backend receives current-session record classes. Runtime leaves inside semantic state are reconstructed as `ExtensionBackendValue` objects; static fields remain detached Python data.
 
-## Semantic lists and `*` expansion
+## Backend API
 
-A semantic callable may return or consume a declared `list[Record]`. Semantic lists can persist in source variables and can be expanded into another extension call with caller-side `*` syntax when the receiving contract accepts those elements.
+A physical implementation is invoked as:
 
-Semantic lists are distinct from ordinary mutable compile-time lists. In particular, they do not gain structural-array mutation methods such as `append(...)`.
+```python
+implementation(context, *bound_args, **bound_kwargs)
+```
 
-## Generated Blender resources
+Import the public backend types from:
 
-If a backend creates persistent Blender IDs, create transaction-owned resources through `ExtensionBackendContext`:
+```python
+from NodeForge.extension_api import ExtensionBackendContext, ExtensionBackendValue, NFType
+```
+
+Runtime direct arguments are `ExtensionBackendValue` instances. Compile-time arguments are detached Python data selected by the parameter's evaluation mode.
+
+### `ExtensionBackendValue`
+
+A runtime value exposes:
+
+- `value.socket` — the Blender output socket carrying the value;
+- `value.typ` — its canonical `NFType`.
+
+Do not construct compiler values or depend on compiler internals. Use the supplied socket with nodes created in the current backend context.
+
+### `ExtensionBackendContext`
+
+`context.group` is the candidate Geometry Nodes group for this compilation.
+
+`context.location` is the `(x, y)` placement anchor for the extension call.
+
+`context.value(socket, typ)` validates and wraps an output socket from the current group as the declared NodeForge type:
+
+```python
+return context.value(node.outputs['Value'], NFType.FLOAT)
+```
+
+A backend may return an existing compatible `ExtensionBackendValue` when no new node is required.
+
+### Generated Blender resources
+
+Persistent Blender IDs created by a backend should be transaction-owned:
 
 ```python
 mesh = context.new_generated_mesh(role='surface', name_hint='Terrain')
@@ -430,29 +406,21 @@ Available helpers are:
 
 Resources created through these helpers participate in the active NodeForge transaction and can be rolled back when compilation fails. Semantic code must not create Blender resources.
 
-## Snapshot and reload behavior
+## Loading and reload behavior
 
-NodeForge captures `interface.py`, `semantic.py`, implementation modules, and owner-local helpers as one extension-owner snapshot. Source bytes determine extension freshness; filesystem timestamp changes alone do not.
+NodeForge snapshots `interface.py`, `semantic.py`, backend modules, and owner-local helpers as one extension owner. Source bytes determine freshness; filesystem timestamp changes alone do not.
 
-`semantic.py` and physical implementation modules are loaded lazily for the phase that needs them. Do not rely on mutable module state being shared between frontend semantic execution and backend realization.
+Semantic and backend modules are loaded lazily for the phase that uses them. Do not rely on mutable module state being shared between frontend semantic execution and Blender-side realization.
 
-When an installed package is edited and a group is recompiled or reloaded, NodeForge resolves a new environment snapshot. A single compilation uses one consistent snapshot for the root and nested calls.
+A new root compilation resolves a new package environment snapshot and uses it consistently for nested calls.
 
-## Validation rules
+## Validation
 
-Keep these constraints in mind when authoring an extension:
+Package installation validates Extension API declarations before the candidate package becomes active. In addition to the contracts described above:
 
-- `EXTENSION_API` must be exactly `2`;
-- `EXTENSIONS` must be a non-empty mapping;
-- every exported declaration is defined directly in `interface.py`;
-- direct parameters use a NodeForge marker or finite marker union plus exactly one `EvaluationMode`;
-- `RUNTIME_ONLY` parameters have no defaults;
+- `EXTENSION_API` must equal `2` and `EXTENSIONS` must be non-empty;
 - `__unique__` is compiler-reserved and cannot be an extension parameter;
-- `**kwargs` is not part of the public extension ABI;
-- physical implementation references are owner-relative `'.module:function'` strings;
-- `interface.py` does not import owner-local child modules;
-- direct executable results are one exact NodeForge type or a fixed tuple of exact types;
-- native-only `functions/<name>` and `examples/<name>` owners export exactly `<name>`;
-- `source.nf` and `interface.py` are never mixed in the same owner.
+- public extension signatures do not support `**kwargs`;
+- direct executable results must be one exact NodeForge type or a fixed tuple of exact types.
 
-Package installation validates these declarations before the candidate package becomes active. Prefer controlled validation failures over compensating for malformed declarations in backend code.
+Treat validation failures as declaration errors rather than compensating for malformed contracts inside backend code.

@@ -51,7 +51,7 @@ The rebuilt group also stores the edited source. Use **Load Script From Selected
 | **Load Script From Selected NodeGroup** | Copies the source embedded in the selected generated group into the selected Text datablock. |
 | **Reload from Source** | Rebuilds a selected Local or package-backed group from its current catalog source. |
 
-Compiled Geometry Nodes groups remain in the Blender file and continue evaluating when the NodeForge add-on is disabled or uninstalled.
+The generated result is native Blender data; see [Generated groups remain native Blender data](CORE_CONCEPTS.md#generated-groups-remain-native-blender-data) for its lifecycle.
 
 ## First script: one input, one output
 
@@ -247,11 +247,11 @@ Read these in order:
 2. [DSL Syntax and Semantics](SYNTAX.md) — learn the supported language rules.
 3. [Core DSL Built-ins Reference](BUILTINS.md) — learn the primitive functions available everywhere.
 4. [Writing Functions](WRITING_FUNCTIONS.md) — create reusable functions with the Core DSL.
-5. [Creating Packages](PACKAGES.md) — distribute source functions, examples, and extensions as a third-party library.
-6. [Python Extension API v2](EXTENSION_API.md) — add typed Python-backed package callables when the Core DSL is not enough.
+5. [Package Guide](PACKAGES.md) — distribute source functions, examples, and extensions as a third-party library.
+6. [Extension API Reference](EXTENSION_API.md) — define typed Python-backed package callables when the Core DSL is not enough.
 7. [Math Methods](MATH_METHODS.md) — use the methods added by the Math library.
 8. [Math Functions](FUNCTIONS.md) — use reusable DSL functions from the Math library.
 9. [Math Examples](MATH_EXAMPLES.md) — explore complete scripts included with the Math package.
-10. [LSystem](LSYSTEMS.md) — create geometry with L-system rules.
+10. [L-System Guide](LSYSTEMS_SCRIPTING.md) — create geometry with L-system rules; use the [L-System Reference](LSYSTEMS.md) for exact contracts.
 
 To study an installed example, add it from **Library → Examples**, load its source with **Load Script From Selected NodeGroup**, and edit the source in a Text datablock.

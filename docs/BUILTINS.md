@@ -15,9 +15,8 @@ Core built-ins are primitive operations registered by the NodeForge add-on and a
 | `Object` | Blender object socket with Object Info access. |
 | `String` | Blender string socket. String literals can also be used as compile-time names and options. |
 | `Bundle` | Blender bundle socket containing named runtime values. |
-| `Float`, `Int`, `Bool`, `Vector`, `Geometry`, `Material`, `Object`, `String`, `Bundle` | Type tokens used by `node(..., typ=...)`, `node(..., outputs=...)`, local parameter annotations, and `bundle_get(..., typ=...)`. |
 
-NodeForge values are typed socket wrappers. A value can be a constant lowered to a node, a linked runtime field, or geometry. Most built-ins accept either literal values or runtime values of the declared type.
+The type names above also serve as tokens for APIs such as `node(..., typ=...)`, `node(..., outputs=...)`, local parameter annotations, and `bundle_get(..., typ=...)`. NodeForge values are typed socket wrappers: a value may be a lowered constant, a linked runtime field, or geometry. Most built-ins accept literals or runtime values of the declared type.
 
 ## Compile-Time Constants
 
