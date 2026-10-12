@@ -120,5 +120,5 @@ This document shows the Blender Geometry Nodes areas and domains currently cover
 | Runtime repeat loops | Partial | Nested repeat-style loops; supported state types only |
 | Runtime `if` / switch logic | Partial | Compatible Float, Int, Vector, Bool, Geometry, String, and Bundle branch values |
 | Arrays / compile-time lists | Partial | Compile-time structure only |
-| L-systems | Yes | NodeForge-specific system |
+| L-systems | Package | `ls.system(...)` from [NodeForge L-System](LSYSTEMS.md) |
 | Raw Blender node creation | Raw only | `node(...)`; NodeForge runtime socket types only |

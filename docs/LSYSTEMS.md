@@ -8,6 +8,10 @@ from packages import lsystem as ls
 
 This page is the API and grammar reference. For a worked introduction with complete examples, use the [L-System Guide](LSYSTEMS_SCRIPTING.md).
 
+## Compatibility
+
+This reference describes **NodeForge L-System 4.0** for **NodeForge 0.65.0–0.66.3**. The package uses Extension API v2 and requires executable Python permission.
+
 ## `ls.system(part, ...)`
 
 Builds an L-system and returns `Geometry`.
@@ -87,7 +91,7 @@ Sets the number of rewrite generations.
 
 | Accepted value | Behavior |
 | --- | --- |
-| compile-time `Integer` | Must be non-negative; expansion happens during compilation. |
+| compile-time `Int` | Must be non-negative; expansion happens during compilation. |
 | runtime `Int` | Expansion happens inside Geometry Nodes and may change topology without recompilation. |
 
 Runtime values below `0` are treated as `0`.
@@ -104,7 +108,7 @@ plant = ls.system(
 )
 ```
 
-`ls.angle(...)` and `ls.step(...)` both accept either a compile-time number or a runtime numeric `Value`.
+`ls.angle(...)` and `ls.step(...)` both accept either a compile-time number or a runtime `Float` or `Int`.
 
 ### `ls.angle(value)`
 
@@ -141,7 +145,7 @@ Binds a numeric value to a name used inside parameterized commands or markers.
 | Parameter | Type | Constraint |
 | --- | --- | --- |
 | `name` | compile-time `String` | Identifier matching `[A-Za-z_][A-Za-z0-9_]*`. |
-| `value` | compile-time number or runtime numeric `Value` | Numeric value exposed to the grammar. |
+| `value` | compile-time number or runtime `Float` or `Int` | Numeric value exposed to the grammar. |
 
 A module argument is either a numeric literal or one declared parameter name. NodeForge expressions are not parsed inside the L-system string; compute an expression in the surrounding script and bind its result with `ls.param(...)`.
 
@@ -254,9 +258,9 @@ These constructor arguments may remain runtime values:
 | Constructor | Runtime type | Effect |
 | --- | --- | --- |
 | `ls.iterations(...)` | `Int` | Changes rewrite count and topology. |
-| `ls.angle(...)` | numeric | Changes default rotations. |
-| `ls.step(...)` | numeric | Changes default forward distance. |
-| `ls.param(...)` | numeric | Changes commands or markers that reference the parameter. |
+| `ls.angle(...)` | `Float` or `Int` | Changes default rotations. |
+| `ls.step(...)` | `Float` or `Int` | Changes default forward distance. |
+| `ls.param(...)` | `Float` or `Int` | Changes commands or markers that reference the parameter. |
 
 The axiom, rule strings, parameter names, marker declarations, and rule set are compile-time declarations.
 
