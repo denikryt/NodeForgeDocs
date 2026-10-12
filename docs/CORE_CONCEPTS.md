@@ -164,7 +164,7 @@ Package aliases can be used when a shorter or more specific name is useful:
 from packages import lsystem as ls
 ```
 
-Local reusable `.nf` files are imported with `from local import ...`, while installed libraries are imported with `from packages import ...`.
+Local reusable `.nf` files are imported with `from local import ...`, while installed libraries are imported with `from packages import ...`. See [Imports](SYNTAX.md#imports) for the available forms.
 
 ## Generated groups remain native Blender data
 

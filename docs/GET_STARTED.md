@@ -192,13 +192,13 @@ Use **Add Folder...** to make an existing directory of `.nf` files available in 
 1. Open **Library → Local** and click **Add Folder...**.
 2. Select an existing folder.
 3. Select the linked folder row and use its arrow button to browse its scripts and subfolders.
-4. Select a script and click **Add Node Group**, or import it with `from local import ...`.
+4. Select a script and click **Add Node Group**, or import it from `local` in another script.
 
 External folders are read-only in NodeForge. Edit their `.nf` files with your normal editor, then select an inserted group and click **Reload from Source** to rebuild it from the current file. **Remove from Local** removes the folder registration and leaves the external files on disk.
 
 For managed Local content, **Delete File** removes a selected `.nf` file. **Delete Folder** removes a selected empty folder.
 
-Folders organize the Local browser, while import names remain flat. A file such as `shapes/cube_row.nf` is imported with `from local import cube_row`. If separate Local roots contain the same public filename, rename or remove one source before importing that name.
+Local files can be imported directly or through their folder path. See [Local imports](SYNTAX.md#local) for the supported forms.
 
 ## Reuse a saved script from another script
 

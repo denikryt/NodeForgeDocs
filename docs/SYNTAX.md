@@ -399,23 +399,51 @@ An unqualified package member can resolve when exactly one imported package prov
 
 `from packages import *` is unsupported. The former `from functions import ...` source namespace has been removed; import the owning package instead.
 
-### Examples and Local
+### Examples
 
-Examples and Local scripts retain their explicit catalogs.
+Import an example by name.
 
 ```python
 from examples import demo_scene
-from local import move_geometry
 ```
 
-Aliases and star imports are supported for these two catalogs.
+Aliases and `from examples import *` are also supported.
+
+### Local
+
+Import reusable `.nf` files from the Local library with `from local import ...`. This includes files saved in NodeForge and files made available from disk with **Library → Local → Add Folder...**.
 
 ```python
+from local import move_geometry
 from local import move_geometry as move
-from examples import *
 ```
 
-Names beginning with `_` are private and excluded from catalog imports. Plain `import`, relative imports, block-local imports, and imports from arbitrary Python modules are unsupported.
+When a file name is unique, the flat form works regardless of its folder. When files share a name, include the folder path to select one explicitly. For example, given `terrain/noise.nf` and `procedural/noise.nf`:
+
+```python
+from local.terrain import noise
+from local.procedural import noise as procedural_noise
+```
+
+You can also import a directory as a namespace and call a file directly inside it:
+
+```python
+from local import terrain as t
+
+value = t.noise(...)
+```
+
+For a file in a nested directory, import from the complete path:
+
+```python
+from local.terrain.filters import blur
+```
+
+A folder added with **Add Folder...** uses its name on disk as its top-level namespace. Folder and file names used in qualified imports must be public ASCII identifiers: use letters, digits, and underscores, begin with a letter, and avoid Python keywords.
+
+`from local import *` imports files by their flat names and requires every imported name to be unique. Names beginning with `_` are private and excluded from catalog imports.
+
+Imports are top-level statements. Plain `import`, relative imports, block-local imports, and imports from arbitrary Python modules are unsupported.
 
 See [Creating Packages](PACKAGES.md) for package authoring and [Python Extension API v2](EXTENSION_API.md) for Python-backed package callables.
 
