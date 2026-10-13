@@ -345,16 +345,10 @@ output('Geometry', geometry)
 output('Value', value)
 ```
 
-Reusable function calls share one backing function group by default. Add `__unique__=True` when one supported call needs its own shallow function-group copy, for example when you intend to edit a Curve Map node separately for that occurrence.
+Reusable function calls share one backing function group by default. Add `__unique__=True` when one call needs its own shallow function-group copy. For example, after saving a function containing a Curve Map node as `remap_curve.nf`:
 
 ```python
-def remap_curve(value: Float):
-    return node(
-        'ShaderNodeFloatCurve',
-        inputs={'Factor': 1.0, 'Value': value},
-        output='Value',
-        typ=Float,
-    )
+from local import remap_curve
 
 value_a = input_float('A')
 value_b = input_float('B')
@@ -362,9 +356,9 @@ first = remap_curve(value_a, __unique__=True)
 second = remap_curve(value_b, __unique__=True)
 ```
 
-`__unique__` must be a compile-time `Bool`. It is supported by reusable source-function calls, including script-local `def` calls and source-backed package functions. Omitting it or passing `__unique__=False` uses the shared function group. Core built-ins, Python extension callables, and `node(...)` do not use this modifier.
+Each marked call creates a separate editable group. `__unique__` must be a compile-time `Bool`. It is supported by script-local `def` calls, imported Local scripts, and source-backed package functions. Omitting it or passing `__unique__=False` uses the shared function group. Core built-ins, Python extension callables, and `node(...)` do not use this modifier.
 
-The copy is shallow, so nested reusable dependencies remain shared unless their calls also use `__unique__=True`. A unique group's manual Blender-node state is preserved when an update leaves that function unchanged. Changing the function source or a reusable dependency used by it rebuilds the group from source.
+The copy is shallow, so nested reusable dependencies remain shared unless their calls also use `__unique__=True`. A unique imported Local group keeps its identity when the caller is updated or renamed, the `.blend` file is reopened, or **Reload from Source** is used. Manual edits inside the group are preserved while its source and reusable dependencies remain unchanged. Changing either rebuilds the group from source.
 
 See [Writing Functions](WRITING_FUNCTIONS.md) for creating and saving a local reusable function.
 
