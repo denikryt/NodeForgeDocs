@@ -419,7 +419,16 @@ from local.terrain import noise
 from local.procedural import noise as procedural_noise
 ```
 
-You can also import a directory as a namespace and call a file directly inside it:
+Import a directory without an alias to make its immediate public `.nf` files available both as bare calls and through the directory namespace:
+
+```python
+from local import terrain
+
+first = noise(...)
+second = terrain.noise(...)
+```
+
+An aliased directory remains namespace-only:
 
 ```python
 from local import terrain as t
@@ -427,11 +436,13 @@ from local import terrain as t
 value = t.noise(...)
 ```
 
-For a file in a nested directory, import from the complete path:
+Nested directories are not included automatically. Import a nested file from its complete path:
 
 ```python
 from local.terrain.filters import blur
 ```
+
+If imported directories provide the same bare function name, use a qualified call such as `terrain.noise(...)` to select one. Directory imports expose only `.nf` files as bare calls; `.nodeforge` files remain available through qualified or explicit imports.
 
 A folder added with **Add Folder...** uses its name on disk as its top-level namespace. Folder and file names used in qualified imports must be public ASCII identifiers: use letters, digits, and underscores, begin with a letter, and avoid Python keywords.
 
