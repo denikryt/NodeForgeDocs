@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://denikryt.github.io/NodeForgeDocs/0.73.0/PACKAGES/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Package Guide - NodeForge Documentation</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Package Guide";
+        var mkdocs_page_input_path = "PACKAGES.md";
+        var mkdocs_page_url = "/NodeForgeDocs/0.73.0/PACKAGES/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> NodeForge Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../GET_STARTED/">Get Started</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">DSL</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../CORE_CONCEPTS/">Core Concepts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SYNTAX/">Syntax</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../BUILTINS/">Built-ins</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../WRITING_FUNCTIONS/">Writing Functions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MESH_COMPUTE/">Mesh Compute (Experimental)</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Package Guide</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#package-layout">Package layout</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#manifest">Manifest</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#importing-package-callables">Importing package callables</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#source-backed-functions">Source-backed functions</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#python-backed-extensions">Python-backed extensions</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#public-names">Public names</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#build-the-installation-zip">Build the installation ZIP</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#install-update-or-remove-a-package">Install, update, or remove a package</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#before-distributing">Before distributing</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../EXTENSION_API/">Extension API Reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../GEOMETRY_NODES_COVERAGE/">Geometry Nodes Coverage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Libraries</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Math</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_METHODS/">Methods</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../FUNCTIONS/">Functions</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_EXAMPLES/">Examples</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >LSystem</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS_SCRIPTING/">Guide</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS/">Reference</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">NodeForge Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">DSL</li>
+      <li class="breadcrumb-item active">Package Guide</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/denikryt/NodeForgeDocs/edit/master/docs/PACKAGES.md">Edit on denikryt/NodeForgeDocs</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="package-guide">Package Guide<a class="headerlink" href="#package-guide" title="Permanent link">&para;</a></h1>
+<p>A NodeForge package is an installable distribution unit for reusable DSL functions, examples, and optional Python-backed extensions. This page covers package structure, manifests, imports, packaging, and installation. The Python callable ABI is documented separately in the <a href="../EXTENSION_API/">Extension API Reference</a>.</p>
+<p>For scripts used only on one machine or project, the <a href="../GET_STARTED/#save-your-own-script-to-local">Local catalog</a> is usually simpler than creating a package.</p>
+<h2 id="package-layout">Package layout<a class="headerlink" href="#package-layout" title="Permanent link">&para;</a></h2>
+<p>Every package contains <code>nodeforge_package.json</code> at its root and one or more content roots declared by that manifest.</p>
+<p>A source-only package can be as small as:</p>
+<pre class="highlight"><code class="language-text">vendor.shapes/
+├── nodeforge_package.json
+└── functions/
+    └── ring.nf</code></pre>
+<p>Packages may declare these content roots:</p>
+<table>
+<thead>
+<tr>
+<th>Root</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>functions</code></td>
+<td>Reusable callables imported through the package namespace.</td>
+</tr>
+<tr>
+<td><code>examples</code></td>
+<td>Complete scripts exposed through <strong>Library → Examples</strong>.</td>
+</tr>
+<tr>
+<td><code>systems</code></td>
+<td>Python-backed extension owners that may export multiple callables.</td>
+</tr>
+</tbody>
+</table>
+<p>A larger package might use all three:</p>
+<pre class="highlight"><code class="language-text">vendor.toolkit/
+├── nodeforge_package.json
+├── functions/
+│   ├── ring.nf
+│   ├── scatter/
+│   │   └── source.nf
+│   └── native_value/
+│       ├── interface.py
+│       └── backend.py
+├── examples/
+│   └── demo_scene.nf
+└── systems/
+    └── procedural/
+        ├── interface.py
+        ├── semantic.py
+        └── backend.py</code></pre>
+<p>Only declare roots that the package actually contains.</p>
+<h2 id="manifest">Manifest<a class="headerlink" href="#manifest" title="Permanent link">&para;</a></h2>
+<p><code>nodeforge_package.json</code> uses schema version <code>1</code>.</p>
+<pre class="highlight"><code class="language-json">{
+  "schema_version": 1,
+  "id": "vendor.shapes",
+  "import_name": "shapes",
+  "name": "Vendor Shapes",
+  "version": "1.0.0",
+  "author": "Vendor",
+  "description": "Reusable shape functions for NodeForge.",
+  "nodeforge_min_version": "0.65.0",
+  "contents": {
+    "functions": "functions"
+  }
+}</code></pre>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Requirement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>schema_version</code></td>
+<td>Integer <code>1</code>.</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td>Stable package identity. Use a dotted lowercase identifier such as <code>vendor.shapes</code>.</td>
+</tr>
+<tr>
+<td><code>import_name</code></td>
+<td>Optional DSL namespace. Defaults to the last component of <code>id</code>.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>Display name.</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td>Dotted numeric package version such as <code>1.2.0</code>.</td>
+</tr>
+<tr>
+<td><code>author</code></td>
+<td>Optional author text.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>Optional short description.</td>
+</tr>
+<tr>
+<td><code>nodeforge_min_version</code></td>
+<td>Minimum compatible NodeForge version.</td>
+</tr>
+<tr>
+<td><code>contents</code></td>
+<td>Non-empty object declaring any of <code>functions</code>, <code>examples</code>, and <code>systems</code>.</td>
+</tr>
+</tbody>
+</table>
+<p><code>id</code> identifies the installed package. <code>import_name</code> is the name used in NodeForge source and must be a public Python-style identifier: it cannot begin with <code>_</code> or be a Python keyword. Two active packages cannot use the same <code>import_name</code>.</p>
+<p>Content paths are package-relative POSIX paths. Absolute paths and empty, <code>.</code> or <code>..</code> path segments are invalid.</p>
+<p>Version fields are compared numerically by component, so <code>0.65</code> and <code>0.65.0</code> compare as the same version.</p>
+<h2 id="importing-package-callables">Importing package callables<a class="headerlink" href="#importing-package-callables" title="Permanent link">&para;</a></h2>
+<p>Import an installed package through the <code>packages</code> namespace:</p>
+<pre class="highlight"><code class="language-python">from packages import shapes
+
+geo = shapes.ring(2.0, 0.25)
+output('Geometry', geo)</code></pre>
+<p>Aliases are supported:</p>
+<pre class="highlight"><code class="language-python">from packages import shapes as s
+
+geo = s.ring(2.0, 0.25)</code></pre>
+<p>Prefer qualified calls such as <code>shapes.ring(...)</code> in reusable code. They remain unambiguous when different packages export the same member name or when a package member shares a name with a Core DSL callable.</p>
+<p>For unqualified lookup, aliasing, and catalog-import precedence, see <a href="../SYNTAX/#imports">Imports</a>.</p>
+<p><code>from packages import *</code> is not supported. Package namespaces are qualifiers rather than DSL runtime values, so assigning a namespace is also invalid:</p>
+<pre class="highlight"><code class="language-python">from packages import shapes
+value = shapes  # invalid</code></pre>
+<p>The former package-source form <code>from functions import ...</code> is not supported. <code>from examples import ...</code> and <code>from local import ...</code> are separate catalogs.</p>
+<h2 id="source-backed-functions">Source-backed functions<a class="headerlink" href="#source-backed-functions" title="Permanent link">&para;</a></h2>
+<p>The <code>functions</code> root can contain a top-level <code>.nf</code> or <code>.nodeforge</code> file:</p>
+<pre class="highlight"><code class="language-text">functions/
+└── ring.nf</code></pre>
+<p>or a directory containing <code>source.nf</code>:</p>
+<pre class="highlight"><code class="language-text">functions/
+└── ring/
+    └── source.nf</code></pre>
+<p>The entry name becomes the public package member. A source-backed function follows the same callable rules as other reusable NodeForge scripts: explicit <code>input_*()</code> declarations define parameters and <code>output(...)</code> declarations define results.</p>
+<pre class="highlight"><code class="language-python"># functions/scale_cube.nf
+size = input_float('Size', default=1.0)
+factor = input_float('Factor', default=2.0)
+geo = cube(size=size * factor)
+output('Geometry', geo)</code></pre>
+<pre class="highlight"><code class="language-python">from packages import shapes
+
+geo = shapes.scale_cube(1.5, factor=3.0)
+output('Geometry', geo)</code></pre>
+<p>Input labels are display text, not declaration identity. Keyword matching uses the normalized labels described in <a href="../WRITING_FUNCTIONS/#write-the-function">Writing Functions</a>; if two labels normalize to the same keyword, call those inputs positionally.</p>
+<p>For general reusable-function behavior, including <code>__unique__=True</code> where supported, see <a href="../SYNTAX/#reusable-functions">Reusable Functions</a>.</p>
+<h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
+<p>The <code>examples</code> root contains complete scripts shown in <strong>Library → Examples</strong>. Store a source example directly as <code>.nf</code>/<code>.nodeforge</code>, or place <code>source.nf</code> inside a named example directory.</p>
+<pre class="highlight"><code class="language-text">examples/
+└── demo_scene.nf</code></pre>
+<p>Examples stay in the <code>examples</code> catalog rather than becoming package members. They can be added from the Library UI or imported explicitly:</p>
+<pre class="highlight"><code class="language-python">from examples import demo_scene</code></pre>
+<p>Python-backed examples are also supported; their declaration and implementation rules are part of the <a href="../EXTENSION_API/">Extension API Reference</a>.</p>
+<h2 id="python-backed-extensions">Python-backed extensions<a class="headerlink" href="#python-backed-extensions" title="Permanent link">&para;</a></h2>
+<p>Use Python only when the required behavior cannot be expressed cleanly as source-backed NodeForge code. Typical cases are custom Blender-node realization or package-defined semantic values.</p>
+<p>Python-backed content uses Extension API v2. A native function under <code>functions</code> is represented by an owner directory such as:</p>
+<pre class="highlight"><code class="language-text">functions/
+└── native_value/
+    ├── interface.py
+    └── backend.py</code></pre>
+<p>A <code>systems</code> owner can export several related callables:</p>
+<pre class="highlight"><code class="language-text">systems/
+└── procedural/
+    ├── interface.py
+    ├── semantic.py
+    └── backend.py</code></pre>
+<p>Python-backed package code runs with normal Python privileges. Install packages only from sources you trust. For <code>interface.py</code>, evaluation modes, backend contexts, semantic values, overloads, generated resources, and owner validation rules, continue with the <a href="../EXTENSION_API/">Extension API Reference</a>.</p>
+<h2 id="public-names">Public names<a class="headerlink" href="#public-names" title="Permanent link">&para;</a></h2>
+<p>Top-level files and owner directories under <code>functions</code> and <code>examples</code> use their filename or directory name as the public entry name. System directory names are also public identifiers.</p>
+<p>Public names must be valid Python-style identifiers, cannot begin with <code>_</code>, and cannot be Python keywords. Files and directories beginning with <code>__</code> are not public entries.</p>
+<p>Within one package, exported members must be unique. Different packages may publish the same member name because the package namespace identifies the owner.</p>
+<h2 id="build-the-installation-zip">Build the installation ZIP<a class="headerlink" href="#build-the-installation-zip" title="Permanent link">&para;</a></h2>
+<p>The Blender UI installs package ZIP archives. The archive must contain exactly one <code>nodeforge_package.json</code>, either at the archive root or inside one top-level directory.</p>
+<pre class="highlight"><code class="language-text">shapes.zip
+└── vendor.shapes/
+    ├── nodeforge_package.json
+    └── functions/
+        └── ring.nf</code></pre>
+<p>Archives with ambiguous roots, path traversal, symbolic links, duplicate paths, Python cache artifacts, or an invalid manifest are rejected.</p>
+<h2 id="install-update-or-remove-a-package">Install, update, or remove a package<a class="headerlink" href="#install-update-or-remove-a-package" title="Permanent link">&para;</a></h2>
+<p>To install a package:</p>
+<ol>
+<li>Open <strong>Library → Packages</strong>.</li>
+<li>Click <strong>Import</strong> and select the ZIP.</li>
+<li>Confirm the import.</li>
+</ol>
+<p>To update an installed package with the same <code>id</code>, import the new ZIP with <strong>Replace existing package</strong> enabled. NodeForge validates the replacement before making it active; a failed replacement leaves the previous installation in place.</p>
+<p>NodeForge copies an installed package into managed storage. It is not a live link to the ZIP or authoring directory, so source changes require a new import.</p>
+<p>To remove a package, select it in <strong>Library → Packages</strong> and click <strong>Uninstall</strong>. Existing generated Geometry Nodes groups remain Blender data, but future compilations can no longer resolve members from the removed package.</p>
+<h2 id="before-distributing">Before distributing<a class="headerlink" href="#before-distributing" title="Permanent link">&para;</a></h2>
+<p>Check that the package:</p>
+<ul>
+<li>declares only content roots that actually exist;</li>
+<li>sets <code>nodeforge_min_version</code> to the newest NodeForge feature it requires;</li>
+<li>uses a stable, conflict-free <code>import_name</code>;</li>
+<li>compiles its source-backed functions from a clean Blender file;</li>
+<li>exposes usable examples through <strong>Library → Examples</strong>;</li>
+<li>uses qualified <code>package.member(...)</code> calls in published examples.</li>
+</ul>
+<p>For Python-backed content, use the validation rules in the <a href="../EXTENSION_API/">Extension API Reference</a> rather than duplicating them here.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../MESH_COMPUTE/" class="btn btn-neutral float-left" title="Mesh Compute (Experimental)"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../EXTENSION_API/" class="btn btn-neutral float-right" title="Extension API Reference">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2026 denikryt</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/denikryt/NodeForgeDocs" class="fa fa-code-fork" style="color: #fcfcfc"> denikryt/NodeForgeDocs</a>
+        </span>
+    
+    
+      <span><a href="../MESH_COMPUTE/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../EXTENSION_API/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+      <script src="../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

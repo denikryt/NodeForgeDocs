@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://denikryt.github.io/NodeForgeDocs/0.73.0/LSYSTEMS/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Reference - NodeForge Documentation</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Reference";
+        var mkdocs_page_input_path = "LSYSTEMS.md";
+        var mkdocs_page_url = "/NodeForgeDocs/0.73.0/LSYSTEMS/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> NodeForge Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../GET_STARTED/">Get Started</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">DSL</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../CORE_CONCEPTS/">Core Concepts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SYNTAX/">Syntax</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../BUILTINS/">Built-ins</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../WRITING_FUNCTIONS/">Writing Functions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MESH_COMPUTE/">Mesh Compute (Experimental)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../PACKAGES/">Package Guide</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../EXTENSION_API/">Extension API Reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../GEOMETRY_NODES_COVERAGE/">Geometry Nodes Coverage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Libraries</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" >Math</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_METHODS/">Methods</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../FUNCTIONS/">Functions</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_EXAMPLES/">Examples</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" >LSystem</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS_SCRIPTING/">Guide</a>
+                </li>
+                <li class="toctree-l2 current"><a class="reference internal current" href="#">Reference</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#compatibility">Compatibility</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#lssystempart">ls.system(part, ...)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#constructors">Constructors</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#lsaxiomvalue">ls.axiom(value)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#lsrulesymbol-replacement">ls.rule(symbol, replacement)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#lsiterationsvalue">ls.iterations(value)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#lsanglevalue">ls.angle(value)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#lsstepvalue">ls.step(value)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#lsparamname-value">ls.param(name, value)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#lsmarkername-parameter_names">ls.marker(name, *parameter_names)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#lspointsgeometry-markername">ls.points(geometry, marker="Name")</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#rewrite-and-grammar-rules">Rewrite and grammar rules</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#turtle-coordinate-frame">Turtle coordinate frame</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#turtle-commands">Turtle commands</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#runtime-values">Runtime values</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#limits">Limits</a>
+    </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">NodeForge Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Libraries</li>
+          <li class="breadcrumb-item">LSystem</li>
+      <li class="breadcrumb-item active">Reference</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/denikryt/NodeForgeDocs/edit/master/docs/LSYSTEMS.md">Edit on denikryt/NodeForgeDocs</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="l-system-reference">L-System Reference<a class="headerlink" href="#l-system-reference" title="Permanent link">&para;</a></h1>
+<p>The <code>nodeforge.lsystem</code> package exposes L-system constructors through the package namespace:</p>
+<pre class="highlight"><code class="language-python">from packages import lsystem as ls</code></pre>
+<p>This page is the API and grammar reference. For a worked introduction with complete examples, use the <a href="../LSYSTEMS_SCRIPTING/">L-System Guide</a>.</p>
+<h2 id="compatibility">Compatibility<a class="headerlink" href="#compatibility" title="Permanent link">&para;</a></h2>
+<p>NodeForge L-System 4.0 requires NodeForge 0.65.0 or newer.</p>
+<h2 id="lssystempart"><code>ls.system(part, ...)</code><a class="headerlink" href="#lssystempart" title="Permanent link">&para;</a></h2>
+<p>Builds an L-system and returns <code>Geometry</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Required</th>
+<th>Multiplicity</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ls.axiom(...)</code></td>
+<td>yes</td>
+<td>one</td>
+<td>Initial module stream.</td>
+</tr>
+<tr>
+<td><code>ls.iterations(...)</code></td>
+<td>yes</td>
+<td>one</td>
+<td>Static or runtime rewrite count.</td>
+</tr>
+<tr>
+<td><code>ls.angle(...)</code></td>
+<td>yes</td>
+<td>one</td>
+<td>Default turtle rotation angle.</td>
+</tr>
+<tr>
+<td><code>ls.step(...)</code></td>
+<td>yes</td>
+<td>one</td>
+<td>Default forward distance.</td>
+</tr>
+<tr>
+<td><code>ls.rule(...)</code></td>
+<td>no</td>
+<td>many</td>
+<td>One-symbol rewrite rules.</td>
+</tr>
+<tr>
+<td><code>ls.param(...)</code></td>
+<td>no</td>
+<td>many</td>
+<td>Named numeric values used by parameterized modules.</td>
+</tr>
+<tr>
+<td><code>ls.marker(...)</code></td>
+<td>no</td>
+<td>many</td>
+<td>Modules that emit marker points.</td>
+</tr>
+</tbody>
+</table>
+<p>All parts are positional. Their order inside <code>ls.system(...)</code> does not affect declaration resolution, so a rule or axiom may reference parameters and markers declared later in the call.</p>
+<p>Duplicate singleton parts, rule predecessors, parameter names, or marker names raise <code>CompileError</code>.</p>
+<pre class="highlight"><code class="language-python">plant = ls.system(
+    ls.axiom("X"),
+    ls.rule("X", "F[+X][-X]FX"),
+    ls.rule("F", "FF"),
+    ls.iterations(4),
+    ls.angle(25),
+    ls.step(0.08),
+)</code></pre>
+<h2 id="constructors">Constructors<a class="headerlink" href="#constructors" title="Permanent link">&para;</a></h2>
+<h3 id="lsaxiomvalue"><code>ls.axiom(value)</code><a class="headerlink" href="#lsaxiomvalue" title="Permanent link">&para;</a></h3>
+<p>Defines the module stream before the first rewrite iteration.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>value</code></td>
+<td>compile-time <code>String</code></td>
+</tr>
+</tbody>
+</table>
+<p>The string may contain turtle commands, one-character grammar symbols, declared markers, and parameterized modules.</p>
+<pre class="highlight"><code class="language-python">plant = ls.system(
+    ls.axiom("F[+F]F"),
+    ls.iterations(0),
+    ls.angle(25),
+    ls.step(1),
+)</code></pre>
+<h3 id="lsrulesymbol-replacement"><code>ls.rule(symbol, replacement)</code><a class="headerlink" href="#lsrulesymbol-replacement" title="Permanent link">&para;</a></h3>
+<p>Defines one parallel rewrite rule.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>symbol</code></td>
+<td>compile-time <code>String</code></td>
+<td>Exactly one turtle command or one ASCII letter, digit, or <code>_</code>.</td>
+</tr>
+<tr>
+<td><code>replacement</code></td>
+<td>compile-time <code>String</code></td>
+<td>Module stream; may be empty.</td>
+</tr>
+</tbody>
+</table>
+<p>Each iteration rewrites every module from the same input generation. Symbols without a rule pass through unchanged; an empty replacement deletes its predecessor.</p>
+<p>Rule strings may be assembled with f-strings when every interpolated value is a compile-time string.</p>
+<pre class="highlight"><code class="language-python">plant = ls.system(
+    ls.axiom("F"),
+    ls.rule("F", "F[+F]F[-F]F"),
+    ls.iterations(2),
+    ls.angle(25),
+    ls.step(0.2),
+)</code></pre>
+<h3 id="lsiterationsvalue"><code>ls.iterations(value)</code><a class="headerlink" href="#lsiterationsvalue" title="Permanent link">&para;</a></h3>
+<p>Sets the number of rewrite generations.</p>
+<table>
+<thead>
+<tr>
+<th>Accepted value</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>compile-time <code>Int</code></td>
+<td>Must be non-negative; expansion happens during compilation.</td>
+</tr>
+<tr>
+<td>runtime <code>Int</code></td>
+<td>Expansion happens inside Geometry Nodes and may change topology without recompilation.</td>
+</tr>
+</tbody>
+</table>
+<p>Runtime values below <code>0</code> are treated as <code>0</code>.</p>
+<p>Runtime iteration mode requires the axiom and every rule replacement to balance <code>[</code> and <code>]</code> independently. Rules may not rewrite <code>[</code> or <code>]</code> in this mode.</p>
+<pre class="highlight"><code class="language-python">iterations = input_int("Iterations", default=4)
+plant = ls.system(
+    ls.axiom("F"),
+    ls.iterations(iterations),
+    ls.angle(25),
+    ls.step(0.2),
+)</code></pre>
+<p><code>ls.angle(...)</code> and <code>ls.step(...)</code> both accept either a compile-time number or a runtime <code>Float</code> or <code>Int</code>.</p>
+<h3 id="lsanglevalue"><code>ls.angle(value)</code><a class="headerlink" href="#lsanglevalue" title="Permanent link">&para;</a></h3>
+<p>Sets the default rotation angle, in degrees, for unparameterized <code>+</code>, <code>-</code>, <code>^</code>, <code>&amp;</code>, <code>/</code>, and <code>\</code> commands. An explicit argument such as <code>+(30)</code> or <code>/(roll)</code> takes precedence for that module.</p>
+<pre class="highlight"><code class="language-python">angle = input_float("Angle", default=25.0)
+plant = ls.system(
+    ls.axiom("F+F"),
+    ls.iterations(0),
+    ls.angle(angle),
+    ls.step(1),
+)</code></pre>
+<h3 id="lsstepvalue"><code>ls.step(value)</code><a class="headerlink" href="#lsstepvalue" title="Permanent link">&para;</a></h3>
+<p>Sets the default forward distance for unparameterized <code>F</code> and <code>f</code>. <code>F(0.5)</code> or <code>F(length)</code> supplies a per-module distance instead.</p>
+<pre class="highlight"><code class="language-python">step = input_float("Step", default=0.2)
+plant = ls.system(
+    ls.axiom("FF"),
+    ls.iterations(0),
+    ls.angle(25),
+    ls.step(step),
+)</code></pre>
+<h3 id="lsparamname-value"><code>ls.param(name, value)</code><a class="headerlink" href="#lsparamname-value" title="Permanent link">&para;</a></h3>
+<p>Binds a numeric value to a name used inside parameterized commands or markers.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>compile-time <code>String</code></td>
+<td>Identifier matching <code>[A-Za-z_][A-Za-z0-9_]*</code>.</td>
+</tr>
+<tr>
+<td><code>value</code></td>
+<td>compile-time number or runtime <code>Float</code> or <code>Int</code></td>
+<td>Numeric value exposed to the grammar.</td>
+</tr>
+</tbody>
+</table>
+<p>A module argument is either a numeric literal or one declared parameter name. NodeForge expressions are not parsed inside the L-system string; compute an expression in the surrounding script and bind its result with <code>ls.param(...)</code>.</p>
+<pre class="highlight"><code class="language-python">length = input_float("Length", default=0.5)
+plant = ls.system(
+    ls.axiom("F(length)F"),
+    ls.iterations(0),
+    ls.angle(25),
+    ls.step(0.2),
+    ls.param("length", length),
+)</code></pre>
+<h3 id="lsmarkername-parameter_names"><code>ls.marker(name, *parameter_names)</code><a class="headerlink" href="#lsmarkername-parameter_names" title="Permanent link">&para;</a></h3>
+<p>Declares a marker module. Reaching that module emits a point at the current turtle position without moving or rotating the turtle.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>compile-time <code>String</code></td>
+<td>Identifier that is not a built-in turtle command.</td>
+</tr>
+<tr>
+<td><code>parameter_names</code></td>
+<td>compile-time <code>String</code> values</td>
+<td>Unique attribute names for marker arguments.</td>
+</tr>
+</tbody>
+</table>
+<p>Marker parameter names cannot use the reserved <code>nf_lsys_</code> prefix.</p>
+<pre class="highlight"><code class="language-python">size = input_float("Leaf Size", default=0.25)
+plant = ls.system(
+    ls.axiom("FLeaf(size)"),
+    ls.iterations(0),
+    ls.angle(25),
+    ls.step(0.5),
+    ls.param("size", size),
+    ls.marker("Leaf", "size"),
+)</code></pre>
+<p>Every marker point stores:</p>
+<ul>
+<li><code>nf_lsys_marker_tangent</code> — turtle Heading;</li>
+<li><code>nf_lsys_marker_up</code> — turtle Up;</li>
+<li>one point attribute for each declared marker parameter.</li>
+</ul>
+<h3 id="lspointsgeometry-markername"><code>ls.points(geometry, marker="Name")</code><a class="headerlink" href="#lspointsgeometry-markername" title="Permanent link">&para;</a></h3>
+<p>Extracts points belonging to one declared marker.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>geometry</code></td>
+<td><code>Geometry</code></td>
+<td>Geometry carrying L-system marker attributes.</td>
+</tr>
+<tr>
+<td><code>marker</code></td>
+<td>compile-time <code>String</code></td>
+<td>Required keyword selecting the marker name.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns <code>Geometry</code> containing only the selected marker points. Marker identity is stored in numeric point attributes, so filtering continues to work after operations such as assignment, <code>transform(...)</code>, and <code>join(...)</code> when Blender preserves those attributes.</p>
+<pre class="highlight"><code class="language-python">leaf_points = ls.points(plant, marker="Leaf")</code></pre>
+<h2 id="rewrite-and-grammar-rules">Rewrite and grammar rules<a class="headerlink" href="#rewrite-and-grammar-rules" title="Permanent link">&para;</a></h2>
+<p>An L-system starts from the axiom, applies all matching rewrite rules in parallel for each iteration, and then sends the final module stream to the turtle interpreter.</p>
+<p>Ordinary grammar symbols are one ASCII letter, digit, or <code>_</code>. They may participate in rewriting but are ignored during turtle drawing if they remain in the final stream. Declared markers may use multi-character identifiers.</p>
+<p>Whitespace, unsupported punctuation, Unicode grammar symbols, undeclared parameter names, malformed argument lists, unmatched <code>]</code>, and unclosed <code>[</code> raise <code>CompileError</code> when the invalid structure is known during compilation.</p>
+<h2 id="turtle-coordinate-frame">Turtle coordinate frame<a class="headerlink" href="#turtle-coordinate-frame" title="Permanent link">&para;</a></h2>
+<p>The turtle starts at the world origin with this local frame:</p>
+<table>
+<thead>
+<tr>
+<th>Axis</th>
+<th>Initial direction</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Heading</td>
+<td><code>+X</code></td>
+<td>Forward direction used by <code>F</code> and <code>f</code>.</td>
+</tr>
+<tr>
+<td>Left</td>
+<td><code>+Y</code></td>
+<td>Local pitch axis.</td>
+</tr>
+<tr>
+<td>Up</td>
+<td><code>+Z</code></td>
+<td>Local yaw axis.</td>
+</tr>
+</tbody>
+</table>
+<p>Yaw, pitch, and roll update the local frame, so rotation order matters. <code>[</code> stores position and all three orientation axes; <code>]</code> restores the saved state.</p>
+<h2 id="turtle-commands">Turtle commands<a class="headerlink" href="#turtle-commands" title="Permanent link">&para;</a></h2>
+<p>Rotation arguments are measured in degrees.</p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>F</code></td>
+<td>Move by <code>ls.step(...)</code> and draw a segment.</td>
+</tr>
+<tr>
+<td><code>F(length)</code></td>
+<td>Move by <code>length</code> and draw a segment.</td>
+</tr>
+<tr>
+<td><code>f</code></td>
+<td>Move by <code>ls.step(...)</code> without drawing.</td>
+</tr>
+<tr>
+<td><code>f(length)</code></td>
+<td>Move by <code>length</code> without drawing.</td>
+</tr>
+<tr>
+<td><code>+</code></td>
+<td>Yaw left around local Up by <code>ls.angle(...)</code>.</td>
+</tr>
+<tr>
+<td><code>+(angle)</code></td>
+<td>Yaw left by <code>angle</code>.</td>
+</tr>
+<tr>
+<td><code>-</code></td>
+<td>Yaw right around local Up by <code>ls.angle(...)</code>.</td>
+</tr>
+<tr>
+<td><code>-(angle)</code></td>
+<td>Yaw right by <code>angle</code>.</td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>Pitch up around local Left by <code>ls.angle(...)</code>.</td>
+</tr>
+<tr>
+<td><code>^(angle)</code></td>
+<td>Pitch up by <code>angle</code>.</td>
+</tr>
+<tr>
+<td><code>&amp;</code></td>
+<td>Pitch down around local Left by <code>ls.angle(...)</code>.</td>
+</tr>
+<tr>
+<td><code>&amp;(angle)</code></td>
+<td>Pitch down by <code>angle</code>.</td>
+</tr>
+<tr>
+<td><code>/</code></td>
+<td>Roll around local Heading by the positive default angle.</td>
+</tr>
+<tr>
+<td><code>/(angle)</code></td>
+<td>Roll around local Heading by positive <code>angle</code>.</td>
+</tr>
+<tr>
+<td><code>\</code></td>
+<td>Roll around local Heading by the negative default angle.</td>
+</tr>
+<tr>
+<td><code>\(angle)</code></td>
+<td>Roll around local Heading by negative <code>angle</code>.</td>
+</tr>
+<tr>
+<td><code>[</code></td>
+<td>Save the complete turtle state and begin a branch.</td>
+</tr>
+<tr>
+<td><code>]</code></td>
+<td>Restore the most recently saved state.</td>
+</tr>
+</tbody>
+</table>
+<p>A parameterized command accepts exactly one numeric literal or one <code>ls.param(...)</code> name.</p>
+<h2 id="runtime-values">Runtime values<a class="headerlink" href="#runtime-values" title="Permanent link">&para;</a></h2>
+<p>These constructor arguments may remain runtime values:</p>
+<table>
+<thead>
+<tr>
+<th>Constructor</th>
+<th>Runtime type</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ls.iterations(...)</code></td>
+<td><code>Int</code></td>
+<td>Changes rewrite count and topology.</td>
+</tr>
+<tr>
+<td><code>ls.angle(...)</code></td>
+<td><code>Float</code> or <code>Int</code></td>
+<td>Changes default rotations.</td>
+</tr>
+<tr>
+<td><code>ls.step(...)</code></td>
+<td><code>Float</code> or <code>Int</code></td>
+<td>Changes default forward distance.</td>
+</tr>
+<tr>
+<td><code>ls.param(...)</code></td>
+<td><code>Float</code> or <code>Int</code></td>
+<td>Changes commands or markers that reference the parameter.</td>
+</tr>
+</tbody>
+</table>
+<p>The axiom, rule strings, parameter names, marker declarations, and rule set are compile-time declarations.</p>
+<h2 id="limits">Limits<a class="headerlink" href="#limits" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Limit</th>
+<th>Applies to</th>
+<th>Result when exceeded</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>200000</code> expanded modules</td>
+<td>compile-time <code>ls.iterations(...)</code></td>
+<td><code>CompileError</code></td>
+</tr>
+<tr>
+<td>branch depth <code>32</code></td>
+<td>compile-time-expanded planar branched systems using runtime angle or step values</td>
+<td><code>CompileError</code></td>
+</tr>
+</tbody>
+</table>
+<p>Runtime <code>Int</code> iterations are evaluated inside Geometry Nodes and are not covered by the compile-time <code>200000</code>-module guard. Constrain user-facing runtime iteration inputs to practical ranges.</p>
+<p>A compiled system must have a possible drawable segment or marker for the selected backend. A compile-time-expanded path that resolves to no drawable content raises <code>CompileError</code>.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../LSYSTEMS_SCRIPTING/" class="btn btn-neutral float-left" title="Guide"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2026 denikryt</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/denikryt/NodeForgeDocs" class="fa fa-code-fork" style="color: #fcfcfc"> denikryt/NodeForgeDocs</a>
+        </span>
+    
+    
+      <span><a href="../LSYSTEMS_SCRIPTING/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+      <script src="../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

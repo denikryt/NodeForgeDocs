@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://denikryt.github.io/NodeForgeDocs/0.73.0/MESH_COMPUTE/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Mesh Compute (Experimental) - NodeForge Documentation</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Mesh Compute (Experimental)";
+        var mkdocs_page_input_path = "MESH_COMPUTE.md";
+        var mkdocs_page_url = "/NodeForgeDocs/0.73.0/MESH_COMPUTE/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> NodeForge Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../GET_STARTED/">Get Started</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">DSL</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../CORE_CONCEPTS/">Core Concepts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SYNTAX/">Syntax</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../BUILTINS/">Built-ins</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../WRITING_FUNCTIONS/">Writing Functions</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Mesh Compute (Experimental)</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#write-a-mesh-compute-script">Write a Mesh Compute script</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#write-the-python-function">Write the Python function</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#input-available-in-python">Input available in Python</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#return-value">Return value</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#sources-and-limits">Sources and limits</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../PACKAGES/">Package Guide</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../EXTENSION_API/">Extension API Reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../GEOMETRY_NODES_COVERAGE/">Geometry Nodes Coverage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Libraries</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Math</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_METHODS/">Methods</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../FUNCTIONS/">Functions</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_EXAMPLES/">Examples</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >LSystem</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS_SCRIPTING/">Guide</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS/">Reference</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">NodeForge Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">DSL</li>
+      <li class="breadcrumb-item active">Mesh Compute (Experimental)</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/denikryt/NodeForgeDocs/edit/master/docs/MESH_COMPUTE.md">Edit on denikryt/NodeForgeDocs</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="mesh-compute-experimental">Mesh Compute (Experimental)<a class="headerlink" href="#mesh-compute-experimental" title="Permanent link">&para;</a></h1>
+<p>Use Mesh Compute to calculate vertex positions or POINT FLOAT attributes in Python. Pass Geometry to the function from a <code>.nf</code> script, then use the returned Geometry in the rest of that script. Changing modifier inputs recalculates the result. This feature is experimental in Blender 5.2.</p>
+<h2 id="write-a-mesh-compute-script">Write a Mesh Compute script<a class="headerlink" href="#write-a-mesh-compute-script" title="Permanent link">&para;</a></h2>
+<p>Place <code>shift_height.py</code> and <code>move_up.nf</code> in a registered <strong>Local</strong> folder. Write the Python calculation in <code>shift_height.py</code>, then import and call it from <code>move_up.nf</code>.</p>
+<p><code>shift_height.py</code>:</p>
+<pre class="highlight"><code class="language-python">from array import array
+from NodeForge import mesh_compute
+
+@mesh_compute(reads=('height',), writes=('height',))
+def shift_height(mesh, amount: float = 2.0):
+    positions = array('f', mesh.positions)
+    heights = array('f', mesh.point_attributes['height'])
+
+    for i in range(mesh.vertex_count):
+        positions[3 * i + 2] += amount
+        heights[i] += amount
+
+    return {
+        'positions': positions,
+        'point_attributes': {'height': heights},
+    }</code></pre>
+<p><code>move_up.nf</code>:</p>
+<pre class="highlight"><code class="language-python">from local import shift_height
+
+geo = input_geometry('Geometry')
+geo = store_named_attribute(
+    geo, 'height', position().z, domain='POINT', type='FLOAT'
+)
+amount = input_float('Amount', default=2.0)
+geo = shift_height(geo, amount=amount)
+output('Geometry', geo)</code></pre>
+<p>Create every attribute listed in <code>reads</code> before the call. In this example, <code>move_up.nf</code> creates <code>height</code>, passes Geometry and <strong>Amount</strong> to <code>shift_height</code>, then sends the returned Geometry to the output. You can apply other NodeForge functions to <code>geo</code> after the call.</p>
+<p>To run it:</p>
+<ol>
+<li>Select a Mesh object with no modifiers, or with one empty Geometry Nodes modifier (no node group or Blender's unedited default pass-through group).</li>
+<li>Open <strong>Library → Local</strong> and select <code>move_up.nf</code>.</li>
+<li>Click <strong>Add Node Group</strong>. NodeForge creates a Mesh Compute modifier or uses the empty modifier already on the object. Change <strong>Amount</strong> on the modifier to recalculate the Mesh.</li>
+</ol>
+<p>You do not need to create a Geometry Nodes tree before using the Library action. You can also open <code>move_up.nf</code> in a Blender Text datablock, select it under <strong>Text Script</strong>, and click <strong>Compile Script</strong>. Ordinary scripts compiled with either action create node groups instead.</p>
+<h2 id="write-the-python-function">Write the Python function<a class="headerlink" href="#write-the-python-function" title="Permanent link">&para;</a></h2>
+<p>Name the function after its <code>.py</code> file: write <code>def shift_height(...)</code> in <code>shift_height.py</code>. Decorate one top-level <code>def</code> with <code>@mesh_compute(...)</code>. Its first argument receives the mesh data; leave it required and unannotated. You may choose any name for that argument (<code>mesh</code> in the example). Add typed <code>float</code>, <code>int</code>, or <code>bool</code> parameters after it, such as <code>amount: float = 2.0</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Declaration</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>reads=('height',)</code></td>
+<td>Request existing POINT FLOAT attributes from the evaluated input Mesh. Omit or use <code>()</code> when none are needed.</td>
+</tr>
+<tr>
+<td><code>writes=('height',)</code></td>
+<td>Declare the POINT FLOAT attributes returned by the callback. Omit or use <code>()</code> when returning positions only.</td>
+</tr>
+<tr>
+<td><code>amount: float = 2.0</code></td>
+<td>A scalar parameter supplied by the <code>.nf</code> call. Supported annotations are built-in <code>float</code>, <code>int</code>, and <code>bool</code>; a default is optional.</td>
+</tr>
+</tbody>
+</table>
+<p>Write <code>reads</code> and <code>writes</code> as literal lists or tuples of nonempty attribute names, with no duplicates within either list. Use literal scalar defaults of the annotated type. Define ordinary parameters; <code>*args</code>, <code>**kwargs</code>, and keyword-only parameters are unsupported.</p>
+<p>In <code>.nf</code>, pass a Geometry value first, followed by the scalar arguments by position or keyword. Use <code>input_float</code>, <code>input_int</code>, <code>input_bool</code>, or matching values calculated earlier in the script. Each runtime scalar must have the same value at every vertex; varying fields cannot be callback parameters. Use the returned Geometry in downstream NodeForge operations.</p>
+<h3 id="input-available-in-python">Input available in Python<a class="headerlink" href="#input-available-in-python" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th><code>mesh</code> member</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mesh.vertex_count</code></td>
+<td>Number of vertices in the evaluated, nonempty Mesh.</td>
+</tr>
+<tr>
+<td><code>mesh.positions</code></td>
+<td>Flat float32 <code>array('f')</code> in <code>x, y, z</code> order, with <code>3 * vertex_count</code> values.</td>
+</tr>
+<tr>
+<td><code>mesh.point_attributes[name]</code></td>
+<td>Float32 <code>array('f')</code> with one value per vertex, available for each name in <code>reads</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Provide every <code>reads</code> attribute on the input Mesh as a POINT FLOAT attribute. In Python, work with the supplied arrays; <code>mesh</code> is not a Blender Mesh object. Use Python's <code>array</code> as shown above, or NumPy if it is installed in Blender's Python.</p>
+<h3 id="return-value">Return value<a class="headerlink" href="#return-value" title="Permanent link">&para;</a></h3>
+<p>Return a dictionary containing <code>positions</code>, <code>point_attributes</code>, or both:</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Expected value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>positions</code></td>
+<td>A flat sequence of <code>3 * vertex_count</code> finite numbers in XYZ order, or a NumPy array shaped <code>(vertex_count, 3)</code>.</td>
+</tr>
+<tr>
+<td><code>point_attributes</code></td>
+<td>A dictionary mapping every name in <code>writes</code> to a sequence of <code>vertex_count</code> finite numbers. The names must match <code>writes</code> exactly.</td>
+</tr>
+</tbody>
+</table>
+<p>For example, <code>{'positions': positions}</code> changes only positions. <code>{'point_attributes': {'height': heights}}</code> changes only the declared attribute. When <code>writes</code> is empty, return positions. NodeForge converts output values to float32, keeps the same vertex count and topology, and preserves other Mesh data. A written name can replace an existing POINT FLOAT attribute or create one; an existing attribute with another domain or type is a conflict.</p>
+<h2 id="sources-and-limits">Sources and limits<a class="headerlink" href="#sources-and-limits" title="Permanent link">&para;</a></h2>
+<p>Import the callback explicitly in the root <code>.nf</code> script: <code>from local import shift_height</code>, <code>from local.terrain import shift_height</code>, or—for a bundled or installed Example—<code>from examples.mesh_compute_erosion import erosion</code>. Directory aliases and <code>*</code> imports do not select Python callbacks. A reusable nested function cannot contain the Mesh Compute call.</p>
+<p>Use callbacks from registered Local sources, bundled Examples, or installed package Examples. Python callbacks execute with normal Python privileges, so use sources you trust. There is no separate executable-Python permission setting.</p>
+<p>Call Mesh Compute once in the root <code>.nf</code> script. Pass a nonempty Mesh; the function can read positions and declared POINT FLOAT inputs and accept uniform <code>float</code>/<code>int</code>/<code>bool</code> parameters. Keep the same vertices and faces in its result. A modified Geometry Nodes group or additional modifier cannot be replaced by Mesh Compute.</p>
+<p>For a larger example, select <code>mesh_compute_erosion/erosion_numpy.nf</code> under <strong>Library → Examples</strong> and click <strong>Add Node Group</strong>. This example also requires NumPy in Blender's Python and the NodeForge Math package.</p>
+<p>After editing the <code>.nf</code> or <code>.py</code> source, reopening a <code>.blend</code> file, or using Undo or Redo, select the current root <code>.nf</code> source in a Blender Text datablock under <strong>Text Script</strong> and click <strong>Reload Compute</strong> on the selected object. If the Python file is removed, its Local source is unregistered, or its Examples package is uninstalled, the calculation becomes unavailable. For interactive rendering, enable <strong>Render Properties → Lock Interface</strong>.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../WRITING_FUNCTIONS/" class="btn btn-neutral float-left" title="Writing Functions"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../PACKAGES/" class="btn btn-neutral float-right" title="Package Guide">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2026 denikryt</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/denikryt/NodeForgeDocs" class="fa fa-code-fork" style="color: #fcfcfc"> denikryt/NodeForgeDocs</a>
+        </span>
+    
+    
+      <span><a href="../WRITING_FUNCTIONS/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../PACKAGES/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+      <script src="../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
