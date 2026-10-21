@@ -4,14 +4,25 @@ NodeForge compiles a Python-like DSL script into a native Blender Geometry Nodes
 
 ## Install NodeForge
 
-1. Open the [NodeForge releases page](https://github.com/denikryt/NodeForge/releases).
-2. In the latest release, download the `NodeForge-v<version>-blender.zip` file from **Assets**.
-3. In Blender, open **Edit → Preferences → Add-ons**.
-4. Open the Add-ons menu and choose **Install from Disk...**.
-5. Select the downloaded ZIP file.
-6. Enable **NodeForge** in the add-on list.
+NodeForge requires Blender 5.2 or newer. Install it through its Blender Extensions repository to receive updates in Blender:
+
+1. Open **Edit → Preferences → Get Extensions**.
+2. Under **Repositories**, choose **Add Remote Repository** and enter `https://denikryt.github.io/NodeForge/index.json`.
+3. Find **NodeForge**, click **Install**, and enable it.
+
+To install from a file instead, download the latest Extension ZIP from [GitHub Releases](https://github.com/denikryt/NodeForge/releases/latest). In **Get Extensions**, choose **Install from Disk...**, select the ZIP, and enable **NodeForge**. This method also works offline after downloading the ZIP.
+
+When switching from the earlier ZIP add-on, disable the old NodeForge add-on before enabling the Extension. Your Local files and installed NodeForge packages remain in Blender's user-data directories.
 
 The installed add-on adds a **NodeForge** tab to the sidebar of the Geometry Node Editor.
+
+## Update NodeForge
+
+If you installed from the remote repository, open **Get Extensions**, use **Refresh Remote** to check for updates, then update **NodeForge** when a newer version is available. You can also enable **Check for Updates on Startup** for the repository.
+
+If you installed from a ZIP, download a newer Extension ZIP from [GitHub Releases](https://github.com/denikryt/NodeForge/releases/latest) and install it from disk again. ZIP installations do not receive repository updates.
+
+The Extension also installs or updates its included NodeForge Math and NodeForge L-System packages when enabled. It keeps a separately installed package if that version is newer.
 
 ## Create your first NodeForge group
 
@@ -155,7 +166,7 @@ Use `range(...)` when the number of loop iterations is known during compilation.
 
 ## Use the Library panel
 
-The **Library** panel contains reusable scripts and package management tools. Package-provided entries appear only after that package has been installed explicitly:
+The **Library** panel contains reusable scripts and package management tools. The Extension installs NodeForge Math and NodeForge L-System when enabled; install other packages through **Library → Packages**:
 
 | Catalog | Purpose |
 | --- | --- |
