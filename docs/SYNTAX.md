@@ -450,6 +450,8 @@ A folder added with **Add Folder...** uses its name on disk as its top-level nam
 
 Imports are top-level statements. Plain `import`, relative imports, block-local imports, and imports from arbitrary Python modules are unsupported.
 
+Experimental Python Mesh Compute callbacks use explicit Local or Examples imports in a root `.nf` script. See [Mesh Compute](MESH_COMPUTE.md) for the supported callback and modifier workflow.
+
 See [Creating Packages](PACKAGES.md) for package authoring and [Python Extension API v2](EXTENSION_API.md) for Python-backed package callables.
 
 ## Local Functions

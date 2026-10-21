@@ -46,7 +46,7 @@ The rebuilt group also stores the edited source. Use **Load Script From Selected
 
 | Button | What it does |
 | --- | --- |
-| **Compile Script** | Compiles the selected Text datablock into a new Geometry Nodes group and inserts it into the active Geometry Nodes editor. |
+| **Compile Script** | Compiles the selected Text datablock into a new Geometry Nodes group and inserts it into the active Geometry Nodes editor. For a [Mesh Compute](MESH_COMPUTE.md) script, creates a modifier on the selected Mesh instead. |
 | **Update Selected NodeGroup** | Recompiles the selected Text datablock into the selected generated group. Compatible input values and links are preserved. |
 | **Load Script From Selected NodeGroup** | Copies the source embedded in the selected generated group into the selected Text datablock. |
 | **Reload from Source** | Rebuilds a selected Local or package-backed group from its current catalog source. |
@@ -161,10 +161,10 @@ The **Library** panel contains reusable scripts and package management tools. Pa
 | --- | --- |
 | **Local** | NodeForge-managed `.nf` files and read-only external source folders. |
 | **Functions** | Reusable DSL functions provided by installed packages. |
-| **Examples** | Example scripts provided by installed packages. |
+| **Examples** | Bundled examples and examples provided by installed packages. |
 | **Packages** | Install and remove NodeForge packages. |
 
-Each script catalog has **Refresh** and **Add Node Group** actions.
+Each script catalog has **Refresh** and **Add Node Group** actions. For a script that uses [Mesh Compute](MESH_COMPUTE.md), **Add Node Group** creates a modifier on the selected Mesh instead of inserting a group node.
 
 1. Open a catalog section, for example **Functions**.
 2. Click **Refresh** to scan that catalog.

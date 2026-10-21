@@ -22,6 +22,7 @@ nav:
       - Syntax: SYNTAX.md
       - Built-ins: BUILTINS.md
       - Writing Functions: WRITING_FUNCTIONS.md
+      - Mesh Compute (Experimental): MESH_COMPUTE.md
       - Package Guide: PACKAGES.md
       - Extension API Reference: EXTENSION_API.md
       - Geometry Nodes Coverage: GEOMETRY_NODES_COVERAGE.md

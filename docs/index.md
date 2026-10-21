@@ -15,7 +15,7 @@ The language separates two evaluation layers:
 - **Compile time** resolves graph structure, declarations, and authoring decisions. A loop over `range(...)` is unrolled while the graph is built.
 - **Runtime** is represented inside the generated graph. Group-input values remain adjustable, runtime branches use Switch nodes, and `repeat_range(...)` creates a native Repeat Zone.
 
-The compiled result is an ordinary Blender Geometry Nodes group. It can be inspected and connected like a manually authored group, and it remains usable in the `.blend` file when the NodeForge add-on is disabled.
+For ordinary scripts, the compiled result is a Blender Geometry Nodes group. It can be inspected and connected like a manually authored group, and it remains usable in the `.blend` file when the NodeForge add-on is disabled.
 
 Every generated group embeds its source. The source can be loaded into a Text datablock, edited, and compiled back into the same group while compatible external links and user-overridden input values are preserved.
 
@@ -29,6 +29,7 @@ Read [Core Concepts](CORE_CONCEPTS.md) for the complete compilation and update m
 - [Geometry Nodes Coverage](GEOMETRY_NODES_COVERAGE.md)
 - [Core DSL Built-ins](BUILTINS.md)
 - [Writing Functions](WRITING_FUNCTIONS.md)
+- [Mesh Compute (Experimental)](MESH_COMPUTE.md)
 - [Package Guide](PACKAGES.md)
 - [Extension API Reference](EXTENSION_API.md)
 
