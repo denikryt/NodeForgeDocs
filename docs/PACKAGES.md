@@ -62,12 +62,8 @@ Only declare roots that the package actually contains.
   "author": "Vendor",
   "description": "Reusable shape functions for NodeForge.",
   "nodeforge_min_version": "0.65.0",
-  "nodeforge_max_version": null,
   "contents": {
     "functions": "functions"
-  },
-  "permissions": {
-    "python": false
   }
 }
 ```
@@ -82,9 +78,7 @@ Only declare roots that the package actually contains.
 | `author` | Optional author text. |
 | `description` | Optional short description. |
 | `nodeforge_min_version` | Minimum compatible NodeForge version. |
-| `nodeforge_max_version` | Optional maximum compatible NodeForge version; omit it or use `null` for no upper bound. |
 | `contents` | Non-empty object declaring any of `functions`, `examples`, and `systems`. |
-| `permissions.python` | Must be `true` when declared content contains Python or declares `systems`; otherwise defaults to `false`. |
 
 `id` identifies the installed package. `import_name` is the name used in NodeForge source and must be a public Python-style identifier: it cannot begin with `_` or be a Python keyword. Two active packages cannot use the same `import_name`.
 
@@ -202,17 +196,7 @@ systems/
     └── backend.py
 ```
 
-A package containing Python must declare:
-
-```json
-{
-  "permissions": {
-    "python": true
-  }
-}
-```
-
-The user approves that permission during installation. For `interface.py`, evaluation modes, backend contexts, semantic values, overloads, generated resources, and owner validation rules, continue with the [Extension API Reference](EXTENSION_API.md).
+Python-backed package code runs with normal Python privileges. Install packages only from sources you trust. For `interface.py`, evaluation modes, backend contexts, semantic values, overloads, generated resources, and owner validation rules, continue with the [Extension API Reference](EXTENSION_API.md).
 
 ## Public names
 
@@ -241,9 +225,8 @@ Archives with ambiguous roots, path traversal, symbolic links, duplicate paths, 
 To install a package:
 
 1. Open **Library → Packages**.
-2. Enable **Allow executable Python** only if the package requests Python permission and you trust its code.
-3. Click **Import** and select the ZIP.
-4. Confirm the import.
+2. Click **Import** and select the ZIP.
+3. Confirm the import.
 
 To update an installed package with the same `id`, import the new ZIP with **Replace existing package** enabled. NodeForge validates the replacement before making it active; a failed replacement leaves the previous installation in place.
 
@@ -259,7 +242,6 @@ Check that the package:
 - sets `nodeforge_min_version` to the newest NodeForge feature it requires;
 - uses a stable, conflict-free `import_name`;
 - compiles its source-backed functions from a clean Blender file;
-- enables `permissions.python` whenever declared content contains Python;
 - exposes usable examples through **Library → Examples**;
 - uses qualified `package.member(...)` calls in published examples.
 

@@ -10,7 +10,7 @@ This page is the API and grammar reference. For a worked introduction with compl
 
 ## Compatibility
 
-This reference describes **NodeForge L-System 4.0** for **NodeForge 0.65.0–0.66.3**. The package uses Extension API v2 and requires executable Python permission.
+NodeForge L-System 4.0 requires NodeForge 0.65.0 or newer.
 
 ## `ls.system(part, ...)`
 

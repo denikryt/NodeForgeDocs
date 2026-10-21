@@ -1,6 +1,6 @@
 # Math Methods
 
-These callables are provided by the `nodeforge.math` package, not by the Core DSL. Install that package explicitly before using them.
+These callables are provided by the included `nodeforge.math` package.
 
 The Math library adds scalar and procedural callables to the DSL. Import its package namespace and use qualified calls.
 
@@ -14,7 +14,7 @@ output('Value', value)
 
 ## Scalar Math Callables
 
-These names are members of the imported `math` package namespace. They accept runtime values and create the corresponding Geometry Nodes operations. The scalar callables accept positional arguments or the parameter names shown below as keywords. When all arguments are compile-time numbers, the compiler can evaluate supported calls during compilation.
+These names are members of the imported `math` package namespace. They create the corresponding Geometry Nodes operations, including when called with numeric literals. The scalar callables accept positional arguments or the parameter names shown below as keywords.
 
 ### Unary Callables
 

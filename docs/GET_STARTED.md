@@ -22,7 +22,7 @@ If you installed from the remote repository, open **Get Extensions**, use **Refr
 
 If you installed from a ZIP, download a newer Extension ZIP from [GitHub Releases](https://github.com/denikryt/NodeForge/releases/latest) and install it from disk again. ZIP installations do not receive repository updates.
 
-The Extension also installs or updates its included NodeForge Math and NodeForge L-System packages when enabled. It keeps a separately installed package if that version is newer.
+NodeForge comes with the [Math](MATH_METHODS.md) and [L-System](LSYSTEMS_SCRIPTING.md) libraries. Enabling the Extension installs or updates them, but keeps a separately installed newer version.
 
 ## Create your first NodeForge group
 
@@ -170,7 +170,7 @@ Use `range(...)` when the number of loop iterations is known during compilation.
 
 ## Use the Library panel
 
-The **Library** panel contains reusable scripts and package management tools. The Extension installs NodeForge Math and NodeForge L-System when enabled; install other packages through **Library → Packages**:
+The **Library** panel contains reusable scripts and package management tools. Install other packages through **Library → Packages**:
 
 | Catalog | Purpose |
 | --- | --- |

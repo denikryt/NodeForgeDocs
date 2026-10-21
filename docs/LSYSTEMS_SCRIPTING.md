@@ -2,7 +2,7 @@
 
 Use this page to learn the `nodeforge.lsystem` library by building scripts. Exact constructor contracts, turtle commands, grammar restrictions, and limits are collected in the [L-System Reference](LSYSTEMS.md).
 
-Install **NodeForge L-System 4.0** through **Library → Packages** as described in the [Package Guide](PACKAGES.md#install-update-or-remove-a-package). Enable **Allow executable Python** for the package. See [Compatibility](LSYSTEMS.md#compatibility) for the supported NodeForge versions. Import the package with an alias:
+NodeForge includes the L-System library. Import it with an alias:
 
 ```python
 from packages import lsystem as ls
