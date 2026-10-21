@@ -43,6 +43,10 @@ output("Geometry", geo)
 
 The object now displays the cube produced by the script.
 
+## Text Editor completion (prototype)
+
+NodeForge has built-in text completion for scripts in Blender's Text Editor. This prototype suggests Core DSL functions, Local and package imports, members of imported namespaces, and functions declared in the current script. It also shows function parameters and return types when available. Enable it with **NodeForge** in the Text Editor header.
+
 ## Update the generated group
 
 1. Edit the source in the Text Editor. For example, change `size=2.0` to `size=3.0`.
