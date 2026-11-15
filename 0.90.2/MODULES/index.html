@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://denikryt.github.io/NodeForgeDocs/0.90.2/MODULES/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Modules - NodeForge Documentation</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Modules";
+        var mkdocs_page_input_path = "MODULES.md";
+        var mkdocs_page_url = "/NodeForgeDocs/0.90.2/MODULES/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> NodeForge Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../GET_STARTED/">Get Started</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">DSL</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../CORE_CONCEPTS/">Core Concepts</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Modules</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#define-functions">Define functions</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#compose-the-base-tree">Compose the base tree</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#import-functions">Import functions</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SYNTAX/">Syntax</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../BUILTINS/">Built-ins</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../WRITING_FUNCTIONS/">Writing Functions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MESH_COMPUTE/">Mesh Compute (Experimental)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../PACKAGES/">Package Guide</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../EXTENSION_API/">Extension API Reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../GEOMETRY_NODES_COVERAGE/">Geometry Nodes Coverage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Libraries</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Math</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_METHODS/">Methods</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../FUNCTIONS/">Functions</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_EXAMPLES/">Examples</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >LSystem</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS_SCRIPTING/">Guide</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS/">Reference</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">NodeForge Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">DSL</li>
+      <li class="breadcrumb-item active">Modules</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/denikryt/NodeForgeDocs/edit/master/docs/MODULES.md">Edit on denikryt/NodeForgeDocs</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="nf-modules"><code>.nf</code> Modules<a class="headerlink" href="#nf-modules" title="Permanent link">&para;</a></h1>
+<p>A <code>.nf</code> file is a module. It can declare reusable functions, build nodes in the open Geometry Nodes tree, or do both. Modules can also contain imports and compile-time constants.</p>
+<pre class="highlight"><code class="language-python">def make_cube(size: Float = 2.0) -&gt; Geometry:
+    return cube(size)
+
+def lift(geometry: Geometry, height: Float = 1.0) -&gt; Geometry:
+    return transform(geometry, translation=vector(0, 0, height))
+
+def raised_cube(size: Float = 2.0) -&gt; Geometry:
+    return lift(make_cube(size), height=3.0)
+
+plain = cube(0.5)
+raised = raised_cube(2.0)</code></pre>
+<p>Compiling this module places the following nodes:</p>
+<pre class="highlight"><code class="language-text">Base tree
+├─ Cube                     plain
+└─ Raised Cube (Group Node) raised
+   └─ Inside: Make Cube → Lift</code></pre>
+<h2 id="define-functions">Define functions<a class="headerlink" href="#define-functions" title="Permanent link">&para;</a></h2>
+<p>Declare any number of top-level functions in one file. Their typed parameters and returns define Group Node sockets.</p>
+<p>This module contains only declarations:</p>
+<pre class="highlight"><code class="language-python">def small_cube() -&gt; Geometry:
+    return cube(0.5)
+
+def large_cube() -&gt; Geometry:
+    return cube(2.0)</code></pre>
+<p>See <a href="../WRITING_FUNCTIONS/">Writing Functions</a> for parameter types, defaults, socket labels, panels, and return values.</p>
+<p>Every function declaration in the selected module must have a valid signature, defaults, panels, and return shape, including functions that are not called. An invalid unused declaration rejects compilation before nodes are added. Runtime operations in a function body are checked when that function is compiled.</p>
+<p>Functions can be called before their declarations appear in the file. Function bodies can call other functions in the same module. Recursive call cycles are not supported. See <a href="../SYNTAX/#reusable-functions">Reusable Functions</a> for group sharing and <code>__unique__</code>.</p>
+<h2 id="compose-the-base-tree">Compose the base tree<a class="headerlink" href="#compose-the-base-tree" title="Permanent link">&para;</a></h2>
+<p>Open an editable base Geometry Nodes tree, select a Text datablock under <strong>Text Script</strong>, and click <strong>Compile Script</strong>. Imports and compile-time constants alone do not count as node-building code. A module with only top-level statements also works:</p>
+<pre class="highlight"><code class="language-python">shape = cube(1.0)
+moved = transform(shape, translation=vector(0, 0, 1))</code></pre>
+<p><strong>Compile Script</strong> uses the module in one of two ways:</p>
+<ul>
+<li>With top-level node-building code, it adds those nodes to the base tree. A function called there appears as a Group Node; functions it calls appear inside that group. Unused declarations add no node.</li>
+<li>Without top-level node-building code, it places the module's entry functions as Group Nodes in the base tree, even without calls. An entry is a function that no other function in the module calls. The declaration-only example places a Group Node for <code>small_cube</code> and one for <code>large_cube</code>. Required inputs on these nodes remain unlinked.</li>
+</ul>
+<p>Function names beginning with <code>_</code> follow the same entry-placement and import rules as other function names.</p>
+<p>Existing base-tree nodes remain in place. Connect the new nodes to <strong>Group Input</strong> and <strong>Group Output</strong> as needed; <strong>Compile Script</strong> does not create or connect the base tree's interface sockets.</p>
+<h2 id="import-functions">Import functions<a class="headerlink" href="#import-functions" title="Permanent link">&para;</a></h2>
+<p>Save the first example as <code>geometry.nf</code> in <strong>Library → Local</strong>, or register its folder with <strong>Add Folder...</strong>. Import its namespace and select functions by name:</p>
+<pre class="highlight"><code class="language-python">from local import geometry
+
+shape = geometry.make_cube(2.0)
+raised = geometry.lift(shape, height=1.5)</code></pre>
+<p>To import one function directly, use its file path and declared name:</p>
+<pre class="highlight"><code class="language-python">from local.geometry import lift as raise_geometry
+
+raised = raise_geometry(cube(1.0), height=1.5)</code></pre>
+<p>Nested files use paths such as <code>from local.terrain.geometry import lift</code>. Selected Examples files work the same way through <code>examples</code>. Package source functions are exported by their declared names under the package namespace; see <a href="../PACKAGES/">Package Guide</a>.</p>
+<p>Importing <code>geometry.nf</code> makes its functions available; its top-level <code>plain</code> and <code>raised</code> statements do not run in the importing script. The module namespace itself is not callable. An imported function is materialized when called. See <a href="../SYNTAX/#imports">Imports</a> for the supported import forms.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../CORE_CONCEPTS/" class="btn btn-neutral float-left" title="Core Concepts"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../SYNTAX/" class="btn btn-neutral float-right" title="Syntax">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2026 denikryt</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/denikryt/NodeForgeDocs" class="fa fa-code-fork" style="color: #fcfcfc"> denikryt/NodeForgeDocs</a>
+        </span>
+    
+    
+      <span><a href="../CORE_CONCEPTS/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../SYNTAX/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+      <script src="../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

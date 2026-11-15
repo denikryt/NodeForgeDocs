@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://denikryt.github.io/NodeForgeDocs/0.90.2/WRITING_FUNCTIONS/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Writing Functions - NodeForge Documentation</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Writing Functions";
+        var mkdocs_page_input_path = "WRITING_FUNCTIONS.md";
+        var mkdocs_page_url = "/NodeForgeDocs/0.90.2/WRITING_FUNCTIONS/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> NodeForge Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../GET_STARTED/">Get Started</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">DSL</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../CORE_CONCEPTS/">Core Concepts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MODULES/">Modules</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SYNTAX/">Syntax</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../BUILTINS/">Built-ins</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Writing Functions</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#parameters-and-sockets">Parameters and sockets</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#return-values">Return values</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#refresh-a-compiled-function">Refresh a compiled function</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MESH_COMPUTE/">Mesh Compute (Experimental)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../PACKAGES/">Package Guide</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../EXTENSION_API/">Extension API Reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../GEOMETRY_NODES_COVERAGE/">Geometry Nodes Coverage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Libraries</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Math</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_METHODS/">Methods</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../FUNCTIONS/">Functions</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_EXAMPLES/">Examples</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >LSystem</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS_SCRIPTING/">Guide</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS/">Reference</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">NodeForge Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">DSL</li>
+      <li class="breadcrumb-item active">Writing Functions</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/denikryt/NodeForgeDocs/edit/master/docs/WRITING_FUNCTIONS.md">Edit on denikryt/NodeForgeDocs</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="writing-functions">Writing Functions<a class="headerlink" href="#writing-functions" title="Permanent link">&para;</a></h1>
+<p>Declare reusable functions with top-level <code>def</code> in a <code>.nf</code> module. Each parameter has a type annotation, and each function ends with a <code>return</code>. A file can declare several functions; <a href="../MODULES/#compose-the-base-tree"><code>.nf</code> Modules</a> explains when their Group Nodes are placed in the base tree.</p>
+<h2 id="parameters-and-sockets">Parameters and sockets<a class="headerlink" href="#parameters-and-sockets" title="Permanent link">&para;</a></h2>
+<pre class="highlight"><code class="language-python">def move(
+    geometry: Geometry,
+    offset: Vector["Translation"] = vector(0, 0, 1)
+) -&gt; Geometry["Moved Geometry"]:
+    return transform(geometry, translation=offset)</code></pre>
+<p>Positional arguments follow parameter order. Inputs appear in that order until <code>panel(...)</code> groups or reorders them. <code>geometry</code> is required in an explicit call; <code>offset</code> has a default. The parameter identifier <code>offset</code> is also its keyword name. <code>Vector["Translation"]</code> changes only the Blender socket label. Keywords match parameter identifiers exactly, including case. Every parameter needs an explicit type annotation, including parameters with defaults.</p>
+<p>Function parameters support <code>Geometry</code>, <code>Float</code>, <code>Int</code>, <code>Bool</code>, <code>Vector</code>, <code>Material</code>, <code>Object</code>, <code>String</code>, and <code>Bundle</code>. You can declare defaults for <code>Float</code>, <code>Int</code>, <code>Bool</code>, <code>Vector</code>, and <code>String</code>. Parameters of the other four types are required.</p>
+<pre class="highlight"><code class="language-python">result = move(cube(1.0), offset=vector(0, 0, 2))</code></pre>
+<p>A <code>Float</code> parameter accepts <code>Float</code> or <code>Int</code> arguments. Other parameter types require matching argument types. A parameter without a declared default must be supplied in a source call, even if Blender gives its unlinked socket a native value.</p>
+<p>Defaults must be known at compile time. They use the final compile-time values in the defining module, including assignments after the function declaration:</p>
+<pre class="highlight"><code class="language-python">DEFAULT_SIZE = 1.0
+
+def make_cube(size: Float = DEFAULT_SIZE) -&gt; Geometry:
+    return cube(size)
+
+DEFAULT_SIZE = 2.0
+shape = make_cube()</code></pre>
+<p>Omitting an optional argument leaves its socket unlinked, using the declared default. Here, the unlinked <code>size</code> input defaults to <code>2.0</code>. Constants in the calling module do not replace defaults in an imported function. Defaults cannot refer to function parameters.</p>
+<p>Use <code>panel([geometry, offset], name="Transform", collapsed=True)</code> at the start of a function body to group its inputs in Blender's interface. Panels change socket layout while positional arguments continue to follow the function declaration. See <a href="../BUILTINS/#interface-panels">Interface Panels</a>.</p>
+<p>Parameters use ordinary positional-or-keyword syntax. Positional-only parameters, keyword-only parameters, <code>*args</code>, and <code>**kwargs</code> are unsupported. Parameter names cannot replace built-ins, type names, constants such as <code>pi</code>, or the compiler option <code>__unique__</code>.</p>
+<h2 id="return-values">Return values<a class="headerlink" href="#return-values" title="Permanent link">&para;</a></h2>
+<p>End the function with exactly one <code>return</code> at the function body's indentation level. Return one value or a flat, nonempty tuple of values. Use branches to assign a result, then return it after the branches; early and branch-local returns are unsupported.</p>
+<p>A single return annotation declares the output type; its <code>Type["Label"]</code> form also sets the output socket label. For multiple outputs, omit the return annotation and return a flat tuple. The compiler determines each output's type from its returned value.</p>
+<pre class="highlight"><code class="language-python">def measure(geometry: Geometry, scale: Float = 2.0):
+    resized = transform(geometry, scale=vector(scale, scale, scale))
+    doubled = scale * 2.0
+    return resized, doubled
+
+result, factor = measure(cube(1.0))</code></pre>
+<p>The output sockets above are <strong>Resized</strong> and <strong>Doubled</strong>, in return order. A returned variable such as <code>final_geometry</code> supplies the label <strong>Final Geometry</strong>. A single returned expression uses <strong>Value</strong>; expressions in a multiple return use <strong>Value 1</strong>, <strong>Value 2</strong>, and so on. Repeated labels receive numeric suffixes. An explicit output label must fit in 63 UTF-8 bytes.</p>
+<p>The caller can unpack multiple outputs or select one with a compile-time integer index. A function can call other functions in its module. Recursive call cycles are not supported.</p>
+<p>Save the module in Local to reuse its functions in other scripts. See <a href="../MODULES/#import-functions">Import functions</a>.</p>
+<h2 id="refresh-a-compiled-function">Refresh a compiled function<a class="headerlink" href="#refresh-a-compiled-function" title="Permanent link">&para;</a></h2>
+<p>Edit the function in its original source, select its Group Node, and click <strong>Reload Function from Source</strong>. Reload reads:</p>
+<ul>
+<li>the original Blender Text datablock for a function compiled from <strong>Text Script</strong>;</li>
+<li>the current file at its registered path for a Local or Examples function;</li>
+<li>the current installed package source for a package function.</li>
+</ul>
+<p>The original Text must still exist and have a unique source binding. Selecting another Text under <strong>Text Script</strong> does not change the source used by this action. <strong>Load Script From Selected NodeGroup</strong> copies the stored module source into the selected Text, replacing its contents; this alone does not change the function's source binding.</p>
+<p>Reload rebuilds the selected function group in place. All Group Nodes using that shared group receive the change; a <code>__unique__</code> group retains its separate instance. Compatible links and user-edited input values are preserved.</p>
+<p>The function name, parameter names, order, and types must match the compiled definition. Removing or renaming the definition, changing those parameters, or losing its source prevents Reload. To compile a changed signature, update the calling script and use <strong>Compile Script</strong> or <strong>Update Script</strong>. For replacement of the base graph, see <a href="../GET_STARTED/#update-a-script">Update a script</a>.</p>
+<p>Blender's <strong>Make Single User</strong> copies the group's source binding along with its nodes. Duplicate bindings prevent NodeForge from choosing an owner when compiling or reloading that function. To keep a manually created copy independent, select that copy in a Geometry Nodes editor. In a Python Console in the same window, run the operator with that editor as its context:</p>
+<pre class="highlight"><code class="language-python">editor = next(area for area in bpy.context.screen.areas
+              if area.type == 'NODE_EDITOR'
+              and area.spaces.active.tree_type == 'GeometryNodeTree')
+with bpy.context.temp_override(area=editor):
+    bpy.ops.nodeforge.detach_selected_source_owner()</code></pre>
+<p>This retains the copy's graph and removes its source ownership. The original group can then be reloaded; the detached copy is edited manually and is no longer a source Reload target. For separate groups that retain source Reload, use <a href="../SYNTAX/#shared-and-unique-groups"><code>__unique__=True</code></a> when writing the calls.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../BUILTINS/" class="btn btn-neutral float-left" title="Built-ins"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../MESH_COMPUTE/" class="btn btn-neutral float-right" title="Mesh Compute (Experimental)">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2026 denikryt</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/denikryt/NodeForgeDocs" class="fa fa-code-fork" style="color: #fcfcfc"> denikryt/NodeForgeDocs</a>
+        </span>
+    
+    
+      <span><a href="../BUILTINS/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../MESH_COMPUTE/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+      <script src="../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

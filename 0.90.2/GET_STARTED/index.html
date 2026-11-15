@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://denikryt.github.io/NodeForgeDocs/0.90.2/GET_STARTED/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Get Started - NodeForge Documentation</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Get Started";
+        var mkdocs_page_input_path = "GET_STARTED.md";
+        var mkdocs_page_url = "/NodeForgeDocs/0.90.2/GET_STARTED/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> NodeForge Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Get Started</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#install-nodeforge">Install NodeForge</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#update-nodeforge">Update NodeForge</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#compile-your-first-script">Compile your first script</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#update-a-script">Update a script</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#main-actions">Main actions</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#use-the-library-panel">Use the Library panel</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#save-a-module-to-local">Save a module to Local</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#text-editor-completion-prototype">Text Editor completion (prototype)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#what-to-read-next">What to read next</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">DSL</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../CORE_CONCEPTS/">Core Concepts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MODULES/">Modules</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SYNTAX/">Syntax</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../BUILTINS/">Built-ins</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../WRITING_FUNCTIONS/">Writing Functions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MESH_COMPUTE/">Mesh Compute (Experimental)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../PACKAGES/">Package Guide</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../EXTENSION_API/">Extension API Reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../GEOMETRY_NODES_COVERAGE/">Geometry Nodes Coverage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Libraries</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Math</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_METHODS/">Methods</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../FUNCTIONS/">Functions</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../MATH_EXAMPLES/">Examples</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >LSystem</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS_SCRIPTING/">Guide</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../LSYSTEMS/">Reference</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">NodeForge Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Get Started</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/denikryt/NodeForgeDocs/edit/master/docs/GET_STARTED.md">Edit on denikryt/NodeForgeDocs</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="get-started-with-nodeforge">Get Started with NodeForge<a class="headerlink" href="#get-started-with-nodeforge" title="Permanent link">&para;</a></h1>
+<p>NodeForge turns <code>.nf</code> scripts into Blender Geometry Nodes. Executable statements add nodes to an open base tree; typed functions create reusable nested groups. See <a href="../CORE_CONCEPTS/">Core Concepts</a> and <a href="../MODULES/"><code>.nf</code> Modules</a> for the language model.</p>
+<h2 id="install-nodeforge">Install NodeForge<a class="headerlink" href="#install-nodeforge" title="Permanent link">&para;</a></h2>
+<p>NodeForge requires Blender 5.2 or newer. Install it through its Blender Extensions repository to receive updates in Blender:</p>
+<ol>
+<li>Open <strong>Edit → Preferences → Get Extensions</strong>.</li>
+<li>Under <strong>Repositories</strong>, choose <strong>Add Remote Repository</strong> and enter <code>https://denikryt.github.io/NodeForge/index.json</code>.</li>
+<li>Find <strong>NodeForge</strong>, click <strong>Install</strong>, and enable it.</li>
+</ol>
+<p>To install from a file, download the latest Extension ZIP from <a href="https://github.com/denikryt/NodeForge/releases/latest">GitHub Releases</a>. In <strong>Get Extensions</strong>, choose <strong>Install from Disk...</strong>, select the ZIP, and enable <strong>NodeForge</strong>. This also works offline after downloading the ZIP.</p>
+<p>When switching from the earlier ZIP add-on, disable the old NodeForge add-on before enabling the Extension. Your Local files and installed packages remain in Blender's user-data directories.</p>
+<p>The add-on adds a <strong>NodeForge</strong> tab to the Geometry Node Editor sidebar. It comes with the <a href="../MATH_METHODS/">Math</a> and <a href="../LSYSTEMS_SCRIPTING/">L-System</a> libraries, which are installed or updated when the Extension is enabled.</p>
+<h2 id="update-nodeforge">Update NodeForge<a class="headerlink" href="#update-nodeforge" title="Permanent link">&para;</a></h2>
+<p>For a repository installation, open <strong>Get Extensions</strong>, use <strong>Refresh Remote</strong>, then update <strong>NodeForge</strong> when available. You can enable <strong>Check for Updates on Startup</strong> for the repository.</p>
+<p>For a ZIP installation, download a newer Extension ZIP and install it from disk again.</p>
+<h2 id="compile-your-first-script">Compile your first script<a class="headerlink" href="#compile-your-first-script" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Select a mesh object and open the <strong>Geometry Node Editor</strong>.</li>
+<li>Click <strong>New</strong> to create a Geometry Nodes modifier and base node tree.</li>
+<li>Press <code>N</code> and open the <strong>NodeForge</strong> tab.</li>
+<li>In a <strong>Text Editor</strong>, create a Text datablock with this script:</li>
+</ol>
+<pre class="highlight"><code class="language-python">def make_cube(size: Float["Size"] = 2.0) -&gt; Geometry:
+    return cube(size)</code></pre>
+<ol>
+<li>Select that Text in <strong>Text Script</strong> and click <strong>Compile Script</strong>.</li>
+</ol>
+<p>The function becomes a Group Node in the open base tree. Connect its output to the base tree's <strong>Group Output</strong> Geometry input to display the cube. Change <strong>Size</strong> on the Group Node to see Blender reevaluate it.</p>
+<p>A script can also build ordinary nodes directly:</p>
+<pre class="highlight"><code class="language-python">geometry = cube(2.0)</code></pre>
+<p><strong>Compile Script</strong> adds these nodes to the open base tree. It keeps existing nodes and does not connect the base tree's Group Input/Output automatically.</p>
+<h2 id="update-a-script">Update a script<a class="headerlink" href="#update-a-script" title="Permanent link">&para;</a></h2>
+<p>Edit the source in a Text datablock, select it under <strong>Text Script</strong>, open the base Geometry Nodes tree, and click <strong>Update Script</strong>. Each update uses the currently selected Text. The action recompiles its root graph and called functions, including nested function groups. It replaces the tree's ordinary nodes, including Group Nodes, while keeping the physical tree, its interface, and its Group Input/Output nodes.</p>
+<p>Compatible unambiguous links between the root interface nodes and rebuilt nodes can be restored; other manual connections between ordinary nodes are replaced by the script's graph. Inspect boundary links after updating, especially if node types or counts changed. Repeated <strong>Update Script</strong> calls replace rather than accumulate nodes. <strong>Compile Script</strong> adds to the existing graph. A module containing only compile-time constants clears the ordinary nodes when used with <strong>Update Script</strong>; a module containing only declarations places its entry functions. An empty or invalid source is rejected.</p>
+<p>Update does not migrate animation or drivers on ordinary root nodes; a tree containing them cannot be updated with this action.</p>
+<p>Both script actions require an editable base tree in the Geometry Nodes editor. Linked read-only trees and NodeForge-managed function or Mesh Compute trees are unsupported targets. Return from any nested group before using them.</p>
+<h2 id="main-actions">Main actions<a class="headerlink" href="#main-actions" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Compile Script</strong></td>
+<td>Adds the selected Text's nodes or entry functions to the open base tree.</td>
+</tr>
+<tr>
+<td><strong>Update Script</strong></td>
+<td>Replaces ordinary nodes in the open base tree from the selected Text.</td>
+</tr>
+<tr>
+<td><strong>Reload Function from Source</strong></td>
+<td>Rebuilds a selected source-backed Function Group from its current source.</td>
+</tr>
+<tr>
+<td><strong>Load Script From Selected NodeGroup</strong></td>
+<td>Copies the selected function's stored module source into the selected Text, replacing its contents.</td>
+</tr>
+<tr>
+<td><strong>Install Mesh Compute</strong> / <strong>Reload Compute</strong></td>
+<td>Install or reload an experimental <a href="../MESH_COMPUTE/">Mesh Compute</a> modifier on a Mesh object.</td>
+</tr>
+</tbody>
+</table>
+<p>For function source selection, shared groups, and Reload requirements, see <a href="../WRITING_FUNCTIONS/#refresh-a-compiled-function">Refresh a compiled function</a>.</p>
+<h2 id="use-the-library-panel">Use the Library panel<a class="headerlink" href="#use-the-library-panel" title="Permanent link">&para;</a></h2>
+<p>The <strong>Library</strong> panel contains reusable scripts and package tools. Install other packages through <strong>Library → Packages</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Catalog</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Local</strong></td>
+<td>NodeForge-managed <code>.nf</code> files and read-only external source folders.</td>
+</tr>
+<tr>
+<td><strong>Functions</strong></td>
+<td>Reusable functions provided by installed packages.</td>
+</tr>
+<tr>
+<td><strong>Examples</strong></td>
+<td>Bundled and package-provided example scripts.</td>
+</tr>
+<tr>
+<td><strong>Packages</strong></td>
+<td>Install and remove NodeForge packages.</td>
+</tr>
+</tbody>
+</table>
+<p>Select a Local file or Example, then click <strong>Add Node Group</strong> to place its entry function in the open base tree. This action requires a single entry function in the selected file; for a file with several entries, import and call the function you need from another script. For a <a href="../MESH_COMPUTE/">Mesh Compute</a> entry, <strong>Add Node Group</strong> installs a modifier on the selected Mesh.</p>
+<h3 id="save-a-module-to-local">Save a module to Local<a class="headerlink" href="#save-a-module-to-local" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Write or load a <code>.nf</code> module in a Text datablock.</li>
+<li>Open <strong>Library → Local</strong> and browse to a NodeForge-managed folder.</li>
+<li>Click <strong>Save</strong>, enter a file name, and confirm. Enable <strong>Overwrite</strong> to replace an existing file.</li>
+</ol>
+<p>Use <strong>Add Folder...</strong> to register an existing directory of <code>.nf</code> files without copying it. External Local folders are read-only in NodeForge: edit their files with your normal editor. <strong>Remove from Local</strong> removes the registration but keeps the external files. In managed Local storage, <strong>Delete File</strong> removes a selected file and <strong>Delete Folder</strong> removes an empty folder.</p>
+<p>To call functions saved in Local from another script, see <a href="../MODULES/#import-functions">Import functions</a>.</p>
+<h2 id="text-editor-completion-prototype">Text Editor completion (prototype)<a class="headerlink" href="#text-editor-completion-prototype" title="Permanent link">&para;</a></h2>
+<p>NodeForge has built-in text completion for scripts in Blender's Text Editor. This prototype suggests Core DSL functions, Local and package imports, imported members, and functions declared in the current script. It also shows function parameters and return types when available. Enable it with <strong>NodeForge</strong> in the Text Editor header.</p>
+<h2 id="what-to-read-next">What to read next<a class="headerlink" href="#what-to-read-next" title="Permanent link">&para;</a></h2>
+<p>Start with <a href="../MODULES/"><code>.nf</code> Modules</a>, then use <a href="../SYNTAX/">DSL Syntax and Semantics</a> and <a href="../BUILTINS/">Core DSL Built-ins</a> as references. <a href="../WRITING_FUNCTIONS/">Writing Functions</a> covers reusable declarations; <a href="../PACKAGES/">Package Guide</a> covers distribution.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href=".." class="btn btn-neutral float-left" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../CORE_CONCEPTS/" class="btn btn-neutral float-right" title="Core Concepts">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2026 denikryt</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/denikryt/NodeForgeDocs" class="fa fa-code-fork" style="color: #fcfcfc"> denikryt/NodeForgeDocs</a>
+        </span>
+    
+    
+      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../CORE_CONCEPTS/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+      <script src="../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
