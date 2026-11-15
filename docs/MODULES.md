@@ -41,13 +41,13 @@ def large_cube() -> Geometry:
 
 See [Writing Functions](WRITING_FUNCTIONS.md) for parameter types, defaults, socket labels, panels, and return values.
 
-Every function declaration in the selected module must have a valid signature and return shape, including functions that are not called.
+Every function declaration in the selected module must have a valid signature, defaults, panels, and return shape, including functions that are not called. An invalid unused declaration rejects compilation before nodes are added. Runtime operations in a function body are checked when that function is compiled.
 
-Function bodies can call other functions in the same module. Recursive call cycles are not supported. See [Reusable Functions](SYNTAX.md#reusable-functions) for group sharing and `__unique__`.
+Functions can be called before their declarations appear in the file. Function bodies can call other functions in the same module. Recursive call cycles are not supported. See [Reusable Functions](SYNTAX.md#reusable-functions) for group sharing and `__unique__`.
 
 ## Compose the base tree
 
-Open an editable base Geometry Nodes tree, select a Text datablock under **Text Script**, and click **Compile Script**. A module with only top-level statements also works:
+Open an editable base Geometry Nodes tree, select a Text datablock under **Text Script**, and click **Compile Script**. Imports and compile-time constants alone do not count as node-building code. A module with only top-level statements also works:
 
 ```python
 shape = cube(1.0)
@@ -57,7 +57,9 @@ moved = transform(shape, translation=vector(0, 0, 1))
 **Compile Script** uses the module in one of two ways:
 
 - With top-level node-building code, it adds those nodes to the base tree. A function called there appears as a Group Node; functions it calls appear inside that group. Unused declarations add no node.
-- Without top-level node-building code, it places the module's entry functions as Group Nodes in the base tree, even without calls. An entry is a function that no other function in the module calls. The declaration-only example places **Small Cube** and **Large Cube**. Required inputs on these nodes remain unlinked.
+- Without top-level node-building code, it places the module's entry functions as Group Nodes in the base tree, even without calls. An entry is a function that no other function in the module calls. The declaration-only example places a Group Node for `small_cube` and one for `large_cube`. Required inputs on these nodes remain unlinked.
+
+Function names beginning with `_` follow the same entry-placement and import rules as other function names.
 
 Existing base-tree nodes remain in place. Connect the new nodes to **Group Input** and **Group Output** as needed; **Compile Script** does not create or connect the base tree's interface sockets.
 

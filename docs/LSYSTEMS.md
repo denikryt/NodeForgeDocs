@@ -10,7 +10,7 @@ This page is the API and grammar reference. For a worked introduction with compl
 
 ## Compatibility
 
-NodeForge L-System 4.0 requires NodeForge 0.65.0 or newer.
+NodeForge L-System 4.1 requires NodeForge 0.90.2 or newer.
 
 ## `ls.system(part, ...)`
 
@@ -209,7 +209,8 @@ Extracts points belonging to one declared marker.
 Returns `Geometry` containing only the selected marker points. Marker identity is stored in numeric point attributes, so filtering continues to work after operations such as assignment, `transform(...)`, and `join(...)` when Blender preserves those attributes.
 
 ```python
-leaf_points = ls.points(plant, marker="Leaf")
+def extract_leaves(plant: Geometry) -> Geometry:
+    return ls.points(plant, marker="Leaf")
 ```
 
 ## Rewrite and grammar rules

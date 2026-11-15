@@ -24,13 +24,13 @@ def cube_row(spacing: Float = 1.5) -> Geometry:
     return join(parts)
 ```
 
-`COPIES` and the loop index `i` are compile-time values: compilation creates three Cube and Transform paths. `spacing` is a runtime `Float` input connected to those paths. Changing **Spacing** on the Group Node makes Blender reevaluate the existing graph.
+`COPIES` and the loop index `i` are compile-time values: compilation creates three Cube and Transform paths. `spacing` is a runtime `Float` input connected to those paths. Changing **spacing** on the Group Node makes Blender reevaluate the existing graph.
 
-A source variable such as `spacing` names a typed value in the graph; it is not the current numeric value on a Group Node. A `for` loop with a runtime `Int` count creates a Repeat Zone instead of unrolling. Ordinary `if` statements create runtime branches. See [For Statements](SYNTAX.md#for-statements) and [If Statements](SYNTAX.md#if-statements).
+A source variable such as `spacing` names a typed value in the graph; it is not the current numeric value on a Group Node. A `for` loop with a runtime `Int` count creates a Repeat Zone instead of unrolling. An `if` with a runtime condition creates a runtime branch. Inside a function, a compile-time Boolean condition selects the branch during compilation. See [For Statements](SYNTAX.md#for-statements) and [If Statements](SYNTAX.md#if-statements).
 
 ## Group inputs and outputs
 
-A typed function's parameters define its Group Node input sockets. Their types determine which values can be connected; defaults provide initial values. Its `return` defines the output socket or sockets. In `cube_row`, `spacing: Float = 1.5` creates a **Spacing** input, and `return join(parts)` supplies a Geometry output.
+A typed function's parameters define its Group Node input sockets. Their types determine which values can be connected; defaults provide initial values. Its `return` defines the output socket or sockets. In `cube_row`, `spacing: Float = 1.5` creates a **spacing** input, and `return join(parts)` supplies a Geometry output.
 
 Each Group Node instance can have different input values or incoming links. Changing an input reevaluates the graph; editing the function source and recompiling changes the graph itself. See [Writing Functions](WRITING_FUNCTIONS.md) for parameters, labels, and multiple outputs.
 

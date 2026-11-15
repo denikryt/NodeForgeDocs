@@ -61,7 +61,7 @@ Only declare roots that the package actually contains.
   "version": "1.0.0",
   "author": "Vendor",
   "description": "Reusable shape functions for NodeForge.",
-  "nodeforge_min_version": "0.65.0",
+  "nodeforge_min_version": "0.90.2",
   "contents": {
     "functions": "functions"
   }
@@ -106,7 +106,7 @@ geo = s.ring(2.0, 0.25)
 
 Prefer qualified calls such as `shapes.ring(...)` in reusable code. They remain unambiguous when different packages export the same member name or when a package member shares a name with a Core DSL callable.
 
-For unqualified lookup, aliasing, and catalog-import precedence, see [Imports](SYNTAX.md#imports).
+For the supported import forms and aliases, see [Imports](SYNTAX.md#imports).
 
 `from packages import *` is not supported. Package namespaces are qualifiers rather than DSL runtime values, so assigning a namespace is also invalid:
 
@@ -134,7 +134,7 @@ functions/
     └── source.nf
 ```
 
-Every top-level `def` in a source file becomes a package member under its declared function name. A file can export several functions. Function parameters and `return` define the Group Node sockets.
+Every top-level `def` in a source file becomes a package member under its declared function name. A file can export several functions, including names beginning with `_`. Exported names must be unique within the package, including names provided by Python-backed extensions. Function parameters and `return` define the Group Node sockets. Top-level node-building statements in these files are skipped when their functions are imported or added from the Library.
 
 ```python
 # functions/scale_cube.nf
@@ -149,6 +149,8 @@ geo = shapes.scale_cube(1.5, factor=3.0)
 ```
 
 Keywords use the function's exact parameter identifiers; display labels may be set with `Type["Label"]`. See [Writing Functions](WRITING_FUNCTIONS.md#parameters-and-sockets).
+
+Under **Library → Functions**, select a package function and click **Add Node Group** to place that definition. The package file can contain several exported functions.
 
 For general reusable-function behavior, including `__unique__=True` where supported, see [Reusable Functions](SYNTAX.md#reusable-functions).
 

@@ -129,7 +129,7 @@ Places function input sockets in a native Blender interface panel. Write `panel(
 
 Returns: statement only.
 
-Each group input can belong to one panel. Inputs omitted from `panel(...)` remain at the root of the group interface. Panels organize the function group interface. Computed values and function results are not interface inputs and cannot be panel members.
+Each group input can belong to one panel. Inputs omitted from `panel(...)` remain at the root of the group interface. Inputs inside each panel follow its member order. If a parameter appears in several panel declarations, the last declaration determines its panel. Positional call arguments always follow the function parameter order. Computed values and function results are not interface inputs and cannot be panel members.
 
 ```python
 def example(radius: Float = 1.0, segments: Int = 32):

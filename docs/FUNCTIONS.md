@@ -161,15 +161,15 @@ def example():
     return pts
 ```
 
-### `wrap(x=0.0, min=0.0, max=1.0)`
+### `wrap(x=0.0, min_value=0.0, max_value=1.0)`
 
-Wraps `x` into the half-open range `[min, max)` using modulo arithmetic.
+Wraps `x` into the half-open range `[min_value, max_value)` using modulo arithmetic.
 
 | Parameter | Type | Default | Description |
 | --- | --- | --- | --- |
 | `x` | `Float` | `0.0` | Input value. |
-| `min` | `Float` | `0.0` | Lower bound. |
-| `max` | `Float` | `1.0` | Upper bound. |
+| `min_value` | `Float` | `0.0` | Lower bound. |
+| `max_value` | `Float` | `1.0` | Upper bound. |
 
 Returns: `Float`.
 
@@ -177,7 +177,7 @@ Returns: `Float`.
 from packages import math
 
 def example(value_1: Float = 7.0):
-    angle = math.wrap(value_1, min=0.0, max=tau)
+    angle = math.wrap(value_1, min_value=0.0, max_value=tau)
     return angle
 ```
 
@@ -431,15 +431,15 @@ def example():
     return spiral
 ```
 
-### `layout_random(geometry, min=vector(-1, -1, -1), max=vector(1, 1, 1), seed=0)`
+### `layout_random(geometry, min_value=vector(-1, -1, -1), max_value=vector(1, 1, 1), seed=0)`
 
 Places existing points at random positions between vector bounds. The point index is used as the random ID.
 
 | Parameter | Type | Default | Description |
 | --- | --- | --- | --- |
 | `geometry` | `Geometry` | required | Point geometry to position. |
-| `min` | `Vector` | `vector(-1, -1, -1)` | Lower random bound. |
-| `max` | `Vector` | `vector(1, 1, 1)` | Upper random bound. |
+| `min_value` | `Vector` | `vector(-1, -1, -1)` | Lower random bound. |
+| `max_value` | `Vector` | `vector(1, 1, 1)` | Upper random bound. |
 | `seed` | `Int` | `0` | Random seed. |
 
 Returns: `Geometry`.
@@ -451,19 +451,19 @@ def example():
     pts = points(50)
     vec_1 = vector(-2, -2, 0)
     vec_2 = vector(2, 2, 1)
-    pts = math.layout_random(pts, min=vec_1, max=vec_2, seed=7)
+    pts = math.layout_random(pts, min_value=vec_1, max_value=vec_2, seed=7)
     return pts
 ```
 
-### `random_points(count=16, min=vector(-1, -1, -1), max=vector(1, 1, 1), seed=0)`
+### `random_points(count=16, min_value=vector(-1, -1, -1), max_value=vector(1, 1, 1), seed=0)`
 
 Creates point geometry and places the points with `layout_random(...)`.
 
 | Parameter | Type | Default | Description |
 | --- | --- | --- | --- |
 | `count` | `Int` | `16` | Number of generated points. Negative values are clamped to zero for point generation. |
-| `min` | `Vector` | `vector(-1, -1, -1)` | Lower random bound. |
-| `max` | `Vector` | `vector(1, 1, 1)` | Upper random bound. |
+| `min_value` | `Vector` | `vector(-1, -1, -1)` | Lower random bound. |
+| `max_value` | `Vector` | `vector(1, 1, 1)` | Upper random bound. |
 | `seed` | `Int` | `0` | Random seed. |
 
 Returns: `Geometry`.
@@ -474,7 +474,7 @@ from packages import math
 def example():
     vec_1 = vector(-3, -3, 0)
     vec_2 = vector(3, 3, 2)
-    pts = math.random_points(count=100, min=vec_1, max=vec_2, seed=42)
+    pts = math.random_points(count=100, min_value=vec_1, max_value=vec_2, seed=42)
     return pts
 ```
 

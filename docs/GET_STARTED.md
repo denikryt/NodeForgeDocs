@@ -50,11 +50,11 @@ geometry = cube(2.0)
 
 Edit the source in a Text datablock, select it under **Text Script**, open the base Geometry Nodes tree, and click **Update Script**. Each update uses the currently selected Text. The action recompiles its root graph and called functions, including nested function groups. It replaces the tree's ordinary nodes, including Group Nodes, while keeping the physical tree, its interface, and its Group Input/Output nodes.
 
-Compatible unambiguous links between the root interface nodes and rebuilt nodes can be restored; other manual connections between ordinary nodes are replaced by the script's graph. Inspect boundary links after updating, especially if node types or counts changed. Repeated **Update Script** calls replace rather than accumulate nodes. **Compile Script** adds to the existing graph.
+Compatible unambiguous links between the root interface nodes and rebuilt nodes can be restored; other manual connections between ordinary nodes are replaced by the script's graph. Inspect boundary links after updating, especially if node types or counts changed. Repeated **Update Script** calls replace rather than accumulate nodes. **Compile Script** adds to the existing graph. A module containing only compile-time constants clears the ordinary nodes when used with **Update Script**; a module containing only declarations places its entry functions. An empty or invalid source is rejected.
 
 Update does not migrate animation or drivers on ordinary root nodes; a tree containing them cannot be updated with this action.
 
-Both script actions require an editable base tree in the Geometry Nodes editor. Return from any nested group before using them.
+Both script actions require an editable base tree in the Geometry Nodes editor. Linked read-only trees and NodeForge-managed function or Mesh Compute trees are unsupported targets. Return from any nested group before using them.
 
 ## Main actions
 
@@ -63,8 +63,10 @@ Both script actions require an editable base tree in the Geometry Nodes editor. 
 | **Compile Script** | Adds the selected Text's nodes or entry functions to the open base tree. |
 | **Update Script** | Replaces ordinary nodes in the open base tree from the selected Text. |
 | **Reload Function from Source** | Rebuilds a selected source-backed Function Group from its current source. |
-| **Load Script From Selected NodeGroup** | Copies the selected generated function's stored source into a Text datablock. |
+| **Load Script From Selected NodeGroup** | Copies the selected function's stored module source into the selected Text, replacing its contents. |
 | **Install Mesh Compute** / **Reload Compute** | Install or reload an experimental [Mesh Compute](MESH_COMPUTE.md) modifier on a Mesh object. |
+
+For function source selection, shared groups, and Reload requirements, see [Refresh a compiled function](WRITING_FUNCTIONS.md#refresh-a-compiled-function).
 
 ## Use the Library panel
 

@@ -259,6 +259,8 @@ geometry = join(parts)
 
 Here, `parts` contains both Geometry values after the append. Assigning a new list to either name replaces that name's binding.
 
+A list of compile-time constants cannot be extended with runtime values. Start with `[]` or a list of graph values when collecting runtime results. Module-level constant lists are copied for each function's compilation; changes inside one function do not change the list seen by another function.
+
 Appending to a collection inside runtime `if` branches or Repeat Zones is unsupported. To accumulate geometry in a runtime loop, use [Geometry Builder](#geometry-builder) or a Geometry repeat-state value; see [Runtime Loops](#runtime-loops).
 
 ### Multiple Function Outputs
@@ -473,7 +475,18 @@ def sine(angle: Float = 0.0) -> Float:
     return m.sin(angle)
 ```
 
-Qualified calls identify the package that supplies a callable. Package `.nf` files export their functions under the declared `def` names. See [Package Guide](PACKAGES.md) for package authoring and [Python Extension API v2](EXTENSION_API.md) for Python-backed package callables.
+Qualified calls identify the package that supplies a callable. A member can also be called without its namespace when exactly one imported package provides that name and no source binding or Core built-in takes precedence:
+
+```python
+from packages import math
+
+def sine(angle: Float = 0.0) -> Float:
+    return sin(angle)
+```
+
+If several imported packages provide the name, the unqualified call is ambiguous. Use a qualified call such as `math.sin(angle)` to select its owner.
+
+Package `.nf` files export their functions under the declared `def` names. See [Package Guide](PACKAGES.md) for package authoring and [Python Extension API v2](EXTENSION_API.md) for Python-backed package callables.
 
 Star imports, plain Python `import`, relative imports, imports inside functions, and imports from arbitrary Python modules are unsupported.
 
