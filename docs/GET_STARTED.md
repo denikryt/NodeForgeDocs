@@ -1,6 +1,6 @@
 # Get Started with NodeForge
 
-NodeForge compiles a Python-like DSL script into a native Blender Geometry Nodes group. The script defines the group's interface and internal data flow. This page takes you from installing the add-on to compiling and updating your first generated group; see [Core Concepts](CORE_CONCEPTS.md) for the complete language model.
+NodeForge turns `.nf` scripts into Blender Geometry Nodes. Executable statements add nodes to an open base tree; typed functions create reusable nested groups. See [Core Concepts](CORE_CONCEPTS.md) and [`.nf` Modules](MODULES.md) for the language model.
 
 ## Install NodeForge
 
@@ -10,263 +10,89 @@ NodeForge requires Blender 5.2 or newer. Install it through its Blender Extensio
 2. Under **Repositories**, choose **Add Remote Repository** and enter `https://denikryt.github.io/NodeForge/index.json`.
 3. Find **NodeForge**, click **Install**, and enable it.
 
-To install from a file instead, download the latest Extension ZIP from [GitHub Releases](https://github.com/denikryt/NodeForge/releases/latest). In **Get Extensions**, choose **Install from Disk...**, select the ZIP, and enable **NodeForge**. This method also works offline after downloading the ZIP.
+To install from a file, download the latest Extension ZIP from [GitHub Releases](https://github.com/denikryt/NodeForge/releases/latest). In **Get Extensions**, choose **Install from Disk...**, select the ZIP, and enable **NodeForge**. This also works offline after downloading the ZIP.
 
-When switching from the earlier ZIP add-on, disable the old NodeForge add-on before enabling the Extension. Your Local files and installed NodeForge packages remain in Blender's user-data directories.
+When switching from the earlier ZIP add-on, disable the old NodeForge add-on before enabling the Extension. Your Local files and installed packages remain in Blender's user-data directories.
 
-The installed add-on adds a **NodeForge** tab to the sidebar of the Geometry Node Editor.
+The add-on adds a **NodeForge** tab to the Geometry Node Editor sidebar. It comes with the [Math](MATH_METHODS.md) and [L-System](LSYSTEMS_SCRIPTING.md) libraries, which are installed or updated when the Extension is enabled.
 
 ## Update NodeForge
 
-If you installed from the remote repository, open **Get Extensions**, use **Refresh Remote** to check for updates, then update **NodeForge** when a newer version is available. You can also enable **Check for Updates on Startup** for the repository.
+For a repository installation, open **Get Extensions**, use **Refresh Remote**, then update **NodeForge** when available. You can enable **Check for Updates on Startup** for the repository.
 
-If you installed from a ZIP, download a newer Extension ZIP from [GitHub Releases](https://github.com/denikryt/NodeForge/releases/latest) and install it from disk again. ZIP installations do not receive repository updates.
+For a ZIP installation, download a newer Extension ZIP and install it from disk again.
 
-NodeForge comes with the [Math](MATH_METHODS.md) and [L-System](LSYSTEMS_SCRIPTING.md) libraries. Enabling the Extension installs or updates them, but keeps a separately installed newer version.
+## Compile your first script
 
-## Create your first NodeForge group
-
-1. Select a mesh object.
-2. Open the **Geometry Node Editor** and click **New** to create a Geometry Nodes modifier and node tree.
-3. Press `N` to open the sidebar, then select the **NodeForge** tab.
-4. Open a **Text Editor** in another Blender area and click **New** to create a Text datablock.
-5. Enter this script:
+1. Select a mesh object and open the **Geometry Node Editor**.
+2. Click **New** to create a Geometry Nodes modifier and base node tree.
+3. Press `N` and open the **NodeForge** tab.
+4. In a **Text Editor**, create a Text datablock with this script:
 
 ```python
-geo = cube(size=2.0)
-output("Geometry", geo)
+def make_cube(size: Float["Size"] = 2.0) -> Geometry:
+    return cube(size)
 ```
 
-6. In the NodeForge sidebar, select the new Text datablock in **Text Script**.
-7. Click **Compile Script**. NodeForge compiles the text and adds the generated group node to the current Geometry Nodes tree.
-8. Connect the generated node **Geometry** output to the **Group Output** node **Geometry** input.
+5. Select that Text in **Text Script** and click **Compile Script**.
 
-The object now displays the cube produced by the script.
+The function becomes a Group Node in the open base tree. Connect its output to the base tree's **Group Output** Geometry input to display the cube. Change **Size** on the Group Node to see Blender reevaluate it.
 
-## Text Editor completion (prototype)
+A script can also build ordinary nodes directly:
 
-NodeForge has built-in text completion for scripts in Blender's Text Editor. This prototype suggests Core DSL functions, Local and package imports, members of imported namespaces, and functions declared in the current script. It also shows function parameters and return types when available. Enable it with **NodeForge** in the Text Editor header.
+```python
+geometry = cube(2.0)
+```
 
-## Update the generated group
+**Compile Script** adds these nodes to the open base tree. It keeps existing nodes and does not connect the base tree's Group Input/Output automatically.
 
-1. Edit the source in the Text Editor. For example, change `size=2.0` to `size=3.0`.
-2. Select the generated NodeForge group node in the Geometry Node Editor.
-3. Click **Update Selected NodeGroup** in the NodeForge sidebar.
+## Update a script
 
-NodeForge recompiles the selected text into the same node group. The group name, compatible input values, and compatible links are preserved.
+Edit the source in a Text datablock, select it under **Text Script**, open the base Geometry Nodes tree, and click **Update Script**. Each update uses the currently selected Text. The action recompiles its root graph and called functions, including nested function groups. It replaces the tree's ordinary nodes, including Group Nodes, while keeping the physical tree, its interface, and its Group Input/Output nodes.
 
-The rebuilt group also stores the edited source. Use **Load Script From Selected NodeGroup** to recover that source into a Text datablock and continue editing it later.
+Compatible unambiguous links between the root interface nodes and rebuilt nodes can be restored; other manual connections between ordinary nodes are replaced by the script's graph. Inspect boundary links after updating, especially if node types or counts changed. Repeated **Update Script** calls replace rather than accumulate nodes. **Compile Script** adds to the existing graph.
+
+Update does not migrate animation or drivers on ordinary root nodes; a tree containing them cannot be updated with this action.
+
+Both script actions require an editable base tree in the Geometry Nodes editor. Return from any nested group before using them.
 
 ## Main actions
 
 | Button | What it does |
 | --- | --- |
-| **Compile Script** | Compiles the selected Text datablock into a new Geometry Nodes group and inserts it into the active Geometry Nodes editor. For a [Mesh Compute](MESH_COMPUTE.md) script, creates a modifier on the selected Mesh instead. |
-| **Update Selected NodeGroup** | Recompiles the selected Text datablock into the selected generated group. Compatible input values and links are preserved. |
-| **Load Script From Selected NodeGroup** | Copies the source embedded in the selected generated group into the selected Text datablock. |
-| **Reload from Source** | Rebuilds a selected Local or package-backed group from its current catalog source. |
-
-The generated result is native Blender data; see [Generated groups remain native Blender data](CORE_CONCEPTS.md#generated-groups-remain-native-blender-data) for its lifecycle.
-
-## First script: one input, one output
-
-Start with the smallest useful node group: one float input and one float output.
-
-```python
-value = input_float('Value', default=1.0)
-output('Value', value)
-```
-
-What this means:
-
-| Line | Meaning |
-| --- | --- |
-| `input_float('Value', default=1.0)` | Creates a float input socket named `Value` with default value `1.0`. |
-| `value = ...` | Stores that socket value in the script variable `value`. |
-| `output('Value', value)` | Creates an output socket named `Value` and connects the value to it. |
-
-After compiling, the generated node group has one input socket and one output socket. This is not visually exciting, but it shows the core model: **inputs create node-group inputs, outputs create node-group outputs**.
-
-## First geometry script: adjustable cube
-
-Now create geometry. This script makes a cube whose size is controlled by a group input.
-
-```python
-size = input_float('Size', default=2.0)
-geo = cube(size=size)
-output('Geometry', geo)
-```
-
-The generated group has:
-
-| Socket | Direction | Type |
-| --- | --- | --- |
-| `Size` | Input | Float |
-| `Geometry` | Output | Geometry |
-
-The important difference from normal Python is that `geo` is not a mesh object in Python memory. It is a Geometry Nodes value being built by the compiler.
-
-## Use the object's input geometry
-
-A compiled NodeForge group can process geometry supplied by the surrounding Geometry Nodes tree. Declare a Geometry input in the script, then connect the surrounding tree's geometry to that socket on the generated group node. The generated NodeForge group is a nested node group; it is not itself the modifier's root node tree.
-
-```python
-geo = input_geometry('Geometry')
-scale = vector(1, 1, 2)
-result = transform(geo, scale=scale)
-output('Geometry', result)
-```
-
-After compiling, connect the object's geometry to the generated group's `Geometry` input if it is not connected automatically. In a Geometry Nodes modifier, this is the socket that carries the mesh or curve from the object in the scene.
-
-Use this when you want to modify an existing object instead of generating all geometry from scratch with functions like `cube(...)`.
-
-## Add variables and transforms
-
-Use variables to keep scripts readable. The following script creates a cube and scales it in Z.
-
-```python
-size = input_float('Size', default=1.0)
-height = input_float('Height', default=3.0)
-
-base = cube(size=size)
-scale = vector(1, 1, height)
-geo = transform(base, scale=scale)
-
-output('Geometry', geo)
-```
-
-This pattern is usually clearer than nesting calls directly inside other calls. Write each meaningful value once, name it, and pass the name to the next operation.
-
-## Build a small shape with a loop
-
-Lists and compile-time `for` loops are useful for generating repeated geometry. This example creates a row of five cubes.
-
-```python
-spacing = input_float('Spacing', default=1.25)
-count = 5
-
-parts = []
-for i in range(count):
-    base = cube(size=1.0)
-    offset = vector(i * spacing, 0, 0)
-    moved = transform(base, translation=offset)
-    parts.append(moved)
-
-geo = join(parts)
-output('Geometry', geo)
-```
-
-What is happening:
-
-| Part | Meaning |
-| --- | --- |
-| `count = 5` | A compile-time value. NodeForge knows it while compiling. |
-| `range(count)` | Unrolls the loop during compilation. |
-| `parts = []` / `parts.append(...)` | Collects Geometry values into a compile-time list. |
-| `join(parts)` | Combines the generated cubes into one Geometry output. |
-
-Use `range(...)` when the number of loop iterations is known during compilation. Use [`repeat_range(...)`](BUILTINS.md#runtime-loops) when the iteration count must be a runtime input or when you want a Blender Repeat Zone.
+| **Compile Script** | Adds the selected Text's nodes or entry functions to the open base tree. |
+| **Update Script** | Replaces ordinary nodes in the open base tree from the selected Text. |
+| **Reload Function from Source** | Rebuilds a selected source-backed Function Group from its current source. |
+| **Load Script From Selected NodeGroup** | Copies the selected generated function's stored source into a Text datablock. |
+| **Install Mesh Compute** / **Reload Compute** | Install or reload an experimental [Mesh Compute](MESH_COMPUTE.md) modifier on a Mesh object. |
 
 ## Use the Library panel
 
-The **Library** panel contains reusable scripts and package management tools. Install other packages through **Library → Packages**:
+The **Library** panel contains reusable scripts and package tools. Install other packages through **Library → Packages**.
 
 | Catalog | Purpose |
 | --- | --- |
 | **Local** | NodeForge-managed `.nf` files and read-only external source folders. |
-| **Functions** | Reusable DSL functions provided by installed packages. |
-| **Examples** | Bundled examples and examples provided by installed packages. |
+| **Functions** | Reusable functions provided by installed packages. |
+| **Examples** | Bundled and package-provided example scripts. |
 | **Packages** | Install and remove NodeForge packages. |
 
-Each script catalog has **Refresh** and **Add Node Group** actions. For a script that uses [Mesh Compute](MESH_COMPUTE.md), **Add Node Group** creates a modifier on the selected Mesh instead of inserting a group node.
+Select a Local file or Example, then click **Add Node Group** to place its entry function in the open base tree. This action requires a single entry function in the selected file; for a file with several entries, import and call the function you need from another script. For a [Mesh Compute](MESH_COMPUTE.md) entry, **Add Node Group** installs a modifier on the selected Mesh.
 
-1. Open a catalog section, for example **Functions**.
-2. Click **Refresh** to scan that catalog.
-3. Select an entry from the list.
-4. Click **Add Node Group** to insert that entry into the active Geometry Nodes editor.
-5. Select the inserted group node and click **Load Script From Selected NodeGroup** if you want to inspect or edit the stored source.
+### Save a module to Local
 
-## Save your own script to Local
+1. Write or load a `.nf` module in a Text datablock.
+2. Open **Library → Local** and browse to a NodeForge-managed folder.
+3. Click **Save**, enter a file name, and confirm. Enable **Overwrite** to replace an existing file.
 
-Use **Local** when you want to keep a script as a reusable file instead of only keeping it as a node group inside the Blender file.
+Use **Add Folder...** to register an existing directory of `.nf` files without copying it. External Local folders are read-only in NodeForge: edit their files with your normal editor. **Remove from Local** removes the registration but keeps the external files. In managed Local storage, **Delete File** removes a selected file and **Delete Folder** removes an empty folder.
 
-1. Write or load a script in a Text datablock.
-2. Open **Library → Local**.
-3. Use the folder rows and arrow buttons to open the managed destination where the script should be stored.
-4. Optionally click **New Folder** to create a subfolder in the current managed directory.
-5. Click **Save**, enter the script name, and confirm. Enable **Overwrite** when replacing an existing file.
-6. Select the saved script and click **Add Node Group** to insert it into the current Geometry Nodes editor.
+To call functions saved in Local from another script, see [Import functions](MODULES.md#import-functions).
 
-The **Save** and **New Folder** actions are available only in NodeForge-managed Local directories.
+## Text Editor completion (prototype)
 
-## Add an external Local folder
-
-Use **Add Folder...** to make an existing directory of `.nf` files available in Local without copying it.
-
-1. Open **Library → Local** and click **Add Folder...**.
-2. Select an existing folder.
-3. Select the linked folder row and use its arrow button to browse its scripts and subfolders.
-4. Select a script and click **Add Node Group**, or import it from `local` in another script.
-
-External folders are read-only in NodeForge. Edit their `.nf` files with your normal editor, then select an inserted group and click **Reload from Source** to rebuild it from the current file. **Remove from Local** removes the folder registration and leaves the external files on disk.
-
-For managed Local content, **Delete File** removes a selected `.nf` file. **Delete Folder** removes a selected empty folder.
-
-Local files can be imported directly or through their folder path. See [Local imports](SYNTAX.md#local) for the supported forms.
-
-## Reuse a saved script from another script
-
-A saved Local script can be imported and called from another NodeForge script. This is the main reuse mechanism: write a script once, save it as a `.nf` file, then call it from other scripts like a function.
-
-The saved script's `input_*` declarations become function parameters. One output becomes the returned value; multiple outputs can be unpacked or selected with a compile-time index.
-
-For example, save this as a Local script named `cube_row`:
-
-```python
-spacing = input_float('Spacing', default=1.25)
-count = 5
-
-parts = []
-for i in range(count):
-    base = cube(size=1.0)
-    offset = vector(i * spacing, 0, 0)
-    moved = transform(base, translation=offset)
-    parts.append(moved)
-
-geo = join(parts)
-output('Geometry', geo)
-```
-
-Then use it from another script:
-
-```python
-from local import cube_row
-
-spacing = input_float('Spacing', default=2.0)
-geo = cube_row(spacing)
-output('Geometry', geo)
-```
-
-Here `Spacing` from the saved script becomes the `spacing` argument of `cube_row(spacing)`. The saved script's `Geometry` output becomes the returned `geo` value.
-
-Existing compiled groups keep the Local dependency source snapshot used when they were built. Editing a Local file affects a group when you compile a new caller or use **Reload from Source** on the existing library-backed group.
-
-For the import and call rules, see [Imports](SYNTAX.md#imports) and [Reusable Functions](SYNTAX.md#reusable-functions). For reusable functions from the Math library, see [Math Functions](FUNCTIONS.md).
+NodeForge has built-in text completion for scripts in Blender's Text Editor. This prototype suggests Core DSL functions, Local and package imports, imported members, and functions declared in the current script. It also shows function parameters and return types when available. Enable it with **NodeForge** in the Text Editor header.
 
 ## What to read next
 
-Read these in order:
-
-1. [Core Concepts](CORE_CONCEPTS.md) — understand how source becomes a node-group interface, nodes, links, and runtime state.
-2. [DSL Syntax and Semantics](SYNTAX.md) — learn the supported language rules.
-3. [Core DSL Built-ins Reference](BUILTINS.md) — learn the primitive functions available everywhere.
-4. [Writing Functions](WRITING_FUNCTIONS.md) — create reusable functions with the Core DSL.
-5. [Package Guide](PACKAGES.md) — distribute source functions, examples, and extensions as a third-party library.
-6. [Extension API Reference](EXTENSION_API.md) — define typed Python-backed package callables when the Core DSL is not enough.
-7. [Math Methods](MATH_METHODS.md) — use the methods added by the Math library.
-8. [Math Functions](FUNCTIONS.md) — use reusable DSL functions from the Math library.
-9. [Math Examples](MATH_EXAMPLES.md) — explore complete scripts included with the Math package.
-10. [L-System Guide](LSYSTEMS_SCRIPTING.md) — create geometry with L-system rules; use the [L-System Reference](LSYSTEMS.md) for exact contracts.
-
-To study an installed example, add it from **Library → Examples**, load its source with **Load Script From Selected NodeGroup**, and edit the source in a Text datablock.
+Start with [`.nf` Modules](MODULES.md), then use [DSL Syntax and Semantics](SYNTAX.md) and [Core DSL Built-ins](BUILTINS.md) as references. [Writing Functions](WRITING_FUNCTIONS.md) covers reusable declarations; [Package Guide](PACKAGES.md) covers distribution.

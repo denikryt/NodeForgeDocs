@@ -7,9 +7,9 @@ The Math library adds scalar and procedural callables to the DSL. Import its pac
 ```python
 from packages import math
 
-angle = input_float('Angle', default=0.0)
-value = math.sin(angle)
-output('Value', value)
+def example(angle: Float = 0.0):
+    value = math.sin(angle)
+    return value
 ```
 
 ## Scalar Math Callables
@@ -60,11 +60,11 @@ These names are members of the imported `math` package namespace. They create th
 ```python
 from packages import math
 
-value = input_float('Value', default=0.25)
-angle = math.radians(value * 360.0)
-wave = math.sin(angle)
-result = math.clamp(wave, -0.5, 0.5)
-output('Value', result)
+def example(value: Float = 0.25):
+    angle = math.radians(value * 360.0)
+    wave = math.sin(angle)
+    result = math.clamp(wave, -0.5, 0.5)
+    return result
 ```
 
 ## Procedural Value Callables
@@ -101,8 +101,9 @@ Creates a Random Value field. With no bounds it returns a `Float` in the default
 ```python
 from packages import math
 
-pts = points(100)
-pos = math.random_value(vector(-2, -2, 0), vector(2, 2, 1), seed=12, id=index())
-pts = set_position(pts, pos)
-output('Geometry', pts)
+def example():
+    pts = points(100)
+    pos = math.random_value(vector(-2, -2, 0), vector(2, 2, 1), seed=12, id=index())
+    pts = set_position(pts, pos)
+    return pts
 ```

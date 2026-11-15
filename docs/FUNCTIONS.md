@@ -20,9 +20,10 @@ Returns: `Float`.
 
 ```python
 from packages import math
-value_1 = input_float('Value', default=4.0)
-t = math.inverse_lerp(2.0, 6.0, value_1)
-output('Factor', t)
+
+def example(value_1: Float = 4.0):
+    t = math.inverse_lerp(2.0, 6.0, value_1)
+    return t
 ```
 
 ### `remap(x=0.0, in_min=0.0, in_max=1.0, out_min=0.0, out_max=1.0)`
@@ -41,14 +42,15 @@ Returns: `Float`.
 
 ```python
 from packages import math
-count = input_int('Count', default=32)
-pts = points(count)
-value_1 = index()
-z = math.remap(value_1, in_min=0.0, in_max=count - 1.0, out_min=-1.0, out_max=1.0)
-value_2 = index()
-vec_3 = vector(value_2 * 0.1, 0, z)
-pts = set_position(pts, vec_3)
-output('Geometry', pts)
+
+def example(count: Int = 32):
+    pts = points(count)
+    value_1 = index()
+    z = math.remap(value_1, in_min=0.0, in_max=count - 1.0, out_min=-1.0, out_max=1.0)
+    value_2 = index()
+    vec_3 = vector(value_2 * 0.1, 0, z)
+    pts = set_position(pts, vec_3)
+    return pts
 ```
 
 ### `saturate(x=0.0)`
@@ -63,9 +65,10 @@ Returns: `Float`.
 
 ```python
 from packages import math
-value = input_float('Value', default=1.25)
-value_1 = math.saturate(value)
-output('Clamped', value_1)
+
+def example(value: Float = 1.25):
+    value_1 = math.saturate(value)
+    return value_1
 ```
 
 ### `step(edge=0.0, x=0.0)`
@@ -81,10 +84,12 @@ Returns: `Float`.
 
 ```python
 from packages import math
-value_1 = position()
-value_2 = math.noise(value_1, scale=3.0)
-mask_value = math.step(0.5, value_2)
-output('Mask', mask_value)
+
+def example():
+    value_1 = position()
+    value_2 = math.noise(value_1, scale=3.0)
+    mask_value = math.step(0.5, value_2)
+    return mask_value
 ```
 
 ### `smoothstep(edge0=0.0, edge1=1.0, x=0.0)`
@@ -101,13 +106,15 @@ Returns: `Float`.
 
 ```python
 from packages import math
-pts = points(64)
-value_1 = index()
-t = math.smoothstep(0.0, 63.0, value_1)
-value_2 = index()
-vec_3 = vector(value_2 * 0.05, 0, t)
-pts = set_position(pts, vec_3)
-output('Geometry', pts)
+
+def example():
+    pts = points(64)
+    value_1 = index()
+    t = math.smoothstep(0.0, 63.0, value_1)
+    value_2 = index()
+    vec_3 = vector(value_2 * 0.05, 0, t)
+    pts = set_position(pts, vec_3)
+    return pts
 ```
 
 ### `smootherstep(edge0=0.0, edge1=1.0, x=0.0)`
@@ -124,9 +131,10 @@ Returns: `Float`.
 
 ```python
 from packages import math
-x = input_float('X', default=0.35)
-value_1 = math.smootherstep(0.0, 1.0, x)
-output('Value', value_1)
+
+def example(x: Float = 0.35):
+    value_1 = math.smootherstep(0.0, 1.0, x)
+    return value_1
 ```
 
 ### `pingpong(x=0.0, length=1.0)`
@@ -142,13 +150,15 @@ Returns: `Float`.
 
 ```python
 from packages import math
-pts = points(80)
-value_1 = index()
-z = math.pingpong(value_1 * 0.1, 1.0)
-value_2 = index()
-vec_3 = vector(value_2 * 0.05, 0, z)
-pts = set_position(pts, vec_3)
-output('Geometry', pts)
+
+def example():
+    pts = points(80)
+    value_1 = index()
+    z = math.pingpong(value_1 * 0.1, 1.0)
+    value_2 = index()
+    vec_3 = vector(value_2 * 0.05, 0, z)
+    pts = set_position(pts, vec_3)
+    return pts
 ```
 
 ### `wrap(x=0.0, min=0.0, max=1.0)`
@@ -165,9 +175,10 @@ Returns: `Float`.
 
 ```python
 from packages import math
-value_1 = input_float('Angle', default=7.0)
-angle = math.wrap(value_1, min=0.0, max=tau)
-output('Angle', angle)
+
+def example(value_1: Float = 7.0):
+    angle = math.wrap(value_1, min=0.0, max=tau)
+    return angle
 ```
 
 ### `sign(x=0.0)`
@@ -182,9 +193,10 @@ Returns: `Float`.
 
 ```python
 from packages import math
-x = input_float('X', default=-2.0)
-value_1 = math.sign(x)
-output('Direction', value_1)
+
+def example(x: Float = -2.0):
+    value_1 = math.sign(x)
+    return value_1
 ```
 
 ## Vector Helpers
@@ -202,10 +214,12 @@ Returns: `Vector`.
 
 ```python
 from packages import math
-vec_1 = vector(1, 0, 0)
-value_2 = math.radians(45)
-v = math.rotate2d(vec_1, value_2)
-output('Vector', v)
+
+def example():
+    vec_1 = vector(1, 0, 0)
+    value_2 = math.radians(45)
+    v = math.rotate2d(vec_1, value_2)
+    return v
 ```
 
 ### `polar(radius=1.0, angle=0.0)`
@@ -221,9 +235,11 @@ Returns: `Vector`.
 
 ```python
 from packages import math
-value_1 = math.radians(30)
-pos = math.polar(radius=2.0, angle=value_1)
-output('Vector', pos)
+
+def example():
+    value_1 = math.radians(30)
+    pos = math.polar(radius=2.0, angle=value_1)
+    return pos
 ```
 
 ### `angle_between(a=vector(1, 0, 0), b=vector(0, 1, 0))`
@@ -239,11 +255,13 @@ Returns: `Float`.
 
 ```python
 from packages import math
-vec_1 = vector(1, 0, 0)
-value_2 = position()
-vec_3 = normalize(value_2)
-angle = math.angle_between(vec_1, vec_3)
-output('Angle', angle)
+
+def example():
+    vec_1 = vector(1, 0, 0)
+    value_2 = position()
+    vec_3 = normalize(value_2)
+    angle = math.angle_between(vec_1, vec_3)
+    return angle
 ```
 
 ### `rotate_around_axis(v=vector(1, 0, 0), axis=vector(0, 0, 1), angle=0.0)`
@@ -260,11 +278,13 @@ Returns: `Vector`.
 
 ```python
 from packages import math
-vec_1 = vector(1, 0, 0)
-vec_2 = vector(0, 1, 0)
-value_3 = math.radians(90)
-v = math.rotate_around_axis(vec_1, axis=vec_2, angle=value_3)
-output('Vector', v)
+
+def example():
+    vec_1 = vector(1, 0, 0)
+    vec_2 = vector(0, 1, 0)
+    value_3 = math.radians(90)
+    v = math.rotate_around_axis(vec_1, axis=vec_2, angle=value_3)
+    return v
 ```
 
 ## Point Creation and Layouts
@@ -286,11 +306,13 @@ Returns: `Geometry`.
 
 ```python
 from packages import math
-pts = points(12)
-vec_1 = vector(4, 3, 1)
-vec_2 = vector(0.5, 0.5, 0.0)
-pts = math.layout_grid(pts, count=vec_1, spacing=vec_2, centered=False)
-output('Geometry', pts)
+
+def example():
+    pts = points(12)
+    vec_1 = vector(4, 3, 1)
+    vec_2 = vector(0.5, 0.5, 0.0)
+    pts = math.layout_grid(pts, count=vec_1, spacing=vec_2, centered=False)
+    return pts
 ```
 
 ### `grid_points(count=vector(1, 1, 1), spacing=vector(1, 1, 1), centered=False)`
@@ -307,10 +329,12 @@ Returns: `Geometry`.
 
 ```python
 from packages import math
-vec_1 = vector(5, 4, 1)
-vec_2 = vector(0.5, 0.5, 0.0)
-grid = math.grid_points(count=vec_1, spacing=vec_2, centered=False)
-output('Geometry', grid)
+
+def example():
+    vec_1 = vector(5, 4, 1)
+    vec_2 = vector(0.5, 0.5, 0.0)
+    points_geo = math.grid_points(count=vec_1, spacing=vec_2, centered=False)
+    return points_geo
 ```
 
 ### `layout_circle(geometry, count=16, radius=1.0, start_angle=0.0, end_angle=tau, include_endpoint=False)`
@@ -330,9 +354,11 @@ Returns: `Geometry`.
 
 ```python
 from packages import math
-pts = points(24)
-pts = math.layout_circle(pts, count=24, radius=2.0, start_angle=0.0, end_angle=tau)
-output('Geometry', pts)
+
+def example():
+    pts = points(24)
+    pts = math.layout_circle(pts, count=24, radius=2.0, start_angle=0.0, end_angle=tau)
+    return pts
 ```
 
 ### `circle_points(count=16, radius=1.0, start_angle=0.0, end_angle=tau, include_endpoint=False)`
@@ -351,8 +377,10 @@ Returns: `Geometry`.
 
 ```python
 from packages import math
-arc = math.circle_points(count=16, radius=2.0, start_angle=0.0, end_angle=pi, include_endpoint=True)
-output('Geometry', arc)
+
+def example():
+    arc = math.circle_points(count=16, radius=2.0, start_angle=0.0, end_angle=pi, include_endpoint=True)
+    return arc
 ```
 
 ### `layout_spiral(geometry, count=16, radius=1.0, turns=1.0, height=0.0, start_radius=0.0, start_angle=0.0)`
@@ -373,9 +401,11 @@ Returns: `Geometry`.
 
 ```python
 from packages import math
-pts = points(96)
-pts = math.layout_spiral(pts, count=96, radius=3.0, turns=4.0, height=1.5)
-output('Geometry', pts)
+
+def example():
+    pts = points(96)
+    pts = math.layout_spiral(pts, count=96, radius=3.0, turns=4.0, height=1.5)
+    return pts
 ```
 
 ### `spiral_points(count=16, radius=1.0, turns=1.0, height=0.0, start_radius=0.0, start_angle=0.0)`
@@ -395,8 +425,10 @@ Returns: `Geometry`.
 
 ```python
 from packages import math
-spiral = math.spiral_points(count=128, radius=3.0, turns=5.0, height=2.0, start_radius=0.25)
-output('Geometry', spiral)
+
+def example():
+    spiral = math.spiral_points(count=128, radius=3.0, turns=5.0, height=2.0, start_radius=0.25)
+    return spiral
 ```
 
 ### `layout_random(geometry, min=vector(-1, -1, -1), max=vector(1, 1, 1), seed=0)`
@@ -414,11 +446,13 @@ Returns: `Geometry`.
 
 ```python
 from packages import math
-pts = points(50)
-vec_1 = vector(-2, -2, 0)
-vec_2 = vector(2, 2, 1)
-pts = math.layout_random(pts, min=vec_1, max=vec_2, seed=7)
-output('Geometry', pts)
+
+def example():
+    pts = points(50)
+    vec_1 = vector(-2, -2, 0)
+    vec_2 = vector(2, 2, 1)
+    pts = math.layout_random(pts, min=vec_1, max=vec_2, seed=7)
+    return pts
 ```
 
 ### `random_points(count=16, min=vector(-1, -1, -1), max=vector(1, 1, 1), seed=0)`
@@ -436,10 +470,12 @@ Returns: `Geometry`.
 
 ```python
 from packages import math
-vec_1 = vector(-3, -3, 0)
-vec_2 = vector(3, 3, 2)
-pts = math.random_points(count=100, min=vec_1, max=vec_2, seed=42)
-output('Geometry', pts)
+
+def example():
+    vec_1 = vector(-3, -3, 0)
+    vec_2 = vector(3, 3, 2)
+    pts = math.random_points(count=100, min=vec_1, max=vec_2, seed=42)
+    return pts
 ```
 
 ## Geometry Helper
@@ -457,10 +493,12 @@ Returns: `Geometry`.
 
 ```python
 from packages import math
-geo = cube(size=1.0)
-vec_1 = vector(1 / 3, 1 / 3, 1 / 3)
-geo = math.copy_by_offsets(geo, scale=vec_1)
-output('Geometry', geo)
+
+def example():
+    geo = cube(size=1.0)
+    vec_1 = vector(1 / 3, 1 / 3, 1 / 3)
+    geo = math.copy_by_offsets(geo, scale=vec_1)
+    return geo
 ```
 
 ## Fractal Helper
@@ -472,9 +510,10 @@ Repeatedly applies `copy_by_offsets` to create a Sierpinski-carpet-style arrange
 ```python
 from packages import math
 
-source = cube(size=1.0)
-geometry = math.sierpinski_carpet(source, steps=2)
-output('Geometry', geometry)
+def example():
+    source = cube(size=1.0)
+    geometry = math.sierpinski_carpet(source, steps=2)
+    return geometry
 ```
 
 ## Sequence Helper
@@ -491,9 +530,10 @@ Returns: `Int` or numeric value compatible with the Repeat Zone state.
 
 ```python
 from packages import math
-n = input_int('N', default=10)
-value = math.fibonacci(n)
-output('Value', value)
+
+def example(n: Int = 10):
+    value = math.fibonacci(n)
+    return value
 ```
 
 For complete scripts included with the package, see [Math Examples](MATH_EXAMPLES.md).

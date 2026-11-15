@@ -4,9 +4,9 @@ This document shows the Blender Geometry Nodes areas and domains currently cover
 
 | Geometry Nodes area | NodeForge | Note |
 | --- | --- | --- |
-| Geometry Nodes modifier workflow | Yes | Script compiles to a node group |
-| Node group inputs / outputs | Yes | `input_*`, implicit inputs, `output(...)` |
-| Group interface panels / metadata | Partial | Root interface panels through `panel(...)` |
+| Geometry Nodes modifier workflow | Yes | Script composes into an open base tree |
+| Node group inputs / outputs | Yes | Typed `def` parameters and `return` |
+| Group interface panels / metadata | Partial | Function input panels through `panel(...)` |
 | Inspection | No | No inspection/debug workflow |
 | Baking | No | No baking workflow |
 | Node-based tools | No | No tool metadata API |
@@ -16,11 +16,11 @@ This document shows the Blender Geometry Nodes areas and domains currently cover
 | Runtime socket: Int | Yes | `Int` |
 | Runtime socket: Bool | Yes | `Bool` |
 | Runtime socket: Vector | Yes | `Vector` |
-| Runtime socket: String | Yes | `String`, `input_string(...)` |
+| Runtime socket: String | Yes | `String` function parameters |
 | Runtime socket: Color | No | Missing type |
-| Runtime socket: Material | Yes | `Material`, `input_material(...)` |
-| Runtime socket: Object | Yes | `Object`, `input_object(...)` |
-| Runtime socket: Bundle | Yes | `Bundle`, `input_bundle(...)` |
+| Runtime socket: Material | Yes | `Material` function parameters |
+| Runtime socket: Object | Yes | `Object` function parameters |
+| Runtime socket: Bundle | Yes | `Bundle` function parameters |
 | Runtime socket: Collection | No | Missing type |
 | Runtime socket: Image | No | Missing type |
 | Runtime socket: Rotation | No | Missing type |
@@ -34,12 +34,11 @@ This document shows the Blender Geometry Nodes areas and domains currently cover
 | Fields: position / normal / index / id | Partial | `position()`, `normal()`, `index()`, `id()` |
 | Fields: radius / selection / active element | Partial | Selection via bool fields only |
 | Fields: evaluate / capture / domain conversion | Partial | `sample_index(...)` and `capture_attribute(...)` for supported field types and domains |
-| Attributes: store | Partial | `store(...)`, `store_named_attribute(...)` |
+| Attributes: store | Partial | `store_named_attribute(...)` |
 | Attributes: read | No | No wrapper |
 | Attributes: statistics / domain size | No | No wrapper |
 | Attributes: blur / capture / remove | Partial | Capture only |
 | Selection fields | Partial | Boolean expressions, `selection=` args |
-| Active geometry stream | Partial | `store(...)`, statement `set_position(...)` |
 | Math: scalar | Yes | Common math functions/operators |
 | Math: integer / bitwise | Partial | Basic ints, no bitwise layer |
 | Math: boolean | Yes | `and`, `or`, `not`, comparisons |
@@ -49,7 +48,7 @@ This document shows the Blender Geometry Nodes areas and domains currently cover
 | Texture nodes | Partial | Noise only |
 | Image texture | No | No `Image` socket |
 | Color utilities | No | No `Color` socket |
-| Runtime String socket | Yes | `input_string(...)`, raw/local/library sockets, runtime attribute names |
+| Runtime String socket | Yes | Typed function, raw-node, and library sockets; runtime attribute names |
 | Compile-time strings | Yes | Names, identifiers, and raw-node declarations |
 | Vector construction | Yes | `vector(x, y, z)` |
 | Vector math | Partial | Common vector operations |
@@ -94,7 +93,7 @@ This document shows the Blender Geometry Nodes areas and domains currently cover
 | Instance transform operations | Partial | Via `instance_on_points` args only |
 | Instance read/info nodes | No | No wrappers |
 | Instance selection / pick instance | Partial | `selection=` in `instance_on_points(...)`; no Pick Instance control |
-| Object instancing | Partial | Object Info geometry through `input_object(...)` and `.geometry` |
+| Object instancing | Partial | Object Info geometry through `Object` parameters and `.geometry` |
 | Collection instancing | No | No `Collection` socket/API |
 | Points / point cloud generation | Partial | `points`, `point`, layout helpers |
 | Points distribution | No | No distribute-points wrappers |
@@ -106,10 +105,10 @@ This document shows the Blender Geometry Nodes areas and domains currently cover
 | Volume primitives | No | No volume primitive wrappers |
 | Volume conversion | No | No mesh/points-to-volume wrappers |
 | Materials: assign | Partial | `set_material(geo, material)` with a name or runtime `Material` |
-| Materials: runtime material data | Yes | `input_material(...)`, raw/local/library sockets |
+| Materials: runtime material data | Yes | Typed function, raw-node, and library sockets |
 | Materials: index / replace / selection | No | No wrappers |
 | Simulation Zone | No | No simulation-zone syntax |
-| Repeat Zone | Partial | Nested `repeat_range(...)` state loops |
+| Repeat Zone | Partial | Runtime `range(count)` and nested `repeat_range(...)` state loops |
 | For Each Geometry Element Zone | No | No foreach-zone syntax |
 | Bake node | No | No wrapper |
 | Viewer node | No | No wrapper |

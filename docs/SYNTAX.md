@@ -1,6 +1,6 @@
 # DSL Syntax and Semantics
 
-NodeForge uses a Python-like domain-specific language for building Blender Geometry Nodes groups. Source expressions describe graph operations and data flow; they are compiled into nodes and links according to the types of their values.
+NodeForge uses a Python-like language for building Blender Geometry Nodes. A `.nf` file is a [module](MODULES.md). Top-level statements build nodes in the open base tree; typed functions define reusable node groups. Expressions and function calls describe the operations and connections in those trees.
 
 Read [Core Concepts](CORE_CONCEPTS.md) for the relationship between source code, group sockets, compile-time structure, and runtime Geometry Nodes values.
 
@@ -26,21 +26,32 @@ size = 1.0
 size = 2.0
 ```
 
-An assignment target must be a single name.
+Use a single name for an ordinary assignment. Flat tuple or list targets unpack multiple-output results; see [Multiple Function Outputs](#multiple-function-outputs).
+
+### Function Scope
+
+Function parameters and assignment targets are local to that function. A local name must be assigned before it is read, including when a module constant or function has the same name. Functions can read module constants that their local names do not shadow:
+
+```python
+FACTOR = 2.0
+
+def scale(value: Float) -> Float:
+    result = value * FACTOR
+    return result
+```
 
 ## Literals
 
-NodeForge supports integer, floating-point, Boolean, string, and `None` literals.
+NodeForge supports integer, floating-point, Boolean, and string literals.
 
 ```python
 count = 4
 scale = 0.5
 enabled = True
 name = 'Height'
-missing = None
 ```
 
-Strings can use single or double quotes.
+Strings can use single or double quotes. Standalone `None` values are unsupported.
 
 ## Value Types
 
@@ -68,10 +79,9 @@ NodeForge supports runtime socket values and compile-time values.
 | Float | Floating-point number. |
 | Boolean | `True` or `False`. |
 | String | Text value. |
-| `None` | Absence of a value. |
 | Vector | Three-component value. `vector(...)` is compile-time only when all arguments are compile-time; runtime arguments produce a runtime `Vector`. |
 | List | Ordered mutable collection. |
-| Tuple | Ordered immutable collection. |
+| Tuple | Ordered collection written with parentheses. |
 
 ## Function Calls
 
@@ -81,16 +91,11 @@ A function call uses a function name followed by parentheses.
 direction = vector(1, 0, 0)
 ```
 
-Arguments can be positional or named.
+Arguments can be positional or named. Assign the returned value to use it in later statements:
 
 ```python
-size = input_float('Size', default=2.0)
-```
-
-The returned value can be assigned to a name.
-
-```python
-geometry = cube(size=2.0)
+first = cube(1.0)
+second = cube(size=2.0)
 ```
 
 Calls can be nested.
@@ -142,66 +147,69 @@ Numeric semantics follow NodeForge's runtime types. `Int + Int`, `Int - Int`, `I
 
 ## Compile-Time and Runtime Values
 
-A compile-time value is resolved while the script is compiled.
+Compile-time values are known while NodeForge builds the graph. They can set function defaults, node options, and the number of iterations in an unrolled loop. Function parameters are runtime values: Blender supplies their values through group sockets when evaluating the graph.
 
 ```python
-socket_name = 'Height'
-default_height = 1.0
-height = input_float(socket_name, default=default_height)
+DEFAULT_HEIGHT = 1.0
+
+def scale_height(height: Float = DEFAULT_HEIGHT) -> Float:
+    return height * 2.0
 ```
 
-A runtime value is represented in the generated node group and can change when Blender evaluates that group.
+`DEFAULT_HEIGHT` supplies the initial value of the **Height** input. The parameter `height` remains a runtime value, and its multiplication becomes a graph operation.
 
-```python
-height = input_float('Height', default=1.0)
-scaled_height = height * 2.0
-```
+The operation receiving a value determines whether it must be known at compile time. For example, `range(3)` unrolls a loop, while `range(count)` with a runtime `Int` parameter creates a Repeat Zone. See [For Statements](#for-statements).
 
-The operation receiving a value determines whether it must be available at compile time or can remain a runtime value.
-
-Compile-time `range(...)` loops generate repeated graph structure, while runtime `repeat_range(...)` loops create native Blender Repeat Zones. See [Compile time and runtime](CORE_CONCEPTS.md#compile-time) for examples of both forms.
-
-Compile-time helper calls are documented in [Core DSL Built-ins](BUILTINS.md#compile-time-helper-calls).
+See [Core Concepts](CORE_CONCEPTS.md#compile-time-and-runtime-values) for the evaluation model and [Compile-Time Helper Calls](BUILTINS.md#compile-time-helper-calls) for `len(...)` and `sum(...)`.
 
 ## Strings and F-Strings
 
-String literals are compile-time values when NodeForge needs a name, identifier, or option while compiling the script.
+String literals can supply compile-time names and options:
 
 ```python
-name = 'Height'
-height = input_float(name, default=1.0)
+attribute_name = 'height'
+geometry = store_named_attribute(cube(), attribute_name, position().z)
 ```
 
-Compile-time strings can be concatenated.
-
-```python
-prefix = 'Generated'
-input_name = prefix + ' Value'
-value = input_float(input_name, default=1.0)
-```
-
-F-strings are supported when every interpolated value is a compile-time string.
+Use an f-string to combine literal text and compile-time strings:
 
 ```python
 prefix = 'Generated'
-input_name = f'{prefix} Value'
-value = input_float(input_name, default=1.0)
+attribute_name = f'{prefix} Height'
+geometry = store_named_attribute(cube(), attribute_name, position().z)
 ```
 
-Runtime interpolation, conversion flags, and format specifications are unsupported.
+String concatenation with `+` is unsupported.
 
-`input_string(...)` creates a runtime `String` socket. Runtime strings can be passed to operations that accept a String field, such as the attribute name in `store_named_attribute(...)` and Bundle paths. A runtime string cannot be used where a compile-time name or option is required.
+Runtime interpolation, non-string interpolation, conversion flags, and format specifications are unsupported.
+
+A typed `String` parameter creates a runtime String socket. Pass it to operations that accept runtime strings, such as named attribute operations and Bundle paths:
+
+```python
+def store_height(geometry: Geometry, name: String = 'height') -> Geometry:
+    return store_named_attribute(geometry, name, position().z)
+```
+
+A runtime string cannot supply an option that requires a compile-time string, such as an attribute domain.
 
 ## Lists and Tuples
 
-Lists and tuples group values at script level.
+Lists and tuples are ordered collections that NodeForge uses while compiling the source. Blender has no corresponding List or Tuple socket type. The compiler keeps track of the elements and uses them to build individual nodes, links, and socket values.
+
+Write a list with square brackets and a tuple with parentheses:
 
 ```python
-sizes = [0.5, 1.0, 2.0]
-offset = (1.0, 0.0, 0.0)
+sizes = [0.5, 1.0, 2.0, 4.0]
+limits = (0.0, 1.0)
 ```
 
-They can also contain runtime values.
+These collections contain compile-time numbers. They can supply values for individual operations or iterations of a compile-time loop.
+
+A list or tuple of three compile-time numbers is also accepted as a Vector in graph expressions. In that context, its component indices are `0`, `1`, and `2`. Use `vector(x, y, z)` to write a vector explicitly.
+
+### Collections of Graph Values
+
+Elements can also refer to runtime values, including geometry and fields. The compiler knows which values belong to the collection, while Blender evaluates those values through their individual sockets.
 
 ```python
 first = cube(size=1.0)
@@ -210,22 +218,75 @@ parts = [first, second]
 geometry = join(parts)
 ```
 
-A list can be extended with `append(...)`.
+The two `cube(...)` calls create two Cube nodes. `parts` groups references to their Geometry outputs. Creating the list adds no node. `join(parts)` creates a Join Geometry node and connects both Cube outputs to its Geometry input. Its result is one Geometry value.
+
+An operation determines how it uses a collection. `join(...)` accepts a collection of Geometry values; each element must be Geometry. A collection itself cannot be connected to a group socket or used as a typed function parameter. Select an element, combine the elements with an operation such as `join(...)`, or expose them as separate function outputs.
+
+### Selecting Elements
+
+Use a compile-time integer index to select an element. Indices start at `0`; negative indices count from the end:
+
+```python
+sizes = [0.5, 1.0, 2.0, 4.0]
+smallest = sizes[0]
+largest = sizes[-1]
+geometry = cube(size=largest)
+```
+
+Selecting a collection element happens during compilation. For a collection of graph values, it chooses which existing value to use; it adds no runtime selection node. A runtime `Int` parameter cannot index a list or tuple.
+
+### Building a List
+
+Start with `[]` and use `append(value)` to add one element. A compile-time loop can build a collection of graph values:
 
 ```python
 parts = []
-parts.append(cube(size=1.0))
-parts.append(cube(size=2.0))
+for size in [0.5, 1.0, 2.0]:
+    parts.append(cube(size=size))
 geometry = join(parts)
 ```
 
-Lists and tuples cannot be exposed directly as group sockets.
+Compilation unrolls the three iterations, creates three Cube nodes, and connects their outputs to a Join Geometry node. `append(...)` changes the collection used to build the graph. It adds no Blender node and does not append geometry while Blender evaluates the graph.
 
-Functions with multiple outputs return a fixed tuple-like result. Unpack it into a flat list or tuple of names, or select an element with a compile-time integer index.
+Assigning a list to another name gives both names access to the same collection:
 
 ```python
-geo, captured = capture_attribute(cube(), position().z)
+parts = [cube(1.0)]
+alias = parts
+alias.append(cube(2.0))
+geometry = join(parts)
 ```
+
+Here, `parts` contains both Geometry values after the append. Assigning a new list to either name replaces that name's binding.
+
+Appending to a collection inside runtime `if` branches or Repeat Zones is unsupported. To accumulate geometry in a runtime loop, use [Geometry Builder](#geometry-builder) or a Geometry repeat-state value; see [Runtime Loops](#runtime-loops).
+
+### Multiple Function Outputs
+
+A function returning several values creates a separate output socket for each value. The caller receives a fixed tuple-like result identifying those outputs:
+
+```python
+def make_part(size: Float = 1.0):
+    geometry = cube(size)
+    doubled = size * 2.0
+    return geometry, doubled
+
+part, doubled_size = make_part(2.0)
+```
+
+The generated Group Node has a Geometry output and a Float output. Unpacking assigns a source name to each output; the number of names must match the number of outputs. The tuple-like result is not passed through a Blender socket as a single value.
+
+Assignment unpacking supports multiple-output call results. Unpacking an ordinary list or tuple literal in an assignment is unsupported. Compile-time loops support unpacking their items; see [Compile-Time Loops](#compile-time-loops).
+
+The caller can also retain the result and select one output with a compile-time index:
+
+```python
+captured = capture_attribute(cube(), position().z)
+geometry = captured[0]
+captured_height = captured[1]
+```
+
+See [Return Values](WRITING_FUNCTIONS.md#return-values) for function return rules.
 
 ## Attribute Access and Indexing
 
@@ -243,14 +304,7 @@ direction = vector(1, 2, 3)
 y = direction[1]
 ```
 
-Lists and tuples support compile-time integer indexing.
-
-```python
-values = [0.5, 1.0, 2.0]
-size = values[1]
-```
-
-A runtime value cannot be used as an index.
+For list and tuple indexing, see [Selecting Elements](#selecting-elements).
 
 `Object` values provide `.geometry`, `.location`, `.rotation`, and `.scale`. Configure their Object Info node with `.info(...)` before the first property access. See [Object Values](BUILTINS.md#object-values).
 
@@ -265,271 +319,233 @@ size = 2.0
 
 ## Group Inputs and Outputs
 
-Group sockets can be declared explicitly or inferred from name usage.
-
-### Explicit Inputs
-
-An `input_*` call declares an input socket and must stand alone on the right side of a direct name assignment.
+A function's typed parameters define its group input sockets. Its final `return` defines its output socket or sockets.
 
 ```python
-width = input_float('Width', default=2.0)
+def move(
+    geometry: Geometry,
+    offset: Vector["Translation"] = vector(0, 0, 1)
+) -> Geometry["Moved Geometry"]:
+    return transform(geometry, translation=offset)
 ```
 
-Every declaration creates a new input socket. Its string argument is the displayed socket label, so separate declarations may use the same label and retain different defaults.
+`geometry` is required in an explicit call, and `offset` has a compile-time default. The `Type["Label"]` form sets the displayed socket label. Keyword arguments use the source parameter name, such as `offset=...`.
 
-```python
-first = input_float('Value', default=1.0)
-second = input_float('Value', default=2.0)
-output('Sum', first + second)
-```
+Each parameter requires an explicit type annotation. A single return annotation is optional; when supplied, it specifies the output type and can set its label. See [Writing Functions](WRITING_FUNCTIONS.md) for supported defaults and output naming.
 
-Call reusable groups with duplicate input labels positionally. A keyword cannot identify which duplicate label to use.
+Top-level statements create nodes in the base tree. Connect them to the base tree's **Group Input** and **Group Output** in Blender. Top-level `input_*()` and `output()` declarations and implicit inputs are unsupported.
 
 ### Interface Panels
 
-Use `panel(...)` to organize previously declared inputs in Blender's node-group interface.
+Use `panel(...)` at the start of the function body to group its input sockets:
 
 ```python
-radius = input_float('Radius', default=1.0)
-segments = input_int('Segments', default=32)
-panel([radius, segments], name='Shape', collapsed=True)
+def shape(radius: Float = 1.0, segments: Int = 32) -> Geometry:
+    panel([radius, segments], name='Shape', collapsed=True)
+    return cube(size=radius)
 ```
 
-Panels are standalone top-level declarations. Their members must be group input variable names, and each input can belong to one panel. See [`panel(...)`](BUILTINS.md#interface-panels) for the complete reference.
-
-### Implicit Inputs
-
-A name read before assignment becomes an implicit group input when it does not resolve to another declared name.
-
-```python
-geometry = cube(size=width)
-```
-
-Here, `width` becomes an implicit group input. Its type must be inferable from the parameter position where it is used. If the use site does not provide one unambiguous expected socket type, compilation fails; use an explicit `input_*` declaration instead.
-
-### Explicit Outputs
-
-The `output(...)` call declares an output socket.
-
-```python
-geometry = cube(size=2.0)
-output('Geometry', geometry)
-```
-
-### Implicit Final Output
-
-The final top-level assignment or expression can define one implicit output.
-
-```python
-geometry = cube(size=2.0)
-geometry
-```
-
-A final assignment uses its variable name. A final expression uses `out`. The value must be a supported runtime output: `Geometry`, `Vector`, `Float`, `Int`, `Bool`, `Material`, `Object`, `String`, or `Bundle`. A statement without a resulting value cannot define an implicit output.
+Panel members are parameter names. Each input can belong to one panel. See [Interface Panels](BUILTINS.md#interface-panels) for the complete reference.
 
 ## Reusable Functions
 
-A reusable function is a saved DSL script whose group inputs become call parameters. One output becomes the call result. Multiple outputs become a fixed result that can be unpacked or indexed.
+Declare functions with top-level `def`. A function can call other functions from its module, including declarations that appear later in the file.
 
 ```python
-size = input_float('Size', default=1.0)
-geometry = cube(size=size)
-output('Geometry', geometry)
+def double(value: Float = 1.0) -> Float:
+    return value * 2.0
+
+def quadruple(value: Float = 1.0) -> Float:
+    return double(double(value))
+
+result = quadruple(3.0)
 ```
 
-```python
-from local import analyze_geometry
-
-geometry, value = analyze_geometry(cube(size=1.0))
-output('Geometry', geometry)
-output('Value', value)
-```
-
-Reusable function calls share one backing function group by default. Add `__unique__=True` when one call needs its own shallow function-group copy. For example, after saving a function containing a Curve Map node as `remap_curve.nf`:
-
-```python
-from local import remap_curve
-
-value_a = input_float('A')
-value_b = input_float('B')
-first = remap_curve(value_a, __unique__=True)
-second = remap_curve(value_b, __unique__=True)
-```
-
-Each marked call creates a separate editable group. `__unique__` must be a compile-time `Bool`. It is supported by script-local `def` calls, imported Local scripts, and source-backed package functions. Omitting it or passing `__unique__=False` uses the shared function group. Core built-ins, Python extension callables, and `node(...)` do not use this modifier.
-
-The copy is shallow, so nested reusable dependencies remain shared unless their calls also use `__unique__=True`. A unique imported Local group keeps its identity when the caller is updated or renamed, the `.blend` file is reopened, or **Reload from Source** is used. Manual edits inside the group are preserved while its source and reusable dependencies remain unchanged. Changing either rebuilds the group from source.
-
-See [Writing Functions](WRITING_FUNCTIONS.md) for creating and saving a local reusable function.
-
-## Imports
-
-Imports are allowed only at top level. NodeForge has three source import namespaces: `packages`, `examples`, and `local`.
-
-### Packages
-
-Import an installed package namespace, then call members through that namespace.
-
-```python
-from packages import math
-
-angle = input_float('Angle', default=0.0)
-value = math.sin(angle)
-output('Value', value)
-```
-
-Packages can be aliased.
-
-```python
-from packages import math as m
-
-value = m.sin(input_float('Angle'))
-output('Value', value)
-```
-
-Qualified `package.member(...)` calls identify the exact package owner. Different installed packages may export the same member name, and a package member may use the same name as a Core DSL callable.
-
-An unqualified package member can resolve when exactly one imported package provides that callable and no source value owns the same name. Prefer qualified calls in reusable scripts because they remain unambiguous when more packages or local bindings are added.
-
-`from packages import *` is unsupported. The former `from functions import ...` source namespace has been removed; import the owning package instead.
-
-### Examples
-
-Import an example by name.
-
-```python
-from examples import demo_scene
-```
-
-Aliases and `from examples import *` are also supported.
-
-### Local
-
-Import reusable `.nf` files from the Local library with `from local import ...`. This includes files saved in NodeForge and files made available from disk with **Library → Local → Add Folder...**.
-
-```python
-from local import move_geometry
-from local import move_geometry as move
-```
-
-When a file name is unique, the flat form works regardless of its folder. When files share a name, include the folder path to select one explicitly. For example, given `terrain/noise.nf` and `procedural/noise.nf`:
-
-```python
-from local.terrain import noise
-from local.procedural import noise as procedural_noise
-```
-
-Import a directory without an alias to make its immediate public `.nf` files available both as bare calls and through the directory namespace:
-
-```python
-from local import terrain
-
-first = noise(...)
-second = terrain.noise(...)
-```
-
-An aliased directory remains namespace-only:
-
-```python
-from local import terrain as t
-
-value = t.noise(...)
-```
-
-Nested directories are not included automatically. Import a nested file from its complete path:
-
-```python
-from local.terrain.filters import blur
-```
-
-If imported directories provide the same bare function name, use a qualified call such as `terrain.noise(...)` to select one. Directory imports expose only `.nf` files as bare calls; `.nodeforge` files remain available through qualified or explicit imports.
-
-A folder added with **Add Folder...** uses its name on disk as its top-level namespace. Folder and file names used in qualified imports must be public ASCII identifiers: use letters, digits, and underscores, begin with a letter, and avoid Python keywords.
-
-`from local import *` imports files by their flat names and requires every imported name to be unique. Names beginning with `_` are private and excluded from catalog imports.
-
-Imports are top-level statements. Plain `import`, relative imports, block-local imports, and imports from arbitrary Python modules are unsupported.
-
-Experimental Python Mesh Compute callbacks use explicit Local or Examples imports in a root `.nf` script. See [Mesh Compute](MESH_COMPUTE.md) for the supported callback and modifier workflow.
-
-See [Creating Packages](PACKAGES.md) for package authoring and [Python Extension API v2](EXTENSION_API.md) for Python-backed package callables.
-
-## Local Functions
-
-A script-local function is declared with `def` and returns one value or a flat tuple of values with `return`.
-
-```python
-def double(value):
-    result = value * 2.0
-    return result
-
-x = input_float('X', default=1.0)
-y = double(x)
-output('Y', y)
-```
-
-Parameters are names without default values. Add a NodeForge type token annotation when a parameter's type cannot be inferred unambiguously from the call.
+Each function ends with one `return`, which returns a value or a flat, nonempty tuple. Nested function declarations and recursive call cycles are unsupported.
 
 ```python
 def inspect(value: Float, pos: Vector):
     return value * 2.0, pos.z, value > 0.0
 
-value = input_float('Value', default=1.0)
-pos = input_vector('Position')
-doubled, height, positive = inspect(value, pos)
-output('Doubled', doubled)
-output('Height', height)
-output('Positive', positive)
+doubled, height, positive = inspect(2.0, vector(0, 0, 3))
 ```
 
-Any [runtime type](#runtime-types) may be used as a parameter annotation. An annotation constrains the generated function input socket; unannotated parameters use call-site type inference. A tuple return must be flat and non-empty. A local function must contain a return statement. Nested function declarations are unsupported.
+Multiple outputs can be unpacked in return order or selected with a compile-time integer index:
 
-The generated function call node uses a readable title derived from the function name. For example, `mix_biomes()` appears as **Mix Biomes**.
+```python
+def measure(value: Float):
+    return value * 2.0, value * 3.0
+
+results = measure(2.0)
+tripled = results[1]
+```
+
+See [Writing Functions](WRITING_FUNCTIONS.md) for function interfaces and [Modules](MODULES.md#compose-the-base-tree) for automatic placement of functions when compiling a module containing only declarations.
+
+### Shared and Unique Groups
+
+Repeated calls share a backing function group by default. Set `__unique__=True` when a call needs its own editable group:
+
+```python
+def remap(value: Float) -> Float:
+    return value * 2.0
+
+first = remap(1.0, __unique__=True)
+second = remap(2.0, __unique__=True)
+```
+
+Each marked call uses a separate group. `__unique__` accepts a compile-time `Bool`; omitting it or passing `False` uses the shared group. The modifier is supported by functions declared in the current module, imported `.nf` functions, and source-backed package functions. Core built-ins, Python extension callables, and `node(...)` do not support it.
+
+The separate group is shallow: functions called inside it remain shared unless their own calls also use `__unique__=True`.
+
+## Imports
+
+Write imports at the top level. NodeForge provides the `local`, `examples`, and `packages` namespaces. Importing a `.nf` module makes its functions available; its top-level node-building statements do not run in the importing script.
+
+### Local
+
+Local imports select `.nf` files saved in **Library → Local** or registered with **Add Folder...**. For example, save this module as `geometry.nf`:
+
+```python
+def lift(geometry: Geometry, height: Float = 1.0) -> Geometry:
+    return transform(geometry, translation=vector(0, 0, height))
+```
+
+Import the file namespace and call its declared function:
+
+```python
+from local import geometry
+
+raised = geometry.lift(cube(1.0), height=2.0)
+```
+
+Import one function by extending the path with the file name. Use `as` to choose a local name:
+
+```python
+from local.geometry import lift as raise_geometry
+
+raised = raise_geometry(cube(1.0), height=2.0)
+```
+
+For a file at `terrain/geometry.nf`, include its directory path:
+
+```python
+from local.terrain import geometry as terrain_geometry
+from local.terrain.geometry import lift
+
+first = terrain_geometry.lift(cube(1.0))
+second = lift(cube(2.0))
+```
+
+The file namespace itself is not callable: `geometry(...)` is unsupported. Use `geometry.lift(...)` or import `lift` directly. See [Import Functions](MODULES.md#import-functions) for saving modules to Local.
+
+### Examples
+
+Examples `.nf` files use the same file and function import forms. For an example stored as `terrain/geometry.nf` with a `lift` function:
+
+```python
+from examples.terrain import geometry as terrain_geometry
+from examples.terrain.geometry import lift
+
+first = terrain_geometry.lift(cube(1.0))
+second = lift(cube(2.0))
+```
+
+Use the path and declared function names of the selected example file.
+
+### Packages
+
+Import an installed package namespace, then call its members:
+
+```python
+from packages import math
+
+def sine(angle: Float = 0.0) -> Float:
+    return math.sin(angle)
+```
+
+Package namespaces can be aliased:
+
+```python
+from packages import math as m
+
+def sine(angle: Float = 0.0) -> Float:
+    return m.sin(angle)
+```
+
+Qualified calls identify the package that supplies a callable. Package `.nf` files export their functions under the declared `def` names. See [Package Guide](PACKAGES.md) for package authoring and [Python Extension API v2](EXTENSION_API.md) for Python-backed package callables.
+
+Star imports, plain Python `import`, relative imports, imports inside functions, and imports from arbitrary Python modules are unsupported.
+
+Experimental Python Mesh Compute callbacks use explicit Local or Examples imports in a typed entry module. See [Mesh Compute](MESH_COMPUTE.md) for the callback and modifier workflow.
 
 ## If Statements
 
-An ordinary `if` statement always represents runtime control flow. This rule applies even when the condition is a literal or another compile-time-known `Bool`. NodeForge does not use ordinary `if` as a compile-time branch-selection construct.
+An `if` with a runtime `Bool` condition selects between graph values through Switch nodes. Assign the result in both branches:
 
 ```python
-use_large_size = input_bool('Large', default=False)
-size = 1.0
-if use_large_size:
-    size = 2.0
-else:
-    size = 1.0
-geometry = cube(size=size)
-output('Geometry', geometry)
+def choose(use_large: Bool = False) -> Geometry:
+    if use_large:
+        size = 2.0
+    else:
+        size = 1.0
+    return cube(size=size)
 ```
 
-Both branches are semantically validated and materialized. Compatible values assigned by both branches are merged through Blender Switch nodes. Consequently, code in a branch is not ignored merely because the condition is written as `True` or `False`.
+Both runtime branches must be valid. Outside a runtime loop, `else` is required, and both branches must assign at least one common runtime result. Merged values must have the same type: `Float`, `Int`, `Vector`, `Bool`, `Geometry`, `String`, or `Bundle`.
 
-A top-level `if` requires an `else` branch and both branches must assign at least one common runtime variable. Merged branch values must have the same type and must be one of `Float`, `Int`, `Vector`, `Bool`, `Geometry`, `String`, or `Bundle`. Compile-time collections are not runtime branch-merge values.
+Inside a runtime loop, an `if` can update existing loop state without `else`. The unchanged state passes through when the condition is false:
 
 ```python
-value = input_float('Value')
-result = 0.0
-if True:
-    result = value * 2.0
-else:
-    result = value * 3.0
-output('Result', result)
+def count_even(steps: Int = 5) -> Int:
+    count = 0
+    for i in range(steps):
+        if i % 2 == 0:
+            count = count + 1
+    return count
 ```
 
-The literal condition above still produces ordinary runtime-if semantics; both branches must be valid. Use compile-time `for` loops and compile-time options to control graph structure.
+### Compile-Time Conditions in Functions
+
+Inside a function, an `if` whose condition resolves to a compile-time `Bool` compiles only the selected branch. This can choose which operations the function contains:
+
+```python
+USE_LARGE = True
+
+def fixed_shape() -> Geometry:
+    if USE_LARGE:
+        geometry = cube(2.0)
+    else:
+        geometry = cube(1.0)
+    return geometry
+```
+
+At module level, an ordinary `if` uses runtime branch semantics even with a literal Boolean condition. Both branches must be valid and satisfy the runtime merge rules.
 
 ## For Statements
 
-A `for` statement over a compile-time list, tuple, or `range(...)` is unrolled while the script is compiled.
+### Compile-Time Loops
+
+A `for` over a compile-time list, tuple, or `range(...)` unrolls while the module is compiled. Each iteration creates its own graph operations:
 
 ```python
 parts = []
 for size in [0.5, 1.0, 1.5]:
     parts.append(cube(size=size))
 geometry = join(parts)
-output('Geometry', geometry)
 ```
 
-A loop target can be a single name or a list or tuple pattern that matches each compile-time item.
+`range(stop)`, `range(start, stop)`, and `range(start, stop, step)` accept compile-time integers. The stop value is exclusive:
+
+```python
+parts = []
+for i in range(0, 6, 2):
+    part = transform(cube(1.0), translation=vector(i, 0, 0))
+    parts.append(part)
+geometry = join(parts)
+```
+
+A compile-time loop target can be a single name or a flat list or tuple pattern matching each item:
 
 ```python
 positions = [(0, 0), (1, 0), (0, 1)]
@@ -539,45 +555,60 @@ for x, y in positions:
     point = set_position(point, vector(x, y, 0))
     parts.append(point)
 geometry = join(parts)
-output('Geometry', geometry)
 ```
 
-`repeat_range(...)` creates a runtime repeat loop.
+### Runtime Loops
+
+Inside a typed function, `range(count)` with a runtime `Int` count creates a Blender Repeat Zone:
 
 ```python
-value = 0.0
-steps = input_int('Steps', default=5)
-for index in repeat_range(steps):
-    value = value + 1.0
-output('Value', value)
+def accumulate(count: Int = 5) -> Float:
+    value = 0.0
+    for i in range(count):
+        value = value + 1.0
+    return value
 ```
 
-Values assigned before the loop and changed inside it become repeat state items. Repeat state is limited to existing `Geometry`, `Vector`, `Float`, `Int`, `Bool`, and `Bundle` values. Each carried state keeps its exact type for the entire Repeat Zone: for example, an `Int` state cannot become `Float` in the loop body or in a nested runtime branch. The loop must update at least one existing state value; names first created inside the loop are local temporaries. Use `range(...)` for compile-time iteration and `repeat_range(...)` for runtime iteration.
-
-`repeat_range(...)` loops can be nested. Each loop creates its own Repeat Zone and its own index value.
+`repeat_range(count)` explicitly selects a runtime loop and also accepts a compile-time count:
 
 ```python
-value = 0.0
-rows = input_int('Rows', default=3)
-columns = input_int('Columns', default=4)
-for row in repeat_range(rows):
-    for column in repeat_range(columns):
-        value = value + row + column
-output('Value', value)
+def accumulate() -> Float:
+    value = 0.0
+    for i in repeat_range(5):
+        value = value + 1.0
+    return value
 ```
+
+Values defined before the loop and changed inside it become repeat state. State values can be `Geometry`, `Vector`, `Float`, `Int`, `Bool`, or `Bundle`. Each state must retain its exact type throughout the loop, including assignments in nested branches. For example, an `Int` state cannot become `Float`.
+
+A runtime loop must update at least one existing value or geometry builder. Names first defined inside the loop are iteration-local temporaries. The runtime loop target is a single name holding the iteration's `Int` index.
+
+Use `repeat_range(...)` for nested runtime loops. Each creates its own Repeat Zone and index:
+
+```python
+def accumulate_grid(rows: Int = 3, columns: Int = 4) -> Float:
+    value = 0.0
+    for row in repeat_range(rows):
+        for column in repeat_range(columns):
+            value = value + row + column
+    return value
+```
+
+Loop indices are scoped to their loop. A same-named outer binding becomes available again after the loop.
 
 ## Geometry Builder
 
 `geometry_builder()` accumulates geometry. The current result is available through `.geometry`.
 
 ```python
-builder = geometry_builder()
-builder.add(cube(size=1.0))
-builder.extend([cube(size=0.5), cube(size=0.25)])
-output('Geometry', builder.geometry)
+def build() -> Geometry:
+    builder = geometry_builder()
+    builder.add(cube(size=1.0))
+    builder.extend([cube(size=0.5), cube(size=0.25)])
+    return builder.geometry
 ```
 
-Builder methods can be used inside compile-time and runtime loops. A builder cannot be assigned to another name, inserted into a collection, passed to a function, or exposed as an output.
+Builder methods can be used inside compile-time and runtime loops. A builder cannot be assigned to another name, inserted into a collection, passed to a function, or exposed as an output. Return `builder.geometry` to expose the accumulated geometry. See [`geometry_builder()`](BUILTINS.md#geometry_builder) for the method reference.
 
 ## Unsupported Python Syntax
 

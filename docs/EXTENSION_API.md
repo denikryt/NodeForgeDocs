@@ -292,13 +292,13 @@ The result may be assigned and passed to another extension call:
 ```python
 from packages import tools
 
-value = input_float('Value')
-part = tools.make_part(value)
-result = tools.consume_part(part)
-output('Result', result)
+def example(value: Float):
+    part = tools.make_part(value)
+    result = tools.consume_part(part)
+    return result
 ```
 
-Semantic records and lists may contain runtime dependencies, but they are not ordinary Geometry Nodes socket values. They cannot be passed directly to `output(...)` or used as Repeat Zone carried state.
+Semantic records and lists may contain runtime dependencies, but they are not ordinary Geometry Nodes socket values. Return an ordinary socket value from a `.nf` function; semantic records cannot be exposed as Group Node outputs or carried through Repeat Zone state.
 
 ### Semantic-then-backend callable
 

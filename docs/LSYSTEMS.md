@@ -31,14 +31,15 @@ All parts are positional. Their order inside `ls.system(...)` does not affect de
 Duplicate singleton parts, rule predecessors, parameter names, or marker names raise `CompileError`.
 
 ```python
-plant = ls.system(
-    ls.axiom("X"),
-    ls.rule("X", "F[+X][-X]FX"),
-    ls.rule("F", "FF"),
-    ls.iterations(4),
-    ls.angle(25),
-    ls.step(0.08),
-)
+def example():
+    return ls.system(
+        ls.axiom("X"),
+        ls.rule("X", "F[+X][-X]FX"),
+        ls.rule("F", "FF"),
+        ls.iterations(4),
+        ls.angle(25),
+        ls.step(0.08),
+    )
 ```
 
 ## Constructors
@@ -54,12 +55,13 @@ Defines the module stream before the first rewrite iteration.
 The string may contain turtle commands, one-character grammar symbols, declared markers, and parameterized modules.
 
 ```python
-plant = ls.system(
-    ls.axiom("F[+F]F"),
-    ls.iterations(0),
-    ls.angle(25),
-    ls.step(1),
-)
+def example():
+    return ls.system(
+        ls.axiom("F[+F]F"),
+        ls.iterations(0),
+        ls.angle(25),
+        ls.step(1),
+    )
 ```
 
 ### `ls.rule(symbol, replacement)`
@@ -76,13 +78,14 @@ Each iteration rewrites every module from the same input generation. Symbols wit
 Rule strings may be assembled with f-strings when every interpolated value is a compile-time string.
 
 ```python
-plant = ls.system(
-    ls.axiom("F"),
-    ls.rule("F", "F[+F]F[-F]F"),
-    ls.iterations(2),
-    ls.angle(25),
-    ls.step(0.2),
-)
+def example():
+    return ls.system(
+        ls.axiom("F"),
+        ls.rule("F", "F[+F]F[-F]F"),
+        ls.iterations(2),
+        ls.angle(25),
+        ls.step(0.2),
+    )
 ```
 
 ### `ls.iterations(value)`
@@ -99,13 +102,14 @@ Runtime values below `0` are treated as `0`.
 Runtime iteration mode requires the axiom and every rule replacement to balance `[` and `]` independently. Rules may not rewrite `[` or `]` in this mode.
 
 ```python
-iterations = input_int("Iterations", default=4)
-plant = ls.system(
-    ls.axiom("F"),
-    ls.iterations(iterations),
-    ls.angle(25),
-    ls.step(0.2),
-)
+def example(iterations: Int = 4):
+    plant = ls.system(
+        ls.axiom("F"),
+        ls.iterations(iterations),
+        ls.angle(25),
+        ls.step(0.2),
+    )
+    return plant
 ```
 
 `ls.angle(...)` and `ls.step(...)` both accept either a compile-time number or a runtime `Float` or `Int`.
@@ -115,13 +119,14 @@ plant = ls.system(
 Sets the default rotation angle, in degrees, for unparameterized `+`, `-`, `^`, `&`, `/`, and `\` commands. An explicit argument such as `+(30)` or `/(roll)` takes precedence for that module.
 
 ```python
-angle = input_float("Angle", default=25.0)
-plant = ls.system(
-    ls.axiom("F+F"),
-    ls.iterations(0),
-    ls.angle(angle),
-    ls.step(1),
-)
+def example(angle: Float = 25.0):
+    plant = ls.system(
+        ls.axiom("F+F"),
+        ls.iterations(0),
+        ls.angle(angle),
+        ls.step(1),
+    )
+    return plant
 ```
 
 ### `ls.step(value)`
@@ -129,13 +134,14 @@ plant = ls.system(
 Sets the default forward distance for unparameterized `F` and `f`. `F(0.5)` or `F(length)` supplies a per-module distance instead.
 
 ```python
-step = input_float("Step", default=0.2)
-plant = ls.system(
-    ls.axiom("FF"),
-    ls.iterations(0),
-    ls.angle(25),
-    ls.step(step),
-)
+def example(step: Float = 0.2):
+    plant = ls.system(
+        ls.axiom("FF"),
+        ls.iterations(0),
+        ls.angle(25),
+        ls.step(step),
+    )
+    return plant
 ```
 
 ### `ls.param(name, value)`
@@ -150,14 +156,15 @@ Binds a numeric value to a name used inside parameterized commands or markers.
 A module argument is either a numeric literal or one declared parameter name. NodeForge expressions are not parsed inside the L-system string; compute an expression in the surrounding script and bind its result with `ls.param(...)`.
 
 ```python
-length = input_float("Length", default=0.5)
-plant = ls.system(
-    ls.axiom("F(length)F"),
-    ls.iterations(0),
-    ls.angle(25),
-    ls.step(0.2),
-    ls.param("length", length),
-)
+def example(segment_length: Float = 0.5):
+    plant = ls.system(
+        ls.axiom("F(length)F"),
+        ls.iterations(0),
+        ls.angle(25),
+        ls.step(0.2),
+        ls.param("length", segment_length),
+    )
+    return plant
 ```
 
 ### `ls.marker(name, *parameter_names)`
@@ -172,15 +179,16 @@ Declares a marker module. Reaching that module emits a point at the current turt
 Marker parameter names cannot use the reserved `nf_lsys_` prefix.
 
 ```python
-size = input_float("Leaf Size", default=0.25)
-plant = ls.system(
-    ls.axiom("FLeaf(size)"),
-    ls.iterations(0),
-    ls.angle(25),
-    ls.step(0.5),
-    ls.param("size", size),
-    ls.marker("Leaf", "size"),
-)
+def example(size: Float["Leaf Size"] = 0.25):
+    plant = ls.system(
+        ls.axiom("FLeaf(size)"),
+        ls.iterations(0),
+        ls.angle(25),
+        ls.step(0.5),
+        ls.param("size", size),
+        ls.marker("Leaf", "size"),
+    )
+    return plant
 ```
 
 Every marker point stores:

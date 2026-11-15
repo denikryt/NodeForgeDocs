@@ -1,6 +1,6 @@
 # Mesh Compute (Experimental)
 
-Use Mesh Compute to calculate vertex positions or POINT FLOAT attributes in Python. Pass Geometry to the function from a `.nf` script, then use the returned Geometry in the rest of that script. Changing modifier inputs recalculates the result. This feature is experimental in Blender 5.2.
+Use Mesh Compute to calculate vertex positions or POINT FLOAT attributes in Python. A typed `.nf` entry function passes Geometry to a Python callback and returns the resulting Geometry. Changing modifier inputs recalculates the result. This feature is experimental in Blender 5.2.
 
 ## Write a Mesh Compute script
 
@@ -32,16 +32,14 @@ def shift_height(mesh, amount: float = 2.0):
 ```python
 from local import shift_height
 
-geo = input_geometry('Geometry')
-geo = store_named_attribute(
-    geo, 'height', position().z, domain='POINT', type='FLOAT'
-)
-amount = input_float('Amount', default=2.0)
-geo = shift_height(geo, amount=amount)
-output('Geometry', geo)
+def move_up(geometry: Geometry, amount: Float["Amount"] = 2.0) -> Geometry:
+    geometry = store_named_attribute(
+        geometry, 'height', position().z, domain='POINT', type='FLOAT'
+    )
+    return shift_height(geometry, amount=amount)
 ```
 
-Create every attribute listed in `reads` before the call. In this example, `move_up.nf` creates `height`, passes Geometry and **Amount** to `shift_height`, then sends the returned Geometry to the output. You can apply other NodeForge functions to `geo` after the call.
+Create every attribute listed in `reads` before the call. In this example, `move_up.nf` creates `height`, passes Geometry and **Amount** to `shift_height`, then returns the resulting Geometry.
 
 To run it:
 
@@ -49,7 +47,7 @@ To run it:
 2. Open **Library → Local** and select `move_up.nf`.
 3. Click **Add Node Group**. NodeForge creates a Mesh Compute modifier or uses the empty modifier already on the object. Change **Amount** on the modifier to recalculate the Mesh.
 
-You do not need to create a Geometry Nodes tree before using the Library action. You can also open `move_up.nf` in a Blender Text datablock, select it under **Text Script**, and click **Compile Script**. Ordinary scripts compiled with either action create node groups instead.
+You do not need to create a Geometry Nodes tree before using the Library action. You can also open `move_up.nf` in a Blender Text datablock, select it under **Text Script**, and click **Install Mesh Compute**. **Compile Script** composes ordinary scripts into an open base tree; it does not install a Mesh Compute modifier.
 
 ## Write the Python function
 
@@ -63,7 +61,7 @@ Name the function after its `.py` file: write `def shift_height(...)` in `shift_
 
 Write `reads` and `writes` as literal lists or tuples of nonempty attribute names, with no duplicates within either list. Use literal scalar defaults of the annotated type. Define ordinary parameters; `*args`, `**kwargs`, and keyword-only parameters are unsupported.
 
-In `.nf`, pass a Geometry value first, followed by the scalar arguments by position or keyword. Use `input_float`, `input_int`, `input_bool`, or matching values calculated earlier in the script. Each runtime scalar must have the same value at every vertex; varying fields cannot be callback parameters. Use the returned Geometry in downstream NodeForge operations.
+In `.nf`, pass a Geometry value first, followed by scalar arguments by position or keyword. Expose scalar controls as typed `def` parameters or calculate them earlier in the script. Each runtime scalar must have the same value at every vertex; varying fields cannot be callback parameters. Return the resulting Geometry from the entry function.
 
 ### Input available in Python
 
@@ -88,11 +86,11 @@ For example, `{'positions': positions}` changes only positions. `{'point_attribu
 
 ## Sources and limits
 
-Import the callback explicitly in the root `.nf` script: `from local import shift_height`, `from local.terrain import shift_height`, or—for a bundled or installed Example—`from examples.mesh_compute_erosion import erosion`. Directory aliases and `*` imports do not select Python callbacks. A reusable nested function cannot contain the Mesh Compute call.
+Import the callback explicitly in the entry `.nf` module: `from local import shift_height`, `from local.terrain import shift_height`, or—for a bundled or installed Example—`from examples.mesh_compute_erosion import erosion`. Directory aliases and `*` imports do not select Python callbacks. The Mesh Compute call belongs in the selected typed entry function, not a nested helper.
 
 Use callbacks from registered Local sources, bundled Examples, or installed package Examples. Python callbacks execute with normal Python privileges, so use sources you trust. There is no separate executable-Python permission setting.
 
-Call Mesh Compute once in the root `.nf` script. Pass a nonempty Mesh; the function can read positions and declared POINT FLOAT inputs and accept uniform `float`/`int`/`bool` parameters. Keep the same vertices and faces in its result. A modified Geometry Nodes group or additional modifier cannot be replaced by Mesh Compute.
+Call Mesh Compute once in the selected entry function. Its first parameter must be a required `Geometry` input, and it must return one `Geometry` value. The `.nf` module must have exactly one entry function and no executable top-level statements. Pass a nonempty Mesh; the callback can read positions and declared POINT FLOAT inputs and accept uniform `float`/`int`/`bool` parameters. Keep the same vertices and faces in its result. A modified Geometry Nodes group or additional modifier cannot be replaced by Mesh Compute.
 
 For a larger example, select `mesh_compute_erosion/erosion_numpy.nf` under **Library → Examples** and click **Add Node Group**. This example also requires NumPy in Blender's Python and the NodeForge Math package.
 

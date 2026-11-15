@@ -2,7 +2,7 @@
 
 A NodeForge package is an installable distribution unit for reusable DSL functions, examples, and optional Python-backed extensions. This page covers package structure, manifests, imports, packaging, and installation. The Python callable ABI is documented separately in the [Extension API Reference](EXTENSION_API.md).
 
-For scripts used only on one machine or project, the [Local catalog](GET_STARTED.md#save-your-own-script-to-local) is usually simpler than creating a package.
+For scripts used only on one machine or project, the [Local catalog](GET_STARTED.md#save-a-module-to-local) is usually simpler than creating a package.
 
 ## Package layout
 
@@ -94,7 +94,6 @@ Import an installed package through the `packages` namespace:
 from packages import shapes
 
 geo = shapes.ring(2.0, 0.25)
-output('Geometry', geo)
 ```
 
 Aliases are supported:
@@ -116,7 +115,7 @@ from packages import shapes
 value = shapes  # invalid
 ```
 
-The former package-source form `from functions import ...` is not supported. `from examples import ...` and `from local import ...` are separate catalogs.
+`examples` and `local` are separate catalogs; see [Imports](SYNTAX.md#imports).
 
 ## Source-backed functions
 
@@ -135,24 +134,21 @@ functions/
     └── source.nf
 ```
 
-The entry name becomes the public package member. A source-backed function follows the same callable rules as other reusable NodeForge scripts: explicit `input_*()` declarations define parameters and `output(...)` declarations define results.
+Every top-level `def` in a source file becomes a package member under its declared function name. A file can export several functions. Function parameters and `return` define the Group Node sockets.
 
 ```python
 # functions/scale_cube.nf
-size = input_float('Size', default=1.0)
-factor = input_float('Factor', default=2.0)
-geo = cube(size=size * factor)
-output('Geometry', geo)
+def scale_cube(size: Float = 1.0, factor: Float = 2.0) -> Geometry:
+    return cube(size=size * factor)
 ```
 
 ```python
 from packages import shapes
 
 geo = shapes.scale_cube(1.5, factor=3.0)
-output('Geometry', geo)
 ```
 
-Input labels are display text, not declaration identity. Keyword matching uses the normalized labels described in [Writing Functions](WRITING_FUNCTIONS.md#write-the-function); if two labels normalize to the same keyword, call those inputs positionally.
+Keywords use the function's exact parameter identifiers; display labels may be set with `Type["Label"]`. See [Writing Functions](WRITING_FUNCTIONS.md#parameters-and-sockets).
 
 For general reusable-function behavior, including `__unique__=True` where supported, see [Reusable Functions](SYNTAX.md#reusable-functions).
 
@@ -200,9 +196,9 @@ Python-backed package code runs with normal Python privileges. Install packages 
 
 ## Public names
 
-Top-level files and owner directories under `functions` and `examples` use their filename or directory name as the public entry name. System directory names are also public identifiers.
+Source-backed package functions are exported by their declared `def` names. Example files appear in the Examples catalog under their file or owner directory names. Python-backed owner directories and systems use their declared public names.
 
-Public names must be valid Python-style identifiers, cannot begin with `_`, and cannot be Python keywords. Files and directories beginning with `__` are not public entries.
+File and directory entry names must be valid public Python-style identifiers: they cannot begin with `_` or be Python keywords. Files and directories beginning with `__` are not catalog entries. Declared function names follow the function rules in [`.nf` Modules](MODULES.md#define-functions), including names beginning with `_`.
 
 Within one package, exported members must be unique. Different packages may publish the same member name because the package namespace identifies the owner.
 
